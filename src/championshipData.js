@@ -21,6 +21,9 @@ export const SPORTS = [
   { key: 'wih', name: "Women's Ice Hockey", short: 'WIH' },
   { key: 'wgym', name: "Women's Gymnastics", short: 'WGY' },
   { key: 'mten', name: "Men's Tennis", short: 'MTN' },
+  { key: 'wten', name: "Women's Tennis", short: 'WTN' },
+  { key: 'mgolf', name: "Men's Golf", short: 'MGF' },
+  { key: 'wgolf', name: "Women's Golf", short: 'WGF' },
   { key: 'wrestling', name: 'Wrestling', short: 'WRS' },
   { key: 'mxc', name: "Men's Cross Country", short: 'MXC' },
 ];
@@ -124,6 +127,8 @@ export const SCHOOLS = {
   'Utah':               { id: 254,   color: '#CC0000', abbr: 'UTAH' },
   'Illinois':           { id: 356,   color: '#E84A27', abbr: 'ILL' },
   'TCU':                { id: 2628,  color: '#4D1979', abbr: 'TCU' },
+  // --- Golf additions ---
+  'Augusta State':      { id: null,  color: '#003087', abbr: 'AUG' },
 };
 
 export const CHAMPIONSHIPS = {
@@ -307,6 +312,43 @@ export const CHAMPIONSHIPS = {
     2014: 'USC', 2015: 'Virginia', 2016: 'Virginia', 2017: 'Virginia',
     2018: 'Wake Forest', 2019: 'Texas', 2021: 'Florida',
     2022: 'Virginia', 2023: 'Virginia', 2024: 'TCU',
+  },
+
+  wten: {
+    1990: 'Stanford', 1991: 'Stanford', 1992: 'Florida', 1993: 'Texas',
+    1994: 'Georgia', 1995: 'Texas', 1996: 'Florida', 1997: 'Stanford',
+    1998: 'Florida', 1999: 'Stanford', 2000: 'Georgia', 2001: 'Stanford',
+    2002: 'Stanford', 2003: 'Florida', 2004: 'Stanford', 2005: 'Stanford',
+    2006: 'Northwestern', 2008: 'Stanford', 2009: 'Duke',
+    2010: 'Stanford', 2011: 'Florida', 2012: 'Florida',
+    2013: 'Texas A&M', 2014: 'UCLA', 2015: 'Vanderbilt',
+    2016: 'Stanford', 2017: 'Florida', 2018: 'Stanford',
+    2019: 'Georgia', 2021: 'Texas', 2022: 'North Carolina',
+    2024: 'Texas A&M',
+  },
+
+  mgolf: {
+    1990: 'Arizona State', 1991: 'Oklahoma State', 1992: 'Arizona',
+    1993: 'Florida', 1994: 'Stanford', 1995: 'Oklahoma State',
+    1996: 'Arizona State', 1997: 'Pepperdine', 1998: 'UNLV',
+    1999: 'Georgia', 2000: 'Oklahoma State', 2001: 'Florida',
+    2002: 'Minnesota', 2003: 'Clemson', 2004: 'California',
+    2005: 'Georgia', 2006: 'Oklahoma State', 2007: 'Stanford',
+    2008: 'UCLA', 2009: 'Texas A&M', 2010: 'Augusta State',
+    2011: 'Augusta State', 2012: 'Texas', 2013: 'Alabama',
+    2014: 'Alabama', 2015: 'LSU', 2016: 'Oregon', 2017: 'Oklahoma',
+    2018: 'Oklahoma State', 2019: 'Stanford', 2021: 'Pepperdine',
+    2022: 'Texas', 2023: 'Florida', 2024: 'Auburn',
+  },
+
+  wgolf: {
+    2001: 'Georgia', 2002: 'Duke', 2003: 'Duke', 2004: 'UCLA',
+    2005: 'Duke', 2006: 'Duke', 2007: 'USC', 2008: 'USC',
+    2009: 'Arizona State', 2010: 'Purdue', 2011: 'UCLA',
+    2012: 'Alabama', 2013: 'USC', 2014: 'Duke', 2015: 'Stanford',
+    2016: 'Washington', 2017: 'Arizona State', 2018: 'Arizona',
+    2019: 'Duke', 2021: 'Ole Miss', 2022: 'Stanford',
+    2023: 'Wake Forest', 2024: 'Stanford',
   },
 
   wrestling: {
