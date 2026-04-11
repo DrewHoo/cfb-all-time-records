@@ -12,6 +12,23 @@ export default function ChampionshipGrid() {
 
   const active = locked || highlighted;
 
+  // Sports ordered alphabetically ignoring the "Men's "/"Women's " prefix so
+  // paired sports (Basketball, Soccer, Tennis…) sit next to each other.
+  const sortedSports = useMemo(() => {
+    const stripGender = (name) => name.replace(/^(Men's |Women's )/, '');
+    return [...SPORTS].sort((a, b) => {
+      const cmp = stripGender(a.name).localeCompare(stripGender(b.name));
+      return cmp !== 0 ? cmp : a.name.localeCompare(b.name);
+    });
+  }, []);
+
+  // Years in descending order (newest at the top of the grid).
+  const descendingYears = useMemo(() => [...YEARS].sort((a, b) => b - a), []);
+  const yearRange = useMemo(
+    () => `${Math.min(...YEARS)}–${Math.max(...YEARS)}`,
+    [],
+  );
+
   // Count total titles per school across all sports shown
   const schoolTitles = useMemo(() => {
     const counts = {};
@@ -68,7 +85,7 @@ export default function ChampionshipGrid() {
         </a>
         <h1>NCAA Division I Championships</h1>
         <p className="cg-sub">
-          {YEARS[0]}–{YEARS[YEARS.length - 1]} &middot; {SPORTS.length} sports
+          {yearRange} &middot; {SPORTS.length} sports
           &middot; Hover or tap to trace a school
         </p>
       </header>
@@ -109,29 +126,29 @@ export default function ChampionshipGrid() {
           ref={gridRef}
           className="cg-grid"
           style={{
-            gridTemplateColumns: `${YEAR_W}px repeat(${SPORTS.length}, ${CELL}px)`,
-            gridTemplateRows: `${HDR_H}px repeat(${YEARS.length}, ${CELL}px)`,
+            gridTemplateColumns: `${YEAR_W}px repeat(${sortedSports.length}, ${CELL}px)`,
+            gridTemplateRows: `${HDR_H}px repeat(${descendingYears.length}, ${CELL}px)`,
           }}
         >
           {/* Corner */}
           <div className="cg-corner" />
 
           {/* Sport column headers */}
-          {SPORTS.map((sport) => (
+          {sortedSports.map((sport) => (
             <div key={sport.key} className="cg-sport-hdr">
               <span className="cg-sport-label">{sport.name}</span>
             </div>
           ))}
 
           {/* Rows */}
-          {YEARS.map((year) => {
+          {descendingYears.map((year) => {
             const isDecade = year % 10 === 0;
             return (
               <Fragment key={year}>
                 <div className={`cg-year ${isDecade ? 'cg-year--decade' : ''}`}>
                   {year}
                 </div>
-                {SPORTS.map((sport) => {
+                {sortedSports.map((sport) => {
                   const school = CHAMPIONSHIPS[sport.key]?.[year] ?? null;
                   const info = school ? SCHOOLS[school] : null;
                   const isActive = active && active === school;
@@ -400,7 +417,7 @@ body {
 .cg-year--decade {
   color: #fff;
   font-weight: 500;
-  border-top: 1px solid rgba(255,255,255,0.12);
+  border-bottom: 1px solid rgba(255,255,255,0.18);
 }
 
 /* Data cells */
@@ -416,7 +433,7 @@ body {
   overflow: visible;
 }
 .cg-cell--decade {
-  border-top: 1px solid rgba(255,255,255,0.12);
+  border-bottom: 1px solid rgba(255,255,255,0.18);
 }
 .cg-cell--on {
   z-index: 5;
