@@ -1,0 +1,185 @@
+// NCAA Division I National Championship Data
+// Sources: NCAA records, AP polls (football pre-CFP era), plus GitHub-hosted datasets
+// (see scripts/fetch-data.mjs for the scraper that populates the .scraped.json).
+// Year convention: football = fall season year; all other sports = tournament/championship year
+
+import scraped from './championshipData.scraped.json';
+
+export const SPORTS = [
+  { key: 'football', name: 'Football', short: 'FB' },
+  { key: 'mbb', name: "Men's Basketball", short: 'MBK' },
+  { key: 'wbb', name: "Women's Basketball", short: 'WBK' },
+  { key: 'baseball', name: 'Baseball', short: 'BSB' },
+  { key: 'softball', name: 'Softball', short: 'SB' },
+  { key: 'wvb', name: "Women's Volleyball", short: 'WVB' },
+  { key: 'mih', name: "Men's Ice Hockey", short: 'MIH' },
+  { key: 'msoc', name: "Men's Soccer", short: 'MSO' },
+  { key: 'wsoc', name: "Women's Soccer", short: 'WSO' },
+  { key: 'mlax', name: "Men's Lacrosse", short: 'MLX' },
+  { key: 'wlax', name: "Women's Lacrosse", short: 'WLX' },
+  { key: 'wfh', name: "Women's Field Hockey", short: 'WFH' },
+  { key: 'wih', name: "Women's Ice Hockey", short: 'WIH' },
+  { key: 'wgym', name: "Women's Gymnastics", short: 'WGY' },
+  { key: 'mten', name: "Men's Tennis", short: 'MTN' },
+  { key: 'wten', name: "Women's Tennis", short: 'WTN' },
+  { key: 'mgolf', name: "Men's Golf", short: 'MGF' },
+  { key: 'wgolf', name: "Women's Golf", short: 'WGF' },
+  { key: 'mswim', name: "Men's Swimming & Diving", short: 'MSW' },
+  { key: 'wswim', name: "Women's Swimming & Diving", short: 'WSW' },
+  { key: 'wrestling', name: 'Wrestling', short: 'WRS' },
+  { key: 'mxc', name: "Men's Cross Country", short: 'MXC' },
+  { key: 'wxc', name: "Women's Cross Country", short: 'WXC' },
+];
+
+// ESPN team ID, primary brand color, abbreviation
+export const SCHOOLS = {
+  'Akron':              { id: 2006,  color: '#041E42', abbr: 'AKR' },
+  'Alabama':            { id: 333,   color: '#9E1B32', abbr: 'ALA' },
+  'Arizona':            { id: 12,    color: '#CC0033', abbr: 'ARIZ' },
+  'Arizona State':      { id: 9,     color: '#8C1D40', abbr: 'ASU' },
+  'Arkansas':           { id: 8,     color: '#9D2235', abbr: 'ARK' },
+  'Auburn':             { id: 2,     color: '#0C2340', abbr: 'AUB' },
+  'Baylor':             { id: 239,   color: '#154734', abbr: 'BAY' },
+  'Boston College':     { id: 103,   color: '#98002E', abbr: 'BC' },
+  'Boston University':  { id: 104,   color: '#CC0000', abbr: 'BU' },
+  'Cal State Fullerton':{ id: 2239,  color: '#00274C', abbr: 'CSUF' },
+  'California':         { id: 25,    color: '#003262', abbr: 'CAL' },
+  'Clemson':            { id: 228,   color: '#F56600', abbr: 'CLEM' },
+  'Coastal Carolina':   { id: 324,   color: '#006F71', abbr: 'CCU' },
+  'Colorado':           { id: 38,    color: '#CFB87C', abbr: 'COLO' },
+  'UConn':              { id: 41,    color: '#000E2F', abbr: 'CONN' },
+  'Denver':             { id: 2172,  color: '#8B2332', abbr: 'DEN' },
+  'Duke':               { id: 150,   color: '#003087', abbr: 'DUKE' },
+  'Florida':            { id: 57,    color: '#0021A5', abbr: 'FLA' },
+  'Florida State':      { id: 52,    color: '#782F40', abbr: 'FSU' },
+  'Fresno State':       { id: 278,   color: '#DB0032', abbr: 'FRES' },
+  'Georgetown':         { id: 46,    color: '#041E42', abbr: 'GTWN' },
+  'Georgia':            { id: 61,    color: '#BA0C2F', abbr: 'UGA' },
+  'Indiana':            { id: 84,    color: '#990000', abbr: 'IND' },
+  'Iowa':               { id: 2294,  color: '#FFCD00', abbr: 'IOWA' },
+  'James Madison':      { id: 256,   color: '#450084', abbr: 'JMU' },
+  'Johns Hopkins':      { id: 2230,  color: '#002D72', abbr: 'JHU' },
+  'Kansas':             { id: 2305,  color: '#0051BA', abbr: 'KU' },
+  'Kentucky':           { id: 96,    color: '#0033A0', abbr: 'UK' },
+  'Lake Superior State':{ id: null,  color: '#003366', abbr: 'LSSU' },
+  'Long Beach State':   { id: 299,   color: '#000000', abbr: 'LBSU' },
+  'Louisville':         { id: 97,    color: '#AD0000', abbr: 'LOU' },
+  'Loyola Maryland':    { id: 2031,  color: '#006747', abbr: 'LMU' },
+  'LSU':                { id: 99,    color: '#461D7C', abbr: 'LSU' },
+  'Maine':              { id: 311,   color: '#003263', abbr: 'ME' },
+  'Marshall':           { id: 276,   color: '#00B140', abbr: 'MRSH' },
+  'Maryland':           { id: 120,   color: '#E03A3E', abbr: 'MD' },
+  'Miami (FL)':         { id: 2390,  color: '#F47321', abbr: 'MIA' },
+  'Michigan':           { id: 130,   color: '#00274C', abbr: 'MICH' },
+  'Michigan State':     { id: 127,   color: '#18453B', abbr: 'MSU' },
+  'Minnesota':          { id: 135,   color: '#7A0019', abbr: 'MINN' },
+  'Minnesota Duluth':   { id: 2168,  color: '#7A0019', abbr: 'UMD' },
+  'Mississippi State':  { id: 177,   color: '#660000', abbr: 'MSST' },
+  'Nebraska':           { id: 158,   color: '#E41C38', abbr: 'NEB' },
+  'UNLV':               { id: 2439,  color: '#CF0A2C', abbr: 'UNLV' },
+  'North Carolina':     { id: 153,   color: '#7BAFD4', abbr: 'UNC' },
+  'North Dakota':       { id: 155,   color: '#009A44', abbr: 'UND' },
+  'Northern Michigan':  { id: 2200,  color: '#006747', abbr: 'NMU' },
+  'Northwestern':       { id: 77,    color: '#4E2A84', abbr: 'NW' },
+  'Notre Dame':         { id: 87,    color: '#0C2340', abbr: 'ND' },
+  'Ohio State':         { id: 194,   color: '#BB0000', abbr: 'OSU' },
+  'Oklahoma':           { id: 201,   color: '#841617', abbr: 'OU' },
+  'Oklahoma State':     { id: 197,   color: '#FF6600', abbr: 'OKST' },
+  'Ole Miss':           { id: 145,   color: '#CE1126', abbr: 'MISS' },
+  'Oregon State':       { id: 204,   color: '#DC4405', abbr: 'ORST' },
+  'Penn State':         { id: 213,   color: '#041E42', abbr: 'PSU' },
+  'Pepperdine':         { id: 2492,  color: '#00205C', abbr: 'PEPP' },
+  'Princeton':          { id: 163,   color: '#FF6600', abbr: 'PRIN' },
+  'Providence':         { id: 2507,  color: '#000000', abbr: 'PROV' },
+  'Purdue':             { id: 2509,  color: '#CEB888', abbr: 'PUR' },
+  'Quinnipiac':         { id: 2514,  color: '#002B5C', abbr: 'QU' },
+  'Rice':               { id: 242,   color: '#002469', abbr: 'RICE' },
+  'Santa Clara':        { id: 2541,  color: '#862633', abbr: 'SCU' },
+  'South Carolina':     { id: 2579,  color: '#73000A', abbr: 'SC' },
+  "St. John's":         { id: 2599,  color: '#CC0000', abbr: 'SJU' },
+  'Stanford':           { id: 24,    color: '#8C1515', abbr: 'STAN' },
+  'Syracuse':           { id: 183,   color: '#F76900', abbr: 'SYR' },
+  'Tennessee':          { id: 2633,  color: '#FF8200', abbr: 'TENN' },
+  'Texas':              { id: 251,   color: '#BF5700', abbr: 'TEX' },
+  'Texas A&M':          { id: 245,   color: '#500000', abbr: 'TAMU' },
+  'Texas Tech':         { id: 2641,  color: '#CC0000', abbr: 'TTU' },
+  'UCLA':               { id: 26,    color: '#2D68C4', abbr: 'UCLA' },
+  'UC Santa Barbara':   { id: 2540,  color: '#003660', abbr: 'UCSB' },
+  'UMass':              { id: 113,   color: '#881C1C', abbr: 'MASS' },
+  'Union':              { id: null,  color: '#800020', abbr: 'UNON' },
+  'USC':                { id: 30,    color: '#990000', abbr: 'USC' },
+  'Vanderbilt':         { id: 238,   color: '#866D4B', abbr: 'VAN' },
+  'Villanova':          { id: 222,   color: '#00205B', abbr: 'NOVA' },
+  'Virginia':           { id: 258,   color: '#232D4B', abbr: 'UVA' },
+  'Wake Forest':        { id: 154,   color: '#9E7E38', abbr: 'WAKE' },
+  'Washington':         { id: 264,   color: '#4B2E83', abbr: 'WASH' },
+  'Wisconsin':          { id: 275,   color: '#C5050C', abbr: 'WIS' },
+  'Yale':               { id: 43,    color: '#00356B', abbr: 'YALE' },
+  'Portland':           { id: 2501,  color: '#461D7C', abbr: 'PORT' },
+  // --- Cross country additions ---
+  'Iowa State':         { id: 66,    color: '#A71930', abbr: 'ISU' },
+  'Oregon':             { id: 2483,  color: '#154733', abbr: 'ORE' },
+  'Northern Arizona':   { id: 2464,  color: '#003466', abbr: 'NAU' },
+  'BYU':                { id: 252,   color: '#002E5D', abbr: 'BYU' },
+  // --- Field hockey / W ice hockey additions ---
+  'Old Dominion':       { id: 295,   color: '#003057', abbr: 'ODU' },
+  'Clarkson':           { id: null,  color: '#006633', abbr: 'CLAR' },
+  'Northeastern':       { id: 111,   color: '#CC0000', abbr: 'NEU' },
+  'Delaware':           { id: 48,    color: '#00539F', abbr: 'DEL' },
+  // --- Gymnastics / tennis additions ---
+  'Utah':               { id: 254,   color: '#CC0000', abbr: 'UTAH' },
+  'Illinois':           { id: 356,   color: '#E84A27', abbr: 'ILL' },
+  'TCU':                { id: 2628,  color: '#4D1979', abbr: 'TCU' },
+  // --- Golf additions ---
+  'Augusta State':      { id: null,  color: '#003087', abbr: 'AUG' },
+  // --- W cross country additions ---
+  'NC State':           { id: 152,   color: '#CC0000', abbr: 'NCST' },
+  'New Mexico':         { id: 167,   color: '#BA0C2F', abbr: 'UNM' },
+  // --- Wikipedia-scraped additions ---
+  'Cornell':            { id: 172,   color: '#B31B1B', abbr: 'COR' },
+  'Harvard':            { id: 108,   color: '#990000', abbr: 'HARV' },
+  'Vermont':            { id: 261,   color: '#154734', abbr: 'UVM' },
+  'Western Michigan':   { id: 2711,  color: '#532E1F', abbr: 'WMU' },
+  'Georgia Tech':       { id: 59,    color: '#B3A369', abbr: 'GT' },
+  'San Jose State':     { id: 23,    color: '#0038A8', abbr: 'SJSU' },
+};
+
+export const CHAMPIONSHIPS = {
+  football: scraped.football || {},
+  mbb: scraped.mbb || {},
+  wbb: scraped.wbb || {},
+  baseball: scraped.baseball || {},
+  softball: scraped.softball || {},
+  wvb: scraped.wvb || {},
+  mih: scraped.mih || {},
+  msoc: scraped.msoc || {},
+  wsoc: scraped.wsoc || {},
+  mlax: scraped.mlax || {},
+  wlax: scraped.wlax || {},
+  wfh: scraped.wfh || {},
+  wih: scraped.wih || {},
+  wgym: scraped.wgym || {},
+  mten: scraped.mten || {},
+  wten: scraped.wten || {},
+  mgolf: scraped.mgolf || {},
+  wgolf: scraped.wgolf || {},
+  mswim: scraped.mswim || {},
+  wswim: scraped.wswim || {},
+  wrestling: scraped.wrestling || {},
+  mxc: scraped.mxc || {},
+  wxc: scraped.wxc || {},
+};
+
+// Compute the full year range from data
+const allYears = new Set();
+for (const sport of SPORTS) {
+  const data = CHAMPIONSHIPS[sport.key];
+  if (data) Object.keys(data).forEach(y => allYears.add(Number(y)));
+}
+export const YEARS = [...allYears].sort((a, b) => a - b);
+
+export function getLogoUrl(schoolName) {
+  const school = SCHOOLS[schoolName];
+  if (!school || !school.id) return null;
+  return `https://a.espncdn.com/i/teamlogos/ncaa/500/${school.id}.png`;
+}
