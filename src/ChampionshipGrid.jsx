@@ -269,7 +269,10 @@ export default function ChampionshipGrid() {
                           {info?.abbr || school.slice(0, 3).toUpperCase()}
                         </div>
                       )}
-                      {!school && CHAMPIONSHIPS[sport.key]?.[2019] && !CHAMPIONSHIPS[sport.key]?.[2020] && (
+                      {!school &&
+                        year === 2020 &&
+                        CHAMPIONSHIPS[sport.key]?.[2019] &&
+                        !CHAMPIONSHIPS[sport.key]?.[2020] && (
                         <div className="cg-covid" title="Canceled (COVID-19)">
                           &mdash;
                         </div>
