@@ -72,13 +72,9 @@ function wiki(extra = {}) {
 const SOURCES = [
   {
     sport: 'mxc',
-    name: "Men's Cross Country (GitHub CSV)",
-    url: 'https://raw.githubusercontent.com/timfulton1/ncaa_cross_viz/master/01_data/team_champs.csv',
-    parser: 'csv',
-    yearCol: 'YEAR',
-    winnerCol: 'CHAMPION',
-    minYear: 1990,
-    rename: { 'Iowa St.': 'Iowa State' },
+    name: "Men's Cross Country",
+    url: 'https://en.wikipedia.org/wiki/NCAA_Division_I_men%27s_cross_country_championships',
+    ...wiki({ yearCol: 'Year', winnerCol: 'Winner' }),
   },
   {
     sport: 'football',
