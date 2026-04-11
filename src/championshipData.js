@@ -84,7 +84,7 @@ export const SCHOOLS = {
   'Johns Hopkins':      { id: 2230,  color: '#002D72', abbr: 'JHU' },
   'Kansas':             { id: 2305,  color: '#0051BA', abbr: 'KU' },
   'Kentucky':           { id: 96,    color: '#0033A0', abbr: 'UK' },
-  'Lake Superior State':{ id: null,  color: '#003366', abbr: 'LSSU' },
+  'Lake Superior State':{ id: null,  color: '#003366', abbr: 'LSSU', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/4/47/Lake_Superior_State_University_Lakers_Logo.svg' },
   'Long Beach State':   { id: 299,   color: '#000000', abbr: 'LBSU' },
   'Louisville':         { id: 97,    color: '#AD0000', abbr: 'LOU' },
   'Loyola Maryland':    { id: 2031,  color: '#006747', abbr: 'LMU' },
@@ -96,7 +96,7 @@ export const SCHOOLS = {
   'Michigan':           { id: 130,   color: '#00274C', abbr: 'MICH' },
   'Michigan State':     { id: 127,   color: '#18453B', abbr: 'MSU' },
   'Minnesota':          { id: 135,   color: '#7A0019', abbr: 'MINN' },
-  'Minnesota Duluth':   { id: null,  color: '#7A0019', abbr: 'UMD' },
+  'Minnesota Duluth':   { id: null,  color: '#7A0019', abbr: 'UMD', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/6/6a/Minnesota_Duluth_Bulldogs_logo.svg' },
   'Mississippi State':  { id: 177,   color: '#660000', abbr: 'MSST' },
   'Nebraska':           { id: 158,   color: '#E41C38', abbr: 'NEB' },
   'UNLV':               { id: 2439,  color: '#CF0A2C', abbr: 'UNLV' },
@@ -129,7 +129,7 @@ export const SCHOOLS = {
   'UCLA':               { id: 26,    color: '#2D68C4', abbr: 'UCLA' },
   'UC Santa Barbara':   { id: 2540,  color: '#003660', abbr: 'UCSB' },
   'UMass':              { id: 113,   color: '#881C1C', abbr: 'MASS' },
-  'Union':              { id: null,  color: '#800020', abbr: 'UNON' },
+  'Union':              { id: null,  color: '#800020', abbr: 'UNON', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Circle_U_Hockey.png' },
   'USC':                { id: 30,    color: '#990000', abbr: 'USC' },
   'Vanderbilt':         { id: 238,   color: '#866D4B', abbr: 'VAN' },
   'Villanova':          { id: 222,   color: '#00205B', abbr: 'NOVA' },
@@ -146,7 +146,7 @@ export const SCHOOLS = {
   'BYU':                { id: 252,   color: '#002E5D', abbr: 'BYU' },
   // --- Field hockey / W ice hockey additions ---
   'Old Dominion':       { id: 295,   color: '#003057', abbr: 'ODU' },
-  'Clarkson':           { id: null,  color: '#006633', abbr: 'CLAR' },
+  'Clarkson':           { id: null,  color: '#006633', abbr: 'CLAR', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/6/63/Clarkson_Golden_Knights.svg' },
   'Northeastern':       { id: 111,   color: '#CC0000', abbr: 'NEU' },
   'Delaware':           { id: 48,    color: '#00539F', abbr: 'DEL' },
   // --- Gymnastics / tennis additions ---
@@ -154,7 +154,7 @@ export const SCHOOLS = {
   'Illinois':           { id: 356,   color: '#E84A27', abbr: 'ILL' },
   'TCU':                { id: 2628,  color: '#4D1979', abbr: 'TCU' },
   // --- Golf additions ---
-  'Augusta State':      { id: null,  color: '#003087', abbr: 'AUG' },
+  'Augusta State':      { id: null,  color: '#003087', abbr: 'AUG', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Augusta_Jaguars_logo.svg' },
   // --- W cross country additions ---
   'NC State':           { id: 152,   color: '#CC0000', abbr: 'NCST' },
   'New Mexico':         { id: 167,   color: '#BA0C2F', abbr: 'UNM' },
@@ -170,7 +170,7 @@ export const SCHOOLS = {
   'UC Irvine':          { id: 300,   color: '#002B5C', abbr: 'UCI' },
   'Loyola Chicago':     { id: 2350,  color: '#9D1244', abbr: 'LUC' },
   'George Mason':       { id: 2244,  color: '#016600', abbr: 'GMU' },
-  'Lewis':              { id: null,  color: '#B80000', abbr: 'LEW' },
+  'Lewis':              { id: null,  color: '#B80000', abbr: 'LEW', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/5/53/Lewis_Flyers_2023_logo.svg' },
 };
 
 export const CHAMPIONSHIPS = {
@@ -216,6 +216,8 @@ export const YEARS = [...allYears].sort((a, b) => a - b);
 
 export function getLogoUrl(schoolName) {
   const school = SCHOOLS[schoolName];
-  if (!school || !school.id) return null;
+  if (!school) return null;
+  if (school.logoUrl) return school.logoUrl;
+  if (!school.id) return null;
   return `https://a.espncdn.com/i/teamlogos/ncaa/500/${school.id}.png`;
 }
