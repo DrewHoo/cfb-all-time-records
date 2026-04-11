@@ -42,16 +42,16 @@ export const SPORTS = [
   { key: 'mwp',       name: "Men's Water Polo",             short: 'MWP', icon: '🤽', gender: '♂' },
   { key: 'wwp',       name: "Women's Water Polo",           short: 'WWP', icon: '🤽', gender: '♀' },
   { key: 'wrestling', name: 'Wrestling',                    short: 'WRS', icon: '🤼', gender: '♂' },
-  { key: 'mxc',       name: "Men's Cross Country",          short: 'MXC', icon: '🏃', gender: '♂' },
-  { key: 'wxc',       name: "Women's Cross Country",        short: 'WXC', icon: '🏃', gender: '♀' },
+  { key: 'mxc',       name: "Men's Cross Country",          short: 'MXC', icon: '👟', gender: '♂' },
+  { key: 'wxc',       name: "Women's Cross Country",        short: 'WXC', icon: '👟', gender: '♀' },
   // Track & Field — 🏃 is the closest human-featured emoji for every
   // running event, but we also need to distinguish XC, indoor T&F, and
   // outdoor T&F. Indoor uses 🏟 (arena) and outdoor uses 🏅 (medal) so
   // each sport has a unique icon at a glance while XC keeps the runner.
   { key: 'mitf',      name: "Men's Indoor Track & Field",   short: 'MIT', icon: '🏟', gender: '♂' },
   { key: 'witf',      name: "Women's Indoor Track & Field", short: 'WIT', icon: '🏟', gender: '♀' },
-  { key: 'motf',      name: "Men's Outdoor Track & Field",  short: 'MOT', icon: '🏅', gender: '♂' },
-  { key: 'wotf',      name: "Women's Outdoor Track & Field",short: 'WOT', icon: '🏅', gender: '♀' },
+  { key: 'motf',      name: "Men's Outdoor Track & Field",  short: 'MOT', icon: '🏃‍♂️', gender: '♂' },
+  { key: 'wotf',      name: "Women's Outdoor Track & Field",short: 'WOT', icon: '🏃‍♀️', gender: '♀' },
 ];
 
 // ESPN team ID, primary brand color, abbreviation
