@@ -1,6 +1,9 @@
 // NCAA Division I National Championship Data
-// Sources: NCAA records, AP polls (football pre-CFP era)
+// Sources: NCAA records, AP polls (football pre-CFP era), plus GitHub-hosted datasets
+// (see scripts/fetch-data.mjs for the scraper that populates the .scraped.json).
 // Year convention: football = fall season year; all other sports = tournament/championship year
+
+import scraped from './championshipData.scraped.json';
 
 export const SPORTS = [
   { key: 'football', name: 'Football', short: 'FB' },
@@ -15,6 +18,7 @@ export const SPORTS = [
   { key: 'mlax', name: "Men's Lacrosse", short: 'MLX' },
   { key: 'wlax', name: "Women's Lacrosse", short: 'WLX' },
   { key: 'wrestling', name: 'Wrestling', short: 'WRS' },
+  { key: 'mxc', name: "Men's Cross Country", short: 'MXC' },
 ];
 
 // ESPN team ID, primary brand color, abbreviation
@@ -102,6 +106,11 @@ export const SCHOOLS = {
   'Wisconsin':          { id: 275,   color: '#C5050C', abbr: 'WIS' },
   'Yale':               { id: 43,    color: '#00356B', abbr: 'YALE' },
   'Portland':           { id: 2501,  color: '#461D7C', abbr: 'PORT' },
+  // --- Cross country additions ---
+  'Iowa State':         { id: 66,    color: '#A71930', abbr: 'ISU' },
+  'Oregon':             { id: 2483,  color: '#154733', abbr: 'ORE' },
+  'Northern Arizona':   { id: 2464,  color: '#003466', abbr: 'NAU' },
+  'BYU':                { id: 252,   color: '#002E5D', abbr: 'BYU' },
 };
 
 export const CHAMPIONSHIPS = {
@@ -234,6 +243,9 @@ export const CHAMPIONSHIPS = {
     2019: 'Maryland', 2021: 'Boston College', 2022: 'North Carolina',
     2023: 'North Carolina', 2024: 'Northwestern', 2025: 'North Carolina',
   },
+  // Pulled from GitHub via scripts/fetch-data.mjs — keep in sync with SPORTS.key.
+  mxc: scraped.mxc || {},
+
   wrestling: {
     1990: 'Oklahoma State', 1991: 'Iowa', 1992: 'Iowa', 1993: 'Iowa',
     1994: 'Oklahoma State', 1995: 'Iowa', 1996: 'Iowa', 1997: 'Iowa',
