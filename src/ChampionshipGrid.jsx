@@ -1,9 +1,10 @@
 import { useState, useMemo, useCallback, useRef, Fragment } from 'react';
 import { SPORTS, SCHOOLS, CHAMPIONSHIPS, YEARS, getLogoUrl } from './championshipData';
 
-const CELL = 42;
-const YEAR_W = 54;
-const HDR_H = 110;
+// Default cell size (overridden on mobile via a CSS min() + viewport calc).
+const CELL = 32;
+const YEAR_W = 48;
+const HDR_H = 56;
 
 export default function ChampionshipGrid() {
   const [highlighted, setHighlighted] = useState(null);
@@ -11,6 +12,23 @@ export default function ChampionshipGrid() {
   const gridRef = useRef(null);
 
   const active = locked || highlighted;
+
+  // Sports ordered alphabetically ignoring the "Men's "/"Women's " prefix so
+  // paired sports (Basketball, Soccer, Tennis…) sit next to each other.
+  const sortedSports = useMemo(() => {
+    const stripGender = (name) => name.replace(/^(Men's |Women's )/, '');
+    return [...SPORTS].sort((a, b) => {
+      const cmp = stripGender(a.name).localeCompare(stripGender(b.name));
+      return cmp !== 0 ? cmp : a.name.localeCompare(b.name);
+    });
+  }, []);
+
+  // Years in descending order (newest at the top of the grid).
+  const descendingYears = useMemo(() => [...YEARS].sort((a, b) => b - a), []);
+  const yearRange = useMemo(
+    () => `${Math.min(...YEARS)}–${Math.max(...YEARS)}`,
+    [],
+  );
 
   // Count total titles per school across all sports shown
   const schoolTitles = useMemo(() => {
@@ -68,7 +86,7 @@ export default function ChampionshipGrid() {
         </a>
         <h1>NCAA Division I Championships</h1>
         <p className="cg-sub">
-          {YEARS[0]}–{YEARS[YEARS.length - 1]} &middot; {SPORTS.length} sports
+          {yearRange} &middot; {SPORTS.length} sports
           &middot; Hover or tap to trace a school
         </p>
       </header>
@@ -109,29 +127,41 @@ export default function ChampionshipGrid() {
           ref={gridRef}
           className="cg-grid"
           style={{
-            gridTemplateColumns: `${YEAR_W}px repeat(${SPORTS.length}, ${CELL}px)`,
-            gridTemplateRows: `${HDR_H}px repeat(${YEARS.length}, ${CELL}px)`,
+            '--sport-count': sortedSports.length,
+            '--year-count': descendingYears.length,
+            '--cell-w-default': `${CELL}px`,
+            '--year-w-default': `${YEAR_W}px`,
+            '--header-h-default': `${HDR_H}px`,
           }}
         >
           {/* Corner */}
           <div className="cg-corner" />
 
           {/* Sport column headers */}
-          {SPORTS.map((sport) => (
-            <div key={sport.key} className="cg-sport-hdr">
-              <span className="cg-sport-label">{sport.name}</span>
+          {sortedSports.map((sport) => (
+            <div
+              key={sport.key}
+              className="cg-sport-hdr"
+              title={sport.name}
+            >
+              <span className="cg-sport-icon" aria-label={sport.name}>
+                {sport.icon}
+              </span>
+              {sport.gender && (
+                <span className="cg-sport-gender">{sport.gender}</span>
+              )}
             </div>
           ))}
 
           {/* Rows */}
-          {YEARS.map((year) => {
+          {descendingYears.map((year) => {
             const isDecade = year % 10 === 0;
             return (
               <Fragment key={year}>
                 <div className={`cg-year ${isDecade ? 'cg-year--decade' : ''}`}>
                   {year}
                 </div>
-                {SPORTS.map((sport) => {
+                {sortedSports.map((sport) => {
                   const school = CHAMPIONSHIPS[sport.key]?.[year] ?? null;
                   const info = school ? SCHOOLS[school] : null;
                   const isActive = active && active === school;
@@ -338,10 +368,18 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Grid */
+/* Grid — cell/year/header widths come from --*-default custom props that
+   the JSX component sets inline, but the computed values live here in CSS
+   so media queries can override them without getting shadowed by inline
+   styles. */
 .cg-grid {
   display: grid;
   position: relative;
+  --cell-w: var(--cell-w-default, 32px);
+  --year-w: var(--year-w-default, 48px);
+  --header-h: var(--header-h-default, 56px);
+  grid-template-columns: var(--year-w) repeat(var(--sport-count), var(--cell-w));
+  grid-template-rows: var(--header-h) repeat(var(--year-count), var(--cell-w));
 }
 
 /* Corner cell */
@@ -363,21 +401,24 @@ body {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding-bottom: 8px;
-  padding-left: 4px;
-  overflow: visible;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  overflow: hidden;
+  padding: 2px 0;
+  cursor: help;
 }
-.cg-sport-label {
-  display: block;
-  transform: rotate(-55deg);
-  transform-origin: bottom left;
-  white-space: nowrap;
-  font-size: 11px;
-  font-weight: 500;
+.cg-sport-icon {
+  font-size: clamp(10px, calc(var(--cell-w) * 0.62), 18px);
+  line-height: 1;
+  filter: saturate(0.85);
+}
+.cg-sport-gender {
+  font-size: clamp(6px, calc(var(--cell-w) * 0.32), 10px);
+  line-height: 1;
   color: var(--muted);
-  letter-spacing: 0.01em;
+  font-weight: 600;
 }
 
 /* Year labels */
@@ -400,7 +441,7 @@ body {
 .cg-year--decade {
   color: #fff;
   font-weight: 500;
-  border-top: 1px solid rgba(255,255,255,0.12);
+  border-bottom: 1px solid rgba(255,255,255,0.18);
 }
 
 /* Data cells */
@@ -416,7 +457,7 @@ body {
   overflow: visible;
 }
 .cg-cell--decade {
-  border-top: 1px solid rgba(255,255,255,0.12);
+  border-bottom: 1px solid rgba(255,255,255,0.18);
 }
 .cg-cell--on {
   z-index: 5;
@@ -435,10 +476,10 @@ body {
   cursor: default;
 }
 
-/* Logos */
+/* Logos — scale with cell size so they shrink cleanly on mobile */
 .cg-logo {
-  width: 32px;
-  height: 32px;
+  width: 82%;
+  height: 82%;
   object-fit: contain;
   pointer-events: none;
   image-rendering: auto;
@@ -446,15 +487,15 @@ body {
 
 /* Text fallback */
 .cg-fallback {
-  width: 30px;
-  height: 30px;
-  border-radius: 4px;
+  width: 78%;
+  height: 78%;
+  border-radius: 3px;
   align-items: center;
   justify-content: center;
-  font-size: 8px;
+  font-size: clamp(6px, calc(var(--cell-w) * 0.26), 9px);
   font-weight: 700;
   color: #fff;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   pointer-events: none;
 }
@@ -478,11 +519,32 @@ body {
   line-height: 1.5;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .cg-page { padding: 12px 4px 32px; }
+/* Responsive: on phones, shrink cells + year column so the full grid
+   fits within the viewport horizontally (vertical scroll is fine). */
+@media (max-width: 640px) {
+  .cg-page { padding: 12px 4px 24px; }
   .cg-header h1 { font-size: 18px; }
   .cg-info { height: 40px; }
   .cg-info-name { font-size: 13px; }
+  .cg-info-placeholder { font-size: 11px; padding: 0 8px; text-align: center; }
+
+  .cg-scroll {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+  .cg-grid {
+    --year-w: 28px;
+    --header-h: 44px;
+    /* cell width = (viewport − year col − horizontal padding) / column count,
+       capped at the desktop default so large phones don't balloon */
+    --cell-w: min(
+      var(--cell-w-default, 32px),
+      calc((100vw - 28px - 10px) / var(--sport-count))
+    );
+  }
+  .cg-year {
+    font-size: 9px;
+    padding-right: 3px;
+  }
 }
 `;

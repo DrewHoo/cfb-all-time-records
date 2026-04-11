@@ -1,57 +1,47 @@
-# College Football All-Time Records
+# CFB All-Time Records
 
-Interactive dashboard of all 136 NCAA FBS football programs showing all-time win-loss records, bowl records, and national championships. Data sourced from Wikipedia through the 2025 season.
+Two interactive views of NCAA Division I college sports history, built with React + Vite and deployed to GitHub Pages.
 
-## Deploy to GitHub Pages
+**Live site:** https://drewhoo.github.io/cfb-all-time-records/
 
-### Option A: Automatic (GitHub Actions) — Recommended
+## What's here
 
-1. **Create a GitHub repo** named `cfb-all-time-records` (or whatever you like)
+- **Championship grid** (`index.html`) — every NCAA Division I national champion in 23 sports from 1990 to present, as a hoverable grid of team logos. Hover any cell to highlight every other championship won by that school across all sports and years.
+- **Football records table** (`football.html`) — all-time win/loss records, bowl records, and national titles for all 136 current FBS programs through the 2025 season.
 
-2. **Update `vite.config.js`** — change the `base` to match your repo name:
-   ```js
-   base: '/your-repo-name/',
-   ```
+## Data sources
 
-3. **Push the code:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/cfb-all-time-records.git
-   git push -u origin main
-   ```
+### Championship grid
 
-4. **Enable GitHub Pages** in your repo:
-   - Go to **Settings → Pages**
-   - Under **Source**, select **GitHub Actions**
+Championship data is scraped from Wikipedia by `scripts/fetch-data.mjs` and written to `src/championshipData.scraped.json`, which `src/championshipData.js` imports at build time. To refresh the data:
 
-5. The workflow runs automatically on push. Your site will be live at:
-   ```
-   https://YOUR_USERNAME.github.io/cfb-all-time-records/
-   ```
+```bash
+node scripts/fetch-data.mjs
+```
 
-### Option B: Manual (gh-pages branch)
+The scraper uses cheerio to parse `<table class="wikitable">` elements on each sport's Wikipedia page, expanding `rowspan`/`colspan` so multi-row headers resolve correctly, merging data from multi-era tables (tennis, golf, swimming) on the same page, and normalizing team names via a shared rename map. Football is handled by a dedicated parser that collapses the NCAA FBS consensus champions table — which lists one row per (year, selector) pair — into a single winner per year, preferring CFP > BCS > AP > Coaches. A handful of GitHub-hosted CSVs are used where Wikipedia coverage is spotty (currently just Men's Cross Country).
 
-1. Install dependencies and build:
-   ```bash
-   npm install
-   npm run build
-   ```
+Adding a new sport is a matter of appending one entry to the `SOURCES` array in `scripts/fetch-data.mjs` — URL, parser type (`wikipediaTable`, `footballConsensus`, or `csv`), and optional `yearCol` / `winnerCol` / `rename` hints — and re-running the scraper.
 
-2. Deploy to the `gh-pages` branch:
-   ```bash
-   npm run deploy
-   ```
+Three helper scripts sit alongside the main scraper:
 
-3. In your repo **Settings → Pages**, set Source to **Deploy from a branch** and select the `gh-pages` branch.
+- `scripts/diff_scraped.mjs` — diffs the scraped JSON against whatever is currently in `championshipData.js`, useful after a re-scrape to see what changed upstream on Wikipedia.
+- `scripts/reconcile.mjs` — merges scraped and memory data and reports any schools referenced in the merged result that are missing from the `SCHOOLS` map in `championshipData.js`.
+- `scripts/gen_champs.mjs` — regenerates the `CHAMPIONSHIPS` block in `championshipData.js` after a re-scrape.
 
-## Local Development
+### Football records table
+
+Sourced from Wikipedia through the 2025 season; data lives in `src/App.jsx`.
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Opens at `http://localhost:5173`
+Dev server opens at `http://localhost:5173/cfb-all-time-records/`.
+
+## Deployment
+
+Pushes to `main` trigger `.github/workflows/deploy.yml`, which runs `npm run build` and publishes `./dist` to GitHub Pages. The Vite `base` is set to `/cfb-all-time-records/` in `vite.config.js` — if you fork this, update that to match your repo name.

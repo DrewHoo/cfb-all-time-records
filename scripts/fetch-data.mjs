@@ -214,6 +214,48 @@ const SOURCES = [
     url: 'https://en.wikipedia.org/wiki/NCAA_Division_I_women%27s_cross_country_championships',
     ...wiki({ yearCol: 'Year', winnerCol: 'Winner' }),
   },
+  {
+    sport: 'mvb',
+    name: "Men's Volleyball",
+    url: 'https://en.wikipedia.org/wiki/NCAA_Men%27s_Volleyball_Championship',
+    ...wiki({ yearCol: 'Year', winnerCol: 'Winner' }),
+  },
+  {
+    sport: 'mwp',
+    name: "Men's Water Polo",
+    url: 'https://en.wikipedia.org/wiki/NCAA_men%27s_water_polo_championship',
+    ...wiki({ yearCol: 'Year', winnerCol: 'Champion' }),
+  },
+  {
+    sport: 'wwp',
+    name: "Women's Water Polo",
+    url: 'https://en.wikipedia.org/wiki/NCAA_women%27s_water_polo_championship',
+    ...wiki({ yearCol: 'Year', winnerCol: 'National Champion' }),
+  },
+  {
+    sport: 'mitf',
+    name: "Men's Indoor Track & Field",
+    url: 'https://en.wikipedia.org/wiki/NCAA_Division_I_Men%27s_Indoor_Track_and_Field_Championships',
+    ...wiki({ yearCol: 'Year', winnerCol: 'Winner' }),
+  },
+  {
+    sport: 'witf',
+    name: "Women's Indoor Track & Field",
+    url: 'https://en.wikipedia.org/wiki/NCAA_Division_I_Women%27s_Indoor_Track_and_Field_Championships',
+    ...wiki({ yearCol: 'Year', winnerCol: 'Winner' }),
+  },
+  {
+    sport: 'motf',
+    name: "Men's Outdoor Track & Field",
+    url: 'https://en.wikipedia.org/wiki/NCAA_Division_I_Men%27s_Outdoor_Track_and_Field_Championships',
+    ...wiki({ yearCol: 'Year', winnerCol: 'Winner' }),
+  },
+  {
+    sport: 'wotf',
+    name: "Women's Outdoor Track & Field",
+    url: 'https://en.wikipedia.org/wiki/NCAA_Division_I_Women%27s_Outdoor_Track_and_Field_Championships',
+    ...wiki({ yearCol: 'Year', winnerCol: 'Winner' }),
+  },
 ];
 
 // --- Parsers ----------------------------------------------------------------

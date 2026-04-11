@@ -5,30 +5,44 @@
 
 import scraped from './championshipData.scraped.json';
 
+// Each sport has:
+//   key       — referenced throughout the app
+//   name      — full display name (shown in tooltips and the info bar)
+//   short     — short code (currently unused; reserved for compact layouts)
+//   icon      — emoji shown in the column header
+//   gender    — optional "♂"/"♀" glyph rendered beneath the icon to
+//               distinguish paired men's/women's sports
 export const SPORTS = [
-  { key: 'football', name: 'Football', short: 'FB' },
-  { key: 'mbb', name: "Men's Basketball", short: 'MBK' },
-  { key: 'wbb', name: "Women's Basketball", short: 'WBK' },
-  { key: 'baseball', name: 'Baseball', short: 'BSB' },
-  { key: 'softball', name: 'Softball', short: 'SB' },
-  { key: 'wvb', name: "Women's Volleyball", short: 'WVB' },
-  { key: 'mih', name: "Men's Ice Hockey", short: 'MIH' },
-  { key: 'msoc', name: "Men's Soccer", short: 'MSO' },
-  { key: 'wsoc', name: "Women's Soccer", short: 'WSO' },
-  { key: 'mlax', name: "Men's Lacrosse", short: 'MLX' },
-  { key: 'wlax', name: "Women's Lacrosse", short: 'WLX' },
-  { key: 'wfh', name: "Women's Field Hockey", short: 'WFH' },
-  { key: 'wih', name: "Women's Ice Hockey", short: 'WIH' },
-  { key: 'wgym', name: "Women's Gymnastics", short: 'WGY' },
-  { key: 'mten', name: "Men's Tennis", short: 'MTN' },
-  { key: 'wten', name: "Women's Tennis", short: 'WTN' },
-  { key: 'mgolf', name: "Men's Golf", short: 'MGF' },
-  { key: 'wgolf', name: "Women's Golf", short: 'WGF' },
-  { key: 'mswim', name: "Men's Swimming & Diving", short: 'MSW' },
-  { key: 'wswim', name: "Women's Swimming & Diving", short: 'WSW' },
-  { key: 'wrestling', name: 'Wrestling', short: 'WRS' },
-  { key: 'mxc', name: "Men's Cross Country", short: 'MXC' },
-  { key: 'wxc', name: "Women's Cross Country", short: 'WXC' },
+  { key: 'football',  name: 'Football',                     short: 'FB',  icon: '🏈' },
+  { key: 'mbb',       name: "Men's Basketball",             short: 'MBK', icon: '🏀', gender: '♂' },
+  { key: 'wbb',       name: "Women's Basketball",           short: 'WBK', icon: '🏀', gender: '♀' },
+  { key: 'baseball',  name: 'Baseball',                     short: 'BSB', icon: '⚾' },
+  { key: 'softball',  name: 'Softball',                     short: 'SB',  icon: '🥎' },
+  { key: 'mvb',       name: "Men's Volleyball",             short: 'MVB', icon: '🏐', gender: '♂' },
+  { key: 'wvb',       name: "Women's Volleyball",           short: 'WVB', icon: '🏐', gender: '♀' },
+  { key: 'mih',       name: "Men's Ice Hockey",             short: 'MIH', icon: '🏒', gender: '♂' },
+  { key: 'wih',       name: "Women's Ice Hockey",           short: 'WIH', icon: '🏒', gender: '♀' },
+  { key: 'msoc',      name: "Men's Soccer",                 short: 'MSO', icon: '⚽', gender: '♂' },
+  { key: 'wsoc',      name: "Women's Soccer",               short: 'WSO', icon: '⚽', gender: '♀' },
+  { key: 'mlax',      name: "Men's Lacrosse",               short: 'MLX', icon: '🥍', gender: '♂' },
+  { key: 'wlax',      name: "Women's Lacrosse",             short: 'WLX', icon: '🥍', gender: '♀' },
+  { key: 'wfh',       name: "Women's Field Hockey",         short: 'WFH', icon: '🏑' },
+  { key: 'wgym',      name: "Women's Gymnastics",           short: 'WGY', icon: '🤸' },
+  { key: 'mten',      name: "Men's Tennis",                 short: 'MTN', icon: '🎾', gender: '♂' },
+  { key: 'wten',      name: "Women's Tennis",               short: 'WTN', icon: '🎾', gender: '♀' },
+  { key: 'mgolf',     name: "Men's Golf",                   short: 'MGF', icon: '⛳', gender: '♂' },
+  { key: 'wgolf',     name: "Women's Golf",                 short: 'WGF', icon: '⛳', gender: '♀' },
+  { key: 'mswim',     name: "Men's Swimming & Diving",      short: 'MSW', icon: '🏊', gender: '♂' },
+  { key: 'wswim',     name: "Women's Swimming & Diving",    short: 'WSW', icon: '🏊', gender: '♀' },
+  { key: 'mwp',       name: "Men's Water Polo",             short: 'MWP', icon: '🤽', gender: '♂' },
+  { key: 'wwp',       name: "Women's Water Polo",           short: 'WWP', icon: '🤽', gender: '♀' },
+  { key: 'wrestling', name: 'Wrestling',                    short: 'WRS', icon: '🤼' },
+  { key: 'mxc',       name: "Men's Cross Country",          short: 'MXC', icon: '🌲', gender: '♂' },
+  { key: 'wxc',       name: "Women's Cross Country",        short: 'WXC', icon: '🌲', gender: '♀' },
+  { key: 'mitf',      name: "Men's Indoor Track & Field",   short: 'MIT', icon: '🏟',  gender: '♂' },
+  { key: 'witf',      name: "Women's Indoor Track & Field", short: 'WIT', icon: '🏟',  gender: '♀' },
+  { key: 'motf',      name: "Men's Outdoor Track & Field",  short: 'MOT', icon: '🏃', gender: '♂' },
+  { key: 'wotf',      name: "Women's Outdoor Track & Field",short: 'WOT', icon: '🏃', gender: '♀' },
 ];
 
 // ESPN team ID, primary brand color, abbreviation
@@ -142,6 +156,12 @@ export const SCHOOLS = {
   'Western Michigan':   { id: 2711,  color: '#532E1F', abbr: 'WMU' },
   'Georgia Tech':       { id: 59,    color: '#B3A369', abbr: 'GT' },
   'San Jose State':     { id: 23,    color: '#0038A8', abbr: 'SJSU' },
+  // --- Water polo / volleyball / track & field additions ---
+  "Hawai'i":            { id: 62,    color: '#024731', abbr: 'HAW' },
+  'UC Irvine':          { id: 300,   color: '#002B5C', abbr: 'UCI' },
+  'Loyola Chicago':     { id: 2350,  color: '#9D1244', abbr: 'LUC' },
+  'George Mason':       { id: 2244,  color: '#016600', abbr: 'GMU' },
+  'Lewis':              { id: null,  color: '#B80000', abbr: 'LEW' },
 };
 
 export const CHAMPIONSHIPS = {
@@ -150,6 +170,7 @@ export const CHAMPIONSHIPS = {
   wbb: scraped.wbb || {},
   baseball: scraped.baseball || {},
   softball: scraped.softball || {},
+  mvb: scraped.mvb || {},
   wvb: scraped.wvb || {},
   mih: scraped.mih || {},
   msoc: scraped.msoc || {},
@@ -165,9 +186,15 @@ export const CHAMPIONSHIPS = {
   wgolf: scraped.wgolf || {},
   mswim: scraped.mswim || {},
   wswim: scraped.wswim || {},
+  mwp: scraped.mwp || {},
+  wwp: scraped.wwp || {},
   wrestling: scraped.wrestling || {},
   mxc: scraped.mxc || {},
   wxc: scraped.wxc || {},
+  mitf: scraped.mitf || {},
+  witf: scraped.witf || {},
+  motf: scraped.motf || {},
+  wotf: scraped.wotf || {},
 };
 
 // Compute the full year range from data
