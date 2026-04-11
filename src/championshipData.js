@@ -19,6 +19,8 @@ export const SPORTS = [
   { key: 'wlax', name: "Women's Lacrosse", short: 'WLX' },
   { key: 'wfh', name: "Women's Field Hockey", short: 'WFH' },
   { key: 'wih', name: "Women's Ice Hockey", short: 'WIH' },
+  { key: 'wgym', name: "Women's Gymnastics", short: 'WGY' },
+  { key: 'mten', name: "Men's Tennis", short: 'MTN' },
   { key: 'wrestling', name: 'Wrestling', short: 'WRS' },
   { key: 'mxc', name: "Men's Cross Country", short: 'MXC' },
 ];
@@ -118,6 +120,10 @@ export const SCHOOLS = {
   'Clarkson':           { id: null,  color: '#006633', abbr: 'CLAR' },
   'Northeastern':       { id: 111,   color: '#CC0000', abbr: 'NEU' },
   'Delaware':           { id: 48,    color: '#00539F', abbr: 'DEL' },
+  // --- Gymnastics / tennis additions ---
+  'Utah':               { id: 254,   color: '#CC0000', abbr: 'UTAH' },
+  'Illinois':           { id: 356,   color: '#E84A27', abbr: 'ILL' },
+  'TCU':                { id: 2628,  color: '#4D1979', abbr: 'TCU' },
 };
 
 export const CHAMPIONSHIPS = {
@@ -277,6 +283,30 @@ export const CHAMPIONSHIPS = {
     2016: 'Minnesota', 2017: 'Clarkson', 2018: 'Clarkson',
     2019: 'Wisconsin', 2021: 'Northeastern', 2022: 'Ohio State',
     2023: 'Wisconsin', 2024: 'Ohio State', 2025: 'Wisconsin',
+  },
+
+  wgym: {
+    1990: 'Utah', 1991: 'Alabama', 1992: 'Utah', 1993: 'Georgia',
+    1994: 'Utah', 1995: 'Utah', 1996: 'Alabama', 1997: 'UCLA',
+    1998: 'Georgia', 1999: 'Georgia', 2000: 'UCLA', 2001: 'UCLA',
+    2002: 'Alabama', 2003: 'UCLA', 2004: 'UCLA', 2005: 'Georgia',
+    2006: 'Georgia', 2007: 'Georgia', 2008: 'Georgia', 2009: 'Georgia',
+    2010: 'UCLA', 2011: 'Alabama', 2012: 'Alabama', 2013: 'Florida',
+    2014: 'Florida', 2015: 'Florida', 2016: 'Oklahoma', 2017: 'Oklahoma',
+    2018: 'UCLA', 2019: 'Oklahoma', 2021: 'Michigan', 2022: 'Oklahoma',
+    2023: 'Oklahoma', 2024: 'LSU',
+  },
+
+  mten: {
+    1990: 'Stanford', 1991: 'USC', 1992: 'Stanford', 1993: 'Georgia',
+    1994: 'USC', 1995: 'Stanford', 1996: 'Stanford', 1997: 'Stanford',
+    1998: 'Stanford', 1999: 'Georgia', 2000: 'Stanford', 2001: 'Georgia',
+    2002: 'USC', 2003: 'Illinois', 2004: 'Baylor', 2005: 'UCLA',
+    2006: 'Pepperdine', 2007: 'Georgia', 2008: 'Georgia', 2009: 'USC',
+    2010: 'USC', 2011: 'USC', 2012: 'USC', 2013: 'Virginia',
+    2014: 'USC', 2015: 'Virginia', 2016: 'Virginia', 2017: 'Virginia',
+    2018: 'Wake Forest', 2019: 'Texas', 2021: 'Florida',
+    2022: 'Virginia', 2023: 'Virginia', 2024: 'TCU',
   },
 
   wrestling: {
