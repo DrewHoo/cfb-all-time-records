@@ -89,7 +89,7 @@ const ogGrid = frame(`
     Since 1990
   </text>
   <text x="60" y="340" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="28" fill="${ACCENT}" font-weight="600">
-    23 sports · one grid
+    30 sports · one grid
   </text>
   <text x="60" y="395" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="20" fill="${MUTED}" font-weight="400">
     Hover any cell to trace a school's
