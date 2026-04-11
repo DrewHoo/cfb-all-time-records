@@ -323,6 +323,9 @@ const GridContent = memo(function GridContent({
                       ? champs.map((co, i) => {
                           const coInfo = SCHOOLS[co];
                           const coLogo = getLogoUrl(co);
+                          const logoCls =
+                            'cg-logo' +
+                            (coInfo?.invertLogo ? ' cg-logo--invert' : '');
                           return (
                             <div
                               key={co}
@@ -336,7 +339,7 @@ const GridContent = memo(function GridContent({
                                   src={coLogo}
                                   alt={co}
                                   loading="lazy"
-                                  className="cg-logo"
+                                  className={logoCls}
                                   onError={handleImgError}
                                 />
                               ) : (
@@ -353,29 +356,36 @@ const GridContent = memo(function GridContent({
                             </div>
                           );
                         })
-                      : primary && (
-                          <>
-                            {getLogoUrl(primary) && (
-                              <img
-                                src={getLogoUrl(primary)}
-                                alt={primary}
-                                loading="lazy"
-                                className="cg-logo"
-                                onError={handleImgError}
-                              />
-                            )}
-                            <div
-                              className="cg-fallback"
-                              style={{
-                                display: getLogoUrl(primary) ? 'none' : 'flex',
-                                background: SCHOOLS[primary]?.color || '#555',
-                              }}
-                            >
-                              {SCHOOLS[primary]?.abbr ||
-                                primary.slice(0, 3).toUpperCase()}
-                            </div>
-                          </>
-                        )}
+                      : primary && (() => {
+                          const info = SCHOOLS[primary];
+                          const logoUrl = getLogoUrl(primary);
+                          const logoCls =
+                            'cg-logo' +
+                            (info?.invertLogo ? ' cg-logo--invert' : '');
+                          return (
+                            <>
+                              {logoUrl && (
+                                <img
+                                  src={logoUrl}
+                                  alt={primary}
+                                  loading="lazy"
+                                  className={logoCls}
+                                  onError={handleImgError}
+                                />
+                              )}
+                              <div
+                                className="cg-fallback"
+                                style={{
+                                  display: logoUrl ? 'none' : 'flex',
+                                  background: info?.color || '#555',
+                                }}
+                              >
+                                {info?.abbr ||
+                                  primary.slice(0, 3).toUpperCase()}
+                              </div>
+                            </>
+                          );
+                        })()}
                     {champs.length === 0 &&
                       year === 2020 &&
                       CHAMPIONSHIPS[sport.key]?.[2019] &&
@@ -680,6 +690,11 @@ body {
   pointer-events: none;
   image-rendering: auto;
 }
+/* For logos whose only variant is solid-dark on transparent (e.g. Long
+   Beach State), flip to white so they read on the dark canvas. */
+.cg-logo--invert {
+  filter: invert(1) brightness(1.6);
+}
 
 /* Text fallback */
 .cg-fallback {
@@ -730,21 +745,6 @@ body {
 .cg-half--b .cg-fallback {
   bottom: 8%;
   right: 8%;
-}
-/* Thin diagonal divider. Placed above both halves via pointer-events: none
-   so the underlying hit targets still receive hover/click. */
-.cg-cell--shared::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top right,
-    transparent calc(50% - 0.5px),
-    rgba(255,255,255,0.35) calc(50% - 0.5px),
-    rgba(255,255,255,0.35) calc(50% + 0.5px),
-    transparent calc(50% + 0.5px)
-  );
-  pointer-events: none;
 }
 
 /* COVID dash */
