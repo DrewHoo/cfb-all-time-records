@@ -6,40 +6,46 @@ const CELL = 32;
 const YEAR_W = 48;
 const HDR_H = 56;
 
-// Read ?school=... on first render so shared links land on the locked view.
-const initialLockedFromUrl = () => {
-  if (typeof window === 'undefined') return null;
-  const param = new URLSearchParams(window.location.search).get('school');
-  if (!param) return null;
-  return SCHOOLS[param] ? param : null;
+// Read ?a=/?b= (or legacy ?school=) on first render so shared links land on
+// the right selection — up to two schools for compare mode.
+const initialSelectionFromUrl = () => {
+  if (typeof window === 'undefined') return [];
+  const params = new URLSearchParams(window.location.search);
+  const raw = [params.get('a'), params.get('b')];
+  const legacy = params.get('school');
+  if (legacy && !raw[0]) raw[0] = legacy;
+  return raw.filter((s) => s && SCHOOLS[s]).slice(0, 2);
 };
 
 export default function ChampionshipGrid() {
   const [highlighted, setHighlighted] = useState(null);
-  const [locked, setLocked] = useState(initialLockedFromUrl);
+  const [selection, setSelection] = useState(initialSelectionFromUrl);
   const [copied, setCopied] = useState(false);
   const gridRef = useRef(null);
 
-  // Stable ref mirrors `locked` so hover callbacks stay referentially stable
-  // (and don't force the memoized cell grid to re-render every mouseenter).
-  const lockedRef = useRef(locked);
+  // Stable ref mirrors `selection` so hover callbacks stay referentially
+  // stable (and don't re-render the memoized cell grid every mouseenter).
+  const selectionRef = useRef(selection);
   useEffect(() => {
-    lockedRef.current = locked;
-  }, [locked]);
+    selectionRef.current = selection;
+  }, [selection]);
 
-  // Keep ?school=... in sync with the locked state without growing history.
+  // Keep ?a=/?b= in sync with the selection and drop legacy ?school=.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const url = new URL(window.location.href);
-    if (locked) {
-      url.searchParams.set('school', locked);
-    } else {
-      url.searchParams.delete('school');
-    }
+    url.searchParams.delete('school');
+    if (selection[0]) url.searchParams.set('a', selection[0]);
+    else url.searchParams.delete('a');
+    if (selection[1]) url.searchParams.set('b', selection[1]);
+    else url.searchParams.delete('b');
     window.history.replaceState(null, '', url);
-  }, [locked]);
+  }, [selection]);
 
-  const active = locked || highlighted;
+  const activeSchools = useMemo(() => {
+    if (selection.length > 0) return selection;
+    return highlighted ? [highlighted] : [];
+  }, [selection, highlighted]);
 
   // Sports ordered alphabetically ignoring the "Men's "/"Women's " prefix so
   // paired sports (Basketball, Soccer, Tennis…) sit next to each other.
@@ -75,24 +81,45 @@ export default function ChampionshipGrid() {
     return counts;
   }, []);
 
-  // These callbacks read `locked` via the ref, so their identity never
+  // Picker option list — only schools with at least one title, sorted
+  // alphabetically. Schools with zero titles can't be meaningfully compared.
+  const schoolOptions = useMemo(
+    () =>
+      Object.keys(SCHOOLS)
+        .filter((s) => schoolTitles[s])
+        .sort((a, b) => a.localeCompare(b)),
+    [schoolTitles],
+  );
+
+  // These callbacks read `selection` via the ref, so their identity never
   // changes. That lets <GridContent> memoize against them.
   const onEnter = useCallback((school) => {
-    if (!lockedRef.current) setHighlighted(school);
+    if (selectionRef.current.length === 0) setHighlighted(school);
   }, []);
 
   const onLeave = useCallback(() => {
-    if (!lockedRef.current) setHighlighted(null);
+    if (selectionRef.current.length === 0) setHighlighted(null);
   }, []);
 
-  const onClick = useCallback((school, e) => {
-    e.stopPropagation();
-    setLocked((prev) => (prev === school ? null : school));
+  const toggleSchool = useCallback((school) => {
+    setSelection((prev) => {
+      if (prev.includes(school)) return prev.filter((s) => s !== school);
+      if (prev.length < 2) return [...prev, school];
+      return [prev[1], school];
+    });
     setHighlighted(null);
   }, []);
 
-  const clearLock = useCallback(() => {
-    setLocked(null);
+  const onClick = useCallback(
+    (school, e) => {
+      e.stopPropagation();
+      toggleSchool(school);
+    },
+    [toggleSchool],
+  );
+
+  const clearSelection = useCallback(() => {
+    setSelection([]);
     setHighlighted(null);
   }, []);
 
@@ -103,9 +130,15 @@ export default function ChampionshipGrid() {
     if (fallback) fallback.style.display = 'flex';
   }, []);
 
-  const shareTitle = locked
-    ? `Every NCAA D-I national title ${locked} has won since 1990`
-    : 'Every NCAA D-I national champion since 1990, in one grid';
+  const shareTitle = useMemo(() => {
+    if (selection.length === 2) {
+      return `${selection[0]} vs ${selection[1]} — NCAA D-I championships since 1990`;
+    }
+    if (selection.length === 1) {
+      return `Every NCAA D-I national title ${selection[0]} has won since 1990`;
+    }
+    return 'Every NCAA D-I national champion since 1990, in one grid';
+  }, [selection]);
 
   const copyLink = useCallback(async (e) => {
     e.stopPropagation();
@@ -129,33 +162,46 @@ export default function ChampionshipGrid() {
     );
   }, [shareTitle]);
 
-  // Dynamic CSS that dims non-matching cells and glows the active school.
-  // Recomputed only when `active` changes — React updates a single text node
-  // instead of reconciling ~800 cells. Split cells carry both champions in
-  // data-school and data-school-2, so either attribute matching counts.
+  // Dynamic CSS that dims non-matching cells and glows each active school in
+  // its own color. Recomputed only when `activeSchools` changes so React
+  // updates a single text node instead of reconciling ~800 cells. Split cells
+  // carry both champions in data-school and data-school-2, so either
+  // attribute matching counts.
   const activeStyle = useMemo(() => {
-    if (!active) return '';
-    const color = SCHOOLS[active]?.color || '#fff';
+    if (activeSchools.length === 0) return '';
     // NCAA school names are safe ASCII, but escape quotes/backslashes defensively.
-    const esc = active.replace(/["\\]/g, '\\$&');
-    return `
-      .cg-grid .cg-cell:not([data-school="${esc}"]):not([data-school-2="${esc}"]) {
+    const esc = (s) => s.replace(/["\\]/g, '\\$&');
+    const notChain = activeSchools
+      .map((s) => {
+        const e = esc(s);
+        return `:not([data-school="${e}"]):not([data-school-2="${e}"])`;
+      })
+      .join('');
+    const dim = `
+      .cg-grid .cg-cell${notChain} {
         opacity: 0.12;
         filter: grayscale(1) brightness(0.6);
-      }
-      .cg-grid .cg-cell[data-school="${esc}"],
-      .cg-grid .cg-cell[data-school-2="${esc}"] {
+      }`;
+    const glows = activeSchools
+      .map((s) => {
+        const color = SCHOOLS[s]?.color || '#fff';
+        const e = esc(s);
+        return `
+      .cg-grid .cg-cell[data-school="${e}"],
+      .cg-grid .cg-cell[data-school-2="${e}"] {
         z-index: 5;
         transform: scale(1.18);
         box-shadow: 0 0 0 2px ${color}, 0 0 14px 3px ${color};
         border-radius: 4px;
         background: rgba(255,255,255,0.06);
-      }
-    `;
-  }, [active]);
+      }`;
+      })
+      .join('');
+    return dim + glows;
+  }, [activeSchools]);
 
   return (
-    <div className="cg-page" onClick={clearLock}>
+    <div className="cg-page" onClick={clearSelection}>
       <style>{STYLES}</style>
       <style>{activeStyle}</style>
 
@@ -167,32 +213,51 @@ export default function ChampionshipGrid() {
         <h1>NCAA Division I Championships</h1>
         <p className="cg-sub">
           {yearRange} &middot; {SPORTS.length} sports
-          &middot; Hover or tap to trace a school
+          &middot; Hover, tap, or pick two schools to compare
         </p>
       </header>
 
+      {/* Compare picker — Mantine-style combobox, up to 2 schools */}
+      <div className="cg-picker-wrap" onClick={(e) => e.stopPropagation()}>
+        <ComparePicker
+          selection={selection}
+          onChange={setSelection}
+          schools={schoolOptions}
+          titleCounts={schoolTitles}
+        />
+      </div>
+
       {/* Info bar */}
-      <div className={`cg-info ${active ? 'cg-info--active' : ''}`}>
-        {active ? (
+      <div className={`cg-info ${activeSchools.length > 0 ? 'cg-info--active' : ''}`}>
+        {activeSchools.length > 0 ? (
           <div className="cg-info-inner">
-            <div
-              className="cg-info-swatch"
-              style={{ background: SCHOOLS[active]?.color || '#888' }}
-            />
-            {getLogoUrl(active) && (
-              <img
-                src={getLogoUrl(active)}
-                alt=""
-                className="cg-info-logo"
-              />
-            )}
-            <span className="cg-info-name">{active}</span>
-            <span className="cg-info-count">
-              {schoolTitles[active]} title{schoolTitles[active] !== 1 ? 's' : ''} shown
-            </span>
-            {locked && (
-              <span className="cg-info-hint">click again to unlock</span>
-            )}
+            {activeSchools.map((s, i) => {
+              const info = SCHOOLS[s];
+              const logo = getLogoUrl(s);
+              return (
+                <Fragment key={s}>
+                  {i > 0 && <span className="cg-info-vs">vs</span>}
+                  <div className="cg-info-school">
+                    <div
+                      className="cg-info-swatch"
+                      style={{ background: info?.color || '#888' }}
+                    />
+                    {logo && (
+                      <img
+                        src={logo}
+                        alt=""
+                        className={
+                          'cg-info-logo' +
+                          (info?.invertLogo ? ' cg-logo--invert' : '')
+                        }
+                      />
+                    )}
+                    <span className="cg-info-name">{s}</span>
+                    <span className="cg-info-count">{schoolTitles[s] || 0}</span>
+                  </div>
+                </Fragment>
+              );
+            })}
           </div>
         ) : (
           <div className="cg-info-placeholder">
@@ -204,7 +269,11 @@ export default function ChampionshipGrid() {
       {/* Share row */}
       <div className="cg-share" onClick={(e) => e.stopPropagation()}>
         <button type="button" className="cg-share-btn" onClick={copyLink}>
-          {copied ? 'Link copied' : locked ? 'Copy link to this view' : 'Copy link'}
+          {copied
+            ? 'Link copied'
+            : selection.length > 0
+            ? 'Copy link to this view'
+            : 'Copy link'}
         </button>
         <button type="button" className="cg-share-btn" onClick={shareToReddit}>
           Share on Reddit
@@ -236,7 +305,7 @@ export default function ChampionshipGrid() {
 }
 
 // Memoized grid body. All its props are stable (module-level data + useCallback
-// handlers that read `locked` via a ref), so React.memo's default shallow
+// handlers that read `selection` via a ref), so React.memo's default shallow
 // comparison skips reconciliation on every hover-state change in the parent.
 const GridContent = memo(function GridContent({
   gridRef,
@@ -405,6 +474,198 @@ const GridContent = memo(function GridContent({
   );
 });
 
+// Mantine/antd-style multi-select combobox capped at 2 schools. Typeable
+// search + keyboard nav + click pills to remove. The input stays visible
+// when 2 are picked so you can still type to replace the oldest.
+const MAX_SELECTION = 2;
+
+function ComparePicker({ selection, onChange, schools, titleCounts }) {
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const inputRef = useRef(null);
+  const rootRef = useRef(null);
+  const listRef = useRef(null);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return schools.filter((s) => {
+      if (selection.includes(s)) return false;
+      if (!q) return true;
+      return s.toLowerCase().includes(q);
+    });
+  }, [schools, selection, query]);
+
+  // Clamp the highlighted option whenever the filtered list shrinks.
+  useEffect(() => {
+    if (activeIdx >= filtered.length) setActiveIdx(0);
+  }, [filtered.length, activeIdx]);
+
+  // Close on outside mousedown so pill × buttons can still fire.
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const commit = (school) => {
+    const next = selection.includes(school)
+      ? selection.filter((s) => s !== school)
+      : selection.length < MAX_SELECTION
+      ? [...selection, school]
+      : [selection[1], school];
+    onChange(next);
+    setQuery('');
+    setActiveIdx(0);
+    inputRef.current?.focus();
+  };
+
+  const remove = (school, e) => {
+    e.stopPropagation();
+    onChange(selection.filter((s) => s !== school));
+    inputRef.current?.focus();
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setOpen(true);
+      setActiveIdx((i) => Math.min(i + 1, Math.max(filtered.length - 1, 0)));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIdx((i) => Math.max(i - 1, 0));
+    } else if (e.key === 'Enter') {
+      if (filtered[activeIdx]) {
+        e.preventDefault();
+        commit(filtered[activeIdx]);
+      }
+    } else if (e.key === 'Backspace' && !query && selection.length > 0) {
+      onChange(selection.slice(0, -1));
+    } else if (e.key === 'Escape') {
+      setOpen(false);
+    }
+  };
+
+  const openAndFocus = () => {
+    setOpen(true);
+    inputRef.current?.focus();
+  };
+
+  return (
+    <div ref={rootRef} className="cg-picker" onClick={openAndFocus}>
+      <div className="cg-picker-control">
+        <span className="cg-picker-label">Compare</span>
+        {selection.map((school) => {
+          const info = SCHOOLS[school];
+          const logo = getLogoUrl(school);
+          return (
+            <span
+              key={school}
+              className="cg-pill"
+              style={{ borderColor: info?.color || 'rgba(255,255,255,0.2)' }}
+            >
+              {logo ? (
+                <img
+                  src={logo}
+                  alt=""
+                  className={
+                    'cg-pill-logo' + (info?.invertLogo ? ' cg-logo--invert' : '')
+                  }
+                />
+              ) : (
+                <span
+                  className="cg-pill-logo cg-pill-logo--text"
+                  style={{ background: info?.color || '#555' }}
+                >
+                  {info?.abbr || school.slice(0, 3)}
+                </span>
+              )}
+              <span className="cg-pill-name">{school}</span>
+              <button
+                type="button"
+                className="cg-pill-x"
+                aria-label={`Remove ${school}`}
+                onClick={(e) => remove(school, e)}
+              >
+                ×
+              </button>
+            </span>
+          );
+        })}
+        <input
+          ref={inputRef}
+          className="cg-picker-input"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+            setActiveIdx(0);
+          }}
+          onKeyDown={onKeyDown}
+          onFocus={() => setOpen(true)}
+          placeholder={
+            selection.length === 0
+              ? 'Search to compare up to 2 schools…'
+              : selection.length === 1
+              ? 'Pick another school…'
+              : 'Type to replace…'
+          }
+        />
+      </div>
+      {open && filtered.length > 0 && (
+        <div ref={listRef} className="cg-picker-menu" role="listbox">
+          {filtered.slice(0, 80).map((school, i) => {
+            const info = SCHOOLS[school];
+            const logo = getLogoUrl(school);
+            const isActive = i === activeIdx;
+            return (
+              <div
+                key={school}
+                role="option"
+                aria-selected={isActive}
+                className={
+                  'cg-picker-option' +
+                  (isActive ? ' cg-picker-option--active' : '')
+                }
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  commit(school);
+                }}
+                onMouseEnter={() => setActiveIdx(i)}
+              >
+                {logo ? (
+                  <img
+                    src={logo}
+                    alt=""
+                    className={
+                      'cg-picker-opt-logo' +
+                      (info?.invertLogo ? ' cg-logo--invert' : '')
+                    }
+                  />
+                ) : (
+                  <div
+                    className="cg-picker-opt-logo cg-picker-opt-logo--text"
+                    style={{ background: info?.color || '#555' }}
+                  >
+                    {info?.abbr || school.slice(0, 3)}
+                  </div>
+                )}
+                <span className="cg-picker-opt-name">{school}</span>
+                <span className="cg-picker-opt-count">
+                  {titleCounts[school] || 0}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
@@ -470,11 +731,155 @@ body {
   margin-top: 4px;
 }
 
+/* Compare picker */
+.cg-picker-wrap {
+  width: 100%;
+  max-width: 720px;
+  margin-bottom: 10px;
+}
+.cg-picker {
+  position: relative;
+  cursor: text;
+}
+.cg-picker-control {
+  min-height: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.15s;
+}
+.cg-picker:focus-within .cg-picker-control {
+  border-color: rgba(255,255,255,0.22);
+}
+.cg-picker-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 2px;
+}
+.cg-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px 3px 4px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  max-width: 220px;
+}
+.cg-pill-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.cg-pill-logo--text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-size: 8px;
+  color: #fff;
+}
+.cg-pill-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cg-pill-x {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 3px;
+  border-radius: 3px;
+}
+.cg-pill-x:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+.cg-picker-input {
+  flex: 1;
+  min-width: 140px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  padding: 4px 2px;
+}
+.cg-picker-input::placeholder {
+  color: var(--muted);
+}
+.cg-picker-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #1a1f28;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.55);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 50;
+  padding: 4px;
+}
+.cg-picker-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 5px;
+}
+.cg-picker-option--active {
+  background: rgba(255,255,255,0.07);
+}
+.cg-picker-opt-logo {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.cg-picker-opt-logo--text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+}
+.cg-picker-opt-name {
+  flex: 1;
+  color: #fff;
+}
+.cg-picker-opt-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
 /* Info bar */
 .cg-info {
   width: 100%;
   max-width: 720px;
-  height: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -484,6 +889,7 @@ body {
   margin-bottom: 16px;
   transition: border-color 0.2s, background 0.2s;
   overflow: hidden;
+  padding: 6px 12px;
 }
 .cg-info--active {
   border-color: rgba(255,255,255,0.12);
@@ -491,35 +897,42 @@ body {
 .cg-info-inner {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 16px;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cg-info-school {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cg-info-vs {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 .cg-info-swatch {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 3px;
   flex-shrink: 0;
 }
 .cg-info-logo {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
 }
 .cg-info-name {
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   color: #fff;
 }
 .cg-info-count {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
   font-family: 'DM Mono', monospace;
-}
-.cg-info-hint {
-  font-size: 11px;
-  color: var(--muted);
-  opacity: 0.7;
-  margin-left: 4px;
 }
 .cg-info-placeholder {
   font-size: 13px;
