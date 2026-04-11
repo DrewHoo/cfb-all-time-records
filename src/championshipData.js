@@ -96,7 +96,7 @@ export const SCHOOLS = {
   'Michigan':           { id: 130,   color: '#00274C', abbr: 'MICH' },
   'Michigan State':     { id: 127,   color: '#18453B', abbr: 'MSU' },
   'Minnesota':          { id: 135,   color: '#7A0019', abbr: 'MINN' },
-  'Minnesota Duluth':   { id: 2168,  color: '#7A0019', abbr: 'UMD' },
+  'Minnesota Duluth':   { id: null,  color: '#7A0019', abbr: 'UMD' },
   'Mississippi State':  { id: 177,   color: '#660000', abbr: 'MSST' },
   'Nebraska':           { id: 158,   color: '#E41C38', abbr: 'NEB' },
   'UNLV':               { id: 2439,  color: '#CF0A2C', abbr: 'UNLV' },
