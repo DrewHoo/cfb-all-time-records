@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef, Fragment } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect, Fragment } from 'react';
 import { SPORTS, SCHOOLS, CHAMPIONSHIPS, YEARS, getLogoUrl } from './championshipData';
 
 // Default cell size (overridden on mobile via a CSS min() + viewport calc).
@@ -6,10 +6,31 @@ const CELL = 32;
 const YEAR_W = 48;
 const HDR_H = 56;
 
+// Read ?school=... on first render so shared links land on the locked view.
+const initialLockedFromUrl = () => {
+  if (typeof window === 'undefined') return null;
+  const param = new URLSearchParams(window.location.search).get('school');
+  if (!param) return null;
+  return SCHOOLS[param] ? param : null;
+};
+
 export default function ChampionshipGrid() {
   const [highlighted, setHighlighted] = useState(null);
-  const [locked, setLocked] = useState(null);
+  const [locked, setLocked] = useState(initialLockedFromUrl);
+  const [copied, setCopied] = useState(false);
   const gridRef = useRef(null);
+
+  // Keep ?school=... in sync with the locked state without growing history.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (locked) {
+      url.searchParams.set('school', locked);
+    } else {
+      url.searchParams.delete('school');
+    }
+    window.history.replaceState(null, '', url);
+  }, [locked]);
 
   const active = locked || highlighted;
 
@@ -75,6 +96,32 @@ export default function ChampionshipGrid() {
     if (fallback) fallback.style.display = 'flex';
   }, []);
 
+  const shareTitle = locked
+    ? `Every NCAA D-I national title ${locked} has won since 1990`
+    : 'Every NCAA D-I national champion since 1990, in one grid';
+
+  const copyLink = useCallback(async (e) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      // Clipboard API can fail on http: or inside some iframes — silently ignore.
+    }
+  }, []);
+
+  const shareToReddit = useCallback((e) => {
+    e.stopPropagation();
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(shareTitle);
+    window.open(
+      `https://www.reddit.com/submit?url=${url}&title=${title}`,
+      '_blank',
+      'noopener,noreferrer',
+    );
+  }, [shareTitle]);
+
   return (
     <div className="cg-page" onClick={clearLock}>
       <style>{STYLES}</style>
@@ -119,6 +166,16 @@ export default function ChampionshipGrid() {
             Hover or tap any cell to highlight a school&rsquo;s championships
           </div>
         )}
+      </div>
+
+      {/* Share row */}
+      <div className="cg-share" onClick={(e) => e.stopPropagation()}>
+        <button type="button" className="cg-share-btn" onClick={copyLink}>
+          {copied ? 'Link copied' : locked ? 'Copy link to this view' : 'Copy link'}
+        </button>
+        <button type="button" className="cg-share-btn" onClick={shareToReddit}>
+          Share on Reddit
+        </button>
       </div>
 
       {/* Grid */}
@@ -356,6 +413,31 @@ body {
 .cg-info-placeholder {
   font-size: 13px;
   color: var(--muted);
+}
+
+/* Share row */
+.cg-share {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.cg-share-btn {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.cg-share-btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.04);
 }
 
 /* Scrollable grid wrapper */
