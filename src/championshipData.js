@@ -24,8 +24,11 @@ export const SPORTS = [
   { key: 'wten', name: "Women's Tennis", short: 'WTN' },
   { key: 'mgolf', name: "Men's Golf", short: 'MGF' },
   { key: 'wgolf', name: "Women's Golf", short: 'WGF' },
+  { key: 'mswim', name: "Men's Swimming & Diving", short: 'MSW' },
+  { key: 'wswim', name: "Women's Swimming & Diving", short: 'WSW' },
   { key: 'wrestling', name: 'Wrestling', short: 'WRS' },
   { key: 'mxc', name: "Men's Cross Country", short: 'MXC' },
+  { key: 'wxc', name: "Women's Cross Country", short: 'WXC' },
 ];
 
 // ESPN team ID, primary brand color, abbreviation
@@ -129,6 +132,9 @@ export const SCHOOLS = {
   'TCU':                { id: 2628,  color: '#4D1979', abbr: 'TCU' },
   // --- Golf additions ---
   'Augusta State':      { id: null,  color: '#003087', abbr: 'AUG' },
+  // --- W cross country additions ---
+  'NC State':           { id: 152,   color: '#CC0000', abbr: 'NCST' },
+  'New Mexico':         { id: 167,   color: '#BA0C2F', abbr: 'UNM' },
 };
 
 export const CHAMPIONSHIPS = {
@@ -349,6 +355,45 @@ export const CHAMPIONSHIPS = {
     2016: 'Washington', 2017: 'Arizona State', 2018: 'Arizona',
     2019: 'Duke', 2021: 'Ole Miss', 2022: 'Stanford',
     2023: 'Wake Forest', 2024: 'Stanford',
+  },
+
+  mswim: {
+    1990: 'Texas', 1991: 'Texas', 1992: 'Stanford', 1993: 'Stanford',
+    1994: 'Stanford', 1995: 'Michigan', 1996: 'Texas', 1997: 'Auburn',
+    1998: 'Stanford', 1999: 'Auburn', 2000: 'Texas', 2001: 'Texas',
+    2002: 'Texas', 2003: 'Auburn', 2004: 'Auburn', 2005: 'Texas',
+    2006: 'Auburn', 2007: 'Auburn', 2008: 'Arizona', 2009: 'Texas',
+    2010: 'Texas', 2011: 'California', 2012: 'California',
+    2013: 'Michigan', 2014: 'California', 2015: 'Texas',
+    2016: 'Texas', 2017: 'Texas', 2018: 'Texas', 2019: 'Texas',
+    2021: 'Texas', 2022: 'California', 2024: 'California',
+  },
+
+  wswim: {
+    1990: 'Texas', 1991: 'Texas', 1992: 'Stanford', 1993: 'Stanford',
+    1994: 'Stanford', 1995: 'Stanford', 1996: 'Stanford',
+    1998: 'Stanford', 1999: 'Georgia', 2000: 'Georgia',
+    2001: 'Georgia', 2002: 'Auburn', 2003: 'Auburn', 2004: 'Auburn',
+    2005: 'Georgia', 2006: 'Auburn', 2007: 'Auburn', 2008: 'Arizona',
+    2009: 'California', 2010: 'Florida', 2011: 'California',
+    2012: 'California', 2013: 'Georgia', 2014: 'Georgia',
+    2015: 'California', 2016: 'Georgia', 2017: 'Stanford',
+    2018: 'Stanford', 2019: 'Stanford', 2021: 'Virginia',
+    2022: 'Virginia', 2023: 'Virginia', 2024: 'Virginia',
+  },
+
+  wxc: {
+    1990: 'Villanova', 1991: 'Villanova', 1992: 'Villanova',
+    1993: 'Villanova', 1994: 'Villanova', 1995: 'Providence',
+    1996: 'Stanford', 1997: 'BYU', 1998: 'Villanova', 1999: 'BYU',
+    2000: 'Colorado', 2001: 'BYU', 2002: 'Stanford', 2003: 'Stanford',
+    2004: 'Stanford', 2005: 'Stanford', 2006: 'Colorado',
+    2007: 'Stanford', 2008: 'Washington', 2009: 'Villanova',
+    2010: 'Villanova', 2011: 'Georgetown', 2012: 'Oregon',
+    2013: 'Providence', 2014: 'Michigan State', 2015: 'New Mexico',
+    2016: 'Oregon', 2017: 'New Mexico', 2018: 'Colorado',
+    2019: 'Arkansas', 2020: 'NC State', 2021: 'NC State',
+    2022: 'NC State', 2023: 'NC State', 2024: 'NC State',
   },
 
   wrestling: {
