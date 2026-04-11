@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef, useEffect, Fragment } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect, Fragment, memo } from 'react';
 import { SPORTS, SCHOOLS, CHAMPIONSHIPS, YEARS, getLogoUrl } from './championshipData';
 
 // Default cell size (overridden on mobile via a CSS min() + viewport calc).
@@ -19,6 +19,13 @@ export default function ChampionshipGrid() {
   const [locked, setLocked] = useState(initialLockedFromUrl);
   const [copied, setCopied] = useState(false);
   const gridRef = useRef(null);
+
+  // Stable ref mirrors `locked` so hover callbacks stay referentially stable
+  // (and don't force the memoized cell grid to re-render every mouseenter).
+  const lockedRef = useRef(locked);
+  useEffect(() => {
+    lockedRef.current = locked;
+  }, [locked]);
 
   // Keep ?school=... in sync with the locked state without growing history.
   useEffect(() => {
@@ -63,31 +70,26 @@ export default function ChampionshipGrid() {
     return counts;
   }, []);
 
+  // These callbacks read `locked` via the ref, so their identity never
+  // changes. That lets <GridContent> memoize against them.
   const onEnter = useCallback((school) => {
-    if (!locked) setHighlighted(school);
-  }, [locked]);
+    if (!lockedRef.current) setHighlighted(school);
+  }, []);
 
   const onLeave = useCallback(() => {
-    if (!locked) setHighlighted(null);
-  }, [locked]);
+    if (!lockedRef.current) setHighlighted(null);
+  }, []);
 
   const onClick = useCallback((school, e) => {
     e.stopPropagation();
-    if (locked === school) {
-      setLocked(null);
-      setHighlighted(null);
-    } else {
-      setLocked(school);
-      setHighlighted(null);
-    }
-  }, [locked]);
+    setLocked((prev) => (prev === school ? null : school));
+    setHighlighted(null);
+  }, []);
 
   const clearLock = useCallback(() => {
-    if (locked) {
-      setLocked(null);
-      setHighlighted(null);
-    }
-  }, [locked]);
+    setLocked(null);
+    setHighlighted(null);
+  }, []);
 
   const handleImgError = useCallback((e) => {
     // Hide broken images so the text fallback shows
@@ -122,9 +124,33 @@ export default function ChampionshipGrid() {
     );
   }, [shareTitle]);
 
+  // Dynamic CSS that dims non-matching cells and glows the active school.
+  // Recomputed only when `active` changes — React updates a single text node
+  // instead of reconciling ~800 cells.
+  const activeStyle = useMemo(() => {
+    if (!active) return '';
+    const color = SCHOOLS[active]?.color || '#fff';
+    // NCAA school names are safe ASCII, but escape quotes/backslashes defensively.
+    const esc = active.replace(/["\\]/g, '\\$&');
+    return `
+      .cg-grid .cg-cell:not([data-school="${esc}"]) {
+        opacity: 0.12;
+        filter: grayscale(1) brightness(0.6);
+      }
+      .cg-grid .cg-cell[data-school="${esc}"] {
+        z-index: 5;
+        transform: scale(1.18);
+        box-shadow: 0 0 0 2px ${color}, 0 0 14px 3px ${color};
+        border-radius: 4px;
+        background: rgba(255,255,255,0.06);
+      }
+    `;
+  }, [active]);
+
   return (
     <div className="cg-page" onClick={clearLock}>
       <style>{STYLES}</style>
+      <style>{activeStyle}</style>
 
       {/* Header */}
       <header className="cg-header">
@@ -178,113 +204,18 @@ export default function ChampionshipGrid() {
         </button>
       </div>
 
-      {/* Grid */}
-      <div className="cg-scroll">
-        <div
-          ref={gridRef}
-          className="cg-grid"
-          style={{
-            '--sport-count': sortedSports.length,
-            '--year-count': descendingYears.length,
-            '--cell-w-default': `${CELL}px`,
-            '--year-w-default': `${YEAR_W}px`,
-            '--header-h-default': `${HDR_H}px`,
-          }}
-        >
-          {/* Corner */}
-          <div className="cg-corner" />
-
-          {/* Sport column headers */}
-          {sortedSports.map((sport) => (
-            <div
-              key={sport.key}
-              className="cg-sport-hdr"
-              title={sport.name}
-            >
-              <span className="cg-sport-icon" aria-label={sport.name}>
-                {sport.icon}
-              </span>
-              {sport.gender && (
-                <span className="cg-sport-gender">{sport.gender}</span>
-              )}
-            </div>
-          ))}
-
-          {/* Rows */}
-          {descendingYears.map((year) => {
-            const isDecade = year % 10 === 0;
-            return (
-              <Fragment key={year}>
-                <div className={`cg-year ${isDecade ? 'cg-year--decade' : ''}`}>
-                  {year}
-                </div>
-                {sortedSports.map((sport) => {
-                  const school = CHAMPIONSHIPS[sport.key]?.[year] ?? null;
-                  const info = school ? SCHOOLS[school] : null;
-                  const isActive = active && active === school;
-                  const isDimmed = active && active !== school;
-                  const logoUrl = school ? getLogoUrl(school) : null;
-
-                  let cls = 'cg-cell';
-                  if (isActive) cls += ' cg-cell--on';
-                  if (isDimmed) cls += ' cg-cell--dim';
-                  if (!school) cls += ' cg-cell--empty';
-                  if (isDecade) cls += ' cg-cell--decade';
-
-                  return (
-                    <div
-                      key={sport.key}
-                      className={cls}
-                      style={
-                        isActive
-                          ? { '--c': info?.color || '#fff' }
-                          : undefined
-                      }
-                      onMouseEnter={() => school && onEnter(school)}
-                      onMouseLeave={onLeave}
-                      onClick={(e) => school && onClick(school, e)}
-                      title={
-                        school
-                          ? `${year} ${sport.name}: ${school}`
-                          : `${year} ${sport.name}: No champion`
-                      }
-                    >
-                      {school && logoUrl && (
-                        <img
-                          src={logoUrl}
-                          alt={school}
-                          loading="lazy"
-                          className="cg-logo"
-                          onError={handleImgError}
-                        />
-                      )}
-                      {school && (
-                        <div
-                          className="cg-fallback"
-                          style={{
-                            display: logoUrl ? 'none' : 'flex',
-                            background: info?.color || '#555',
-                          }}
-                        >
-                          {info?.abbr || school.slice(0, 3).toUpperCase()}
-                        </div>
-                      )}
-                      {!school &&
-                        year === 2020 &&
-                        CHAMPIONSHIPS[sport.key]?.[2019] &&
-                        !CHAMPIONSHIPS[sport.key]?.[2020] && (
-                        <div className="cg-covid" title="Canceled (COVID-19)">
-                          &mdash;
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </Fragment>
-            );
-          })}
-        </div>
-      </div>
+      {/* Grid — memoized so hover state changes in the parent don't reconcile
+          ~800 cells. Active-school highlighting is applied via the sibling
+          <style> above using data-school attribute selectors. */}
+      <GridContent
+        gridRef={gridRef}
+        sortedSports={sortedSports}
+        descendingYears={descendingYears}
+        onEnter={onEnter}
+        onLeave={onLeave}
+        onClick={onClick}
+        handleImgError={handleImgError}
+      />
 
       <footer className="cg-footer">
         <p>
@@ -296,6 +227,113 @@ export default function ChampionshipGrid() {
     </div>
   );
 }
+
+// Memoized grid body. All its props are stable (module-level data + useCallback
+// handlers that read `locked` via a ref), so React.memo's default shallow
+// comparison skips reconciliation on every hover-state change in the parent.
+const GridContent = memo(function GridContent({
+  gridRef,
+  sortedSports,
+  descendingYears,
+  onEnter,
+  onLeave,
+  onClick,
+  handleImgError,
+}) {
+  return (
+    <div className="cg-scroll">
+      <div
+        ref={gridRef}
+        className="cg-grid"
+        style={{
+          '--sport-count': sortedSports.length,
+          '--year-count': descendingYears.length,
+          '--cell-w-default': `${CELL}px`,
+          '--year-w-default': `${YEAR_W}px`,
+          '--header-h-default': `${HDR_H}px`,
+        }}
+      >
+        <div className="cg-corner" />
+
+        {sortedSports.map((sport) => (
+          <div key={sport.key} className="cg-sport-hdr" title={sport.name}>
+            <span className="cg-sport-icon" aria-label={sport.name}>
+              {sport.icon}
+            </span>
+            {sport.gender && (
+              <span className="cg-sport-gender">{sport.gender}</span>
+            )}
+          </div>
+        ))}
+
+        {descendingYears.map((year) => {
+          const isDecade = year % 10 === 0;
+          return (
+            <Fragment key={year}>
+              <div className={`cg-year ${isDecade ? 'cg-year--decade' : ''}`}>
+                {year}
+              </div>
+              {sortedSports.map((sport) => {
+                const school = CHAMPIONSHIPS[sport.key]?.[year] ?? null;
+                const info = school ? SCHOOLS[school] : null;
+                const logoUrl = school ? getLogoUrl(school) : null;
+
+                let cls = 'cg-cell';
+                if (!school) cls += ' cg-cell--empty';
+                if (isDecade) cls += ' cg-cell--decade';
+
+                return (
+                  <div
+                    key={sport.key}
+                    className={cls}
+                    data-school={school || undefined}
+                    onMouseEnter={school ? () => onEnter(school) : undefined}
+                    onMouseLeave={school ? onLeave : undefined}
+                    onClick={school ? (e) => onClick(school, e) : undefined}
+                    title={
+                      school
+                        ? `${year} ${sport.name}: ${school}`
+                        : `${year} ${sport.name}: No champion`
+                    }
+                  >
+                    {school && logoUrl && (
+                      <img
+                        src={logoUrl}
+                        alt={school}
+                        loading="lazy"
+                        className="cg-logo"
+                        onError={handleImgError}
+                      />
+                    )}
+                    {school && (
+                      <div
+                        className="cg-fallback"
+                        style={{
+                          display: logoUrl ? 'none' : 'flex',
+                          background: info?.color || '#555',
+                        }}
+                      >
+                        {info?.abbr || school.slice(0, 3).toUpperCase()}
+                      </div>
+                    )}
+                    {!school &&
+                      year === 2020 &&
+                      CHAMPIONSHIPS[sport.key]?.[2019] &&
+                      !CHAMPIONSHIPS[sport.key]?.[2020] && (
+                        <div className="cg-covid" title="Canceled (COVID-19)">
+                          &mdash;
+                        </div>
+                      )}
+                  </div>
+                );
+              })}
+            </Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
 
 const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
@@ -543,19 +581,6 @@ body {
 }
 .cg-cell--decade {
   border-bottom: 1px solid rgba(255,255,255,0.18);
-}
-.cg-cell--on {
-  z-index: 5;
-  transform: scale(1.18);
-  box-shadow:
-    0 0 0 2px var(--c, #fff),
-    0 0 14px 3px var(--c, #fff);
-  border-radius: 4px;
-  background: rgba(255,255,255,0.06);
-}
-.cg-cell--dim {
-  opacity: 0.12;
-  filter: grayscale(1) brightness(0.6);
 }
 .cg-cell--empty {
   cursor: default;
