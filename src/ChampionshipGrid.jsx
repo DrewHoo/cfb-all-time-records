@@ -256,12 +256,19 @@ const GridContent = memo(function GridContent({
         <div className="cg-corner" />
 
         {sortedSports.map((sport) => (
-          <div key={sport.key} className="cg-sport-hdr" title={sport.name}>
-            <span className="cg-sport-icon" aria-label={sport.name}>
+          <div
+            key={sport.key}
+            className="cg-sport-hdr"
+            data-name={sport.name}
+            aria-label={sport.name}
+          >
+            <span className="cg-sport-icon" aria-hidden="true">
               {sport.icon}
             </span>
             {sport.gender && (
-              <span className="cg-sport-gender">{sport.gender}</span>
+              <span className="cg-sport-gender" aria-hidden="true">
+                {sport.gender}
+              </span>
             )}
           </div>
         ))}
@@ -528,7 +535,6 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  overflow: hidden;
   padding: 2px 0;
   cursor: help;
 }
@@ -542,6 +548,33 @@ body {
   line-height: 1;
   color: var(--muted);
   font-weight: 600;
+}
+/* Custom hover tooltip for sport names — replaces the native title
+   attribute because browser tooltips take ~500ms to show and flicker
+   out on fast mouse movement. */
+.cg-sport-hdr::after {
+  content: attr(data-name);
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2533;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 30;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+  transition: opacity 0.12s ease;
+}
+.cg-sport-hdr:hover::after {
+  opacity: 1;
 }
 
 /* Year labels */
