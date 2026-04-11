@@ -5,6 +5,19 @@
 
 import scraped from './championshipData.scraped.json';
 
+// Overrides layered on top of scraped data. Use for:
+//   - Patching years the upstream source hasn't added yet (e.g. Men's XC,
+//     which is pulled from a GitHub CSV that lags one year)
+//   - Correcting specific Wikipedia errors without regenerating .scraped.json
+// Keys match SPORTS[].key; inner keys are years. Overrides win over scraped.
+const SCRAPED_OVERRIDES = {
+  mxc: {
+    2024: 'Oklahoma State', // source CSV ends at 2023; verify before shipping
+  },
+};
+
+const merge = (key) => ({ ...(scraped[key] || {}), ...(SCRAPED_OVERRIDES[key] || {}) });
+
 export const SPORTS = [
   { key: 'football', name: 'Football', short: 'FB' },
   { key: 'mbb', name: "Men's Basketball", short: 'MBK' },
@@ -145,29 +158,29 @@ export const SCHOOLS = {
 };
 
 export const CHAMPIONSHIPS = {
-  football: scraped.football || {},
-  mbb: scraped.mbb || {},
-  wbb: scraped.wbb || {},
-  baseball: scraped.baseball || {},
-  softball: scraped.softball || {},
-  wvb: scraped.wvb || {},
-  mih: scraped.mih || {},
-  msoc: scraped.msoc || {},
-  wsoc: scraped.wsoc || {},
-  mlax: scraped.mlax || {},
-  wlax: scraped.wlax || {},
-  wfh: scraped.wfh || {},
-  wih: scraped.wih || {},
-  wgym: scraped.wgym || {},
-  mten: scraped.mten || {},
-  wten: scraped.wten || {},
-  mgolf: scraped.mgolf || {},
-  wgolf: scraped.wgolf || {},
-  mswim: scraped.mswim || {},
-  wswim: scraped.wswim || {},
-  wrestling: scraped.wrestling || {},
-  mxc: scraped.mxc || {},
-  wxc: scraped.wxc || {},
+  football: merge('football'),
+  mbb: merge('mbb'),
+  wbb: merge('wbb'),
+  baseball: merge('baseball'),
+  softball: merge('softball'),
+  wvb: merge('wvb'),
+  mih: merge('mih'),
+  msoc: merge('msoc'),
+  wsoc: merge('wsoc'),
+  mlax: merge('mlax'),
+  wlax: merge('wlax'),
+  wfh: merge('wfh'),
+  wih: merge('wih'),
+  wgym: merge('wgym'),
+  mten: merge('mten'),
+  wten: merge('wten'),
+  mgolf: merge('mgolf'),
+  wgolf: merge('wgolf'),
+  mswim: merge('mswim'),
+  wswim: merge('wswim'),
+  wrestling: merge('wrestling'),
+  mxc: merge('mxc'),
+  wxc: merge('wxc'),
 };
 
 // Compute the full year range from data
