@@ -1064,7 +1064,10 @@
     "2022": "Florida",
     "2023": "Florida",
     "2024": "Florida",
-    "2025": "USC"
+    "2025": [
+      "USC",
+      "Texas A&M"
+    ]
   },
   "wotf": {
     "1990": "LSU",

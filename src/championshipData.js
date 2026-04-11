@@ -79,7 +79,7 @@ export const SCHOOLS = {
   'Georgetown':         { id: 46,    color: '#041E42', abbr: 'GTWN' },
   'Georgia':            { id: 61,    color: '#BA0C2F', abbr: 'UGA' },
   'Indiana':            { id: 84,    color: '#990000', abbr: 'IND' },
-  'Iowa':               { id: 2294,  color: '#FFCD00', abbr: 'IOWA' },
+  'Iowa':               { id: 2294,  color: '#FFCD00', abbr: 'IOWA', darkLogo: true },
   'James Madison':      { id: 256,   color: '#450084', abbr: 'JMU' },
   'Johns Hopkins':      { id: 2230,  color: '#002D72', abbr: 'JHU' },
   'Kansas':             { id: 2305,  color: '#0051BA', abbr: 'KU' },
@@ -110,7 +110,7 @@ export const SCHOOLS = {
   'Oklahoma State':     { id: 197,   color: '#FF6600', abbr: 'OKST' },
   'Ole Miss':           { id: 145,   color: '#CE1126', abbr: 'MISS' },
   'Oregon State':       { id: 204,   color: '#DC4405', abbr: 'ORST' },
-  'Penn State':         { id: 213,   color: '#041E42', abbr: 'PSU' },
+  'Penn State':         { id: 213,   color: '#041E42', abbr: 'PSU', darkLogo: true },
   'Pepperdine':         { id: 2492,  color: '#00205C', abbr: 'PEPP' },
   'Princeton':          { id: 163,   color: '#FF6600', abbr: 'PRIN' },
   'Providence':         { id: 2507,  color: '#000000', abbr: 'PROV' },
@@ -219,5 +219,8 @@ export function getLogoUrl(schoolName) {
   if (!school) return null;
   if (school.logoUrl) return school.logoUrl;
   if (!school.id) return null;
-  return `https://a.espncdn.com/i/teamlogos/ncaa/500/${school.id}.png`;
+  // ESPN publishes an inverted "dark" variant for some teams — used for
+  // schools whose primary logo is too dark to read on our #0c0f14 canvas.
+  const variant = school.darkLogo ? '500-dark' : '500';
+  return `https://a.espncdn.com/i/teamlogos/ncaa/${variant}/${school.id}.png`;
 }

@@ -58,13 +58,18 @@ export default function ChampionshipGrid() {
     [],
   );
 
-  // Count total titles per school across all sports shown
+  // Count total titles per school across all sports shown. Shared titles
+  // (array values) credit each co-champion with one title.
   const schoolTitles = useMemo(() => {
     const counts = {};
     for (const sport of SPORTS) {
       const data = CHAMPIONSHIPS[sport.key] || {};
-      for (const school of Object.values(data)) {
-        if (school) counts[school] = (counts[school] || 0) + 1;
+      for (const value of Object.values(data)) {
+        if (!value) continue;
+        const schools = Array.isArray(value) ? value : [value];
+        for (const school of schools) {
+          counts[school] = (counts[school] || 0) + 1;
+        }
       }
     }
     return counts;
@@ -126,18 +131,20 @@ export default function ChampionshipGrid() {
 
   // Dynamic CSS that dims non-matching cells and glows the active school.
   // Recomputed only when `active` changes — React updates a single text node
-  // instead of reconciling ~800 cells.
+  // instead of reconciling ~800 cells. Split cells carry both champions in
+  // data-school and data-school-2, so either attribute matching counts.
   const activeStyle = useMemo(() => {
     if (!active) return '';
     const color = SCHOOLS[active]?.color || '#fff';
     // NCAA school names are safe ASCII, but escape quotes/backslashes defensively.
     const esc = active.replace(/["\\]/g, '\\$&');
     return `
-      .cg-grid .cg-cell:not([data-school="${esc}"]) {
+      .cg-grid .cg-cell:not([data-school="${esc}"]):not([data-school-2="${esc}"]) {
         opacity: 0.12;
         filter: grayscale(1) brightness(0.6);
       }
-      .cg-grid .cg-cell[data-school="${esc}"] {
+      .cg-grid .cg-cell[data-school="${esc}"],
+      .cg-grid .cg-cell[data-school-2="${esc}"] {
         z-index: 5;
         transform: scale(1.18);
         box-shadow: 0 0 0 2px ${color}, 0 0 14px 3px ${color};
@@ -281,49 +288,95 @@ const GridContent = memo(function GridContent({
                 {year}
               </div>
               {sortedSports.map((sport) => {
-                const school = CHAMPIONSHIPS[sport.key]?.[year] ?? null;
-                const info = school ? SCHOOLS[school] : null;
-                const logoUrl = school ? getLogoUrl(school) : null;
+                const raw = CHAMPIONSHIPS[sport.key]?.[year] ?? null;
+                const champs = raw == null ? [] : Array.isArray(raw) ? raw : [raw];
+                const isShared = champs.length > 1;
+                const primary = champs[0] ?? null;
+                const secondary = champs[1] ?? null;
 
                 let cls = 'cg-cell';
-                if (!school) cls += ' cg-cell--empty';
+                if (champs.length === 0) cls += ' cg-cell--empty';
                 if (isDecade) cls += ' cg-cell--decade';
+                if (isShared) cls += ' cg-cell--shared';
+
+                const titleText =
+                  champs.length === 0
+                    ? `${year} ${sport.name}: No champion`
+                    : `${year} ${sport.name}: ${champs.join(' & ')}${isShared ? ' (shared)' : ''}`;
 
                 return (
                   <div
                     key={sport.key}
                     className={cls}
-                    data-school={school || undefined}
-                    onMouseEnter={school ? () => onEnter(school) : undefined}
-                    onMouseLeave={school ? onLeave : undefined}
-                    onClick={school ? (e) => onClick(school, e) : undefined}
-                    title={
-                      school
-                        ? `${year} ${sport.name}: ${school}`
-                        : `${year} ${sport.name}: No champion`
+                    data-school={primary || undefined}
+                    data-school-2={secondary || undefined}
+                    onMouseEnter={
+                      !isShared && primary ? () => onEnter(primary) : undefined
                     }
+                    onMouseLeave={!isShared && primary ? onLeave : undefined}
+                    onClick={
+                      !isShared && primary ? (e) => onClick(primary, e) : undefined
+                    }
+                    title={titleText}
                   >
-                    {school && logoUrl && (
-                      <img
-                        src={logoUrl}
-                        alt={school}
-                        loading="lazy"
-                        className="cg-logo"
-                        onError={handleImgError}
-                      />
-                    )}
-                    {school && (
-                      <div
-                        className="cg-fallback"
-                        style={{
-                          display: logoUrl ? 'none' : 'flex',
-                          background: info?.color || '#555',
-                        }}
-                      >
-                        {info?.abbr || school.slice(0, 3).toUpperCase()}
-                      </div>
-                    )}
-                    {!school &&
+                    {isShared
+                      ? champs.map((co, i) => {
+                          const coInfo = SCHOOLS[co];
+                          const coLogo = getLogoUrl(co);
+                          return (
+                            <div
+                              key={co}
+                              className={`cg-half cg-half--${i === 0 ? 'a' : 'b'}`}
+                              onMouseEnter={() => onEnter(co)}
+                              onMouseLeave={onLeave}
+                              onClick={(e) => onClick(co, e)}
+                            >
+                              {coLogo ? (
+                                <img
+                                  src={coLogo}
+                                  alt={co}
+                                  loading="lazy"
+                                  className="cg-logo"
+                                  onError={handleImgError}
+                                />
+                              ) : (
+                                <div
+                                  className="cg-fallback"
+                                  style={{
+                                    display: 'flex',
+                                    background: coInfo?.color || '#555',
+                                  }}
+                                >
+                                  {coInfo?.abbr || co.slice(0, 3).toUpperCase()}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })
+                      : primary && (
+                          <>
+                            {getLogoUrl(primary) && (
+                              <img
+                                src={getLogoUrl(primary)}
+                                alt={primary}
+                                loading="lazy"
+                                className="cg-logo"
+                                onError={handleImgError}
+                              />
+                            )}
+                            <div
+                              className="cg-fallback"
+                              style={{
+                                display: getLogoUrl(primary) ? 'none' : 'flex',
+                                background: SCHOOLS[primary]?.color || '#555',
+                              }}
+                            >
+                              {SCHOOLS[primary]?.abbr ||
+                                primary.slice(0, 3).toUpperCase()}
+                            </div>
+                          </>
+                        )}
+                    {champs.length === 0 &&
                       year === 2020 &&
                       CHAMPIONSHIPS[sport.key]?.[2019] &&
                       !CHAMPIONSHIPS[sport.key]?.[2020] && (
@@ -640,6 +693,57 @@ body {
   color: #fff;
   letter-spacing: 0.02em;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+
+/* Shared championship — two logos split diagonally (top-left / bottom-right).
+   Each half is its own hit target so hover/click target the correct school. */
+.cg-cell--shared {
+  position: relative;
+}
+.cg-half {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cg-half--a {
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.cg-half--b {
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.cg-half .cg-logo,
+.cg-half .cg-fallback {
+  width: 52%;
+  height: 52%;
+  position: absolute;
+}
+.cg-half--a .cg-logo,
+.cg-half--a .cg-fallback {
+  top: 8%;
+  left: 8%;
+}
+.cg-half--b .cg-logo,
+.cg-half--b .cg-fallback {
+  bottom: 8%;
+  right: 8%;
+}
+/* Thin diagonal divider. Placed above both halves via pointer-events: none
+   so the underlying hit targets still receive hover/click. */
+.cg-cell--shared::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 0.5px),
+    rgba(255,255,255,0.35) calc(50% - 0.5px),
+    rgba(255,255,255,0.35) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
   pointer-events: none;
 }
 
