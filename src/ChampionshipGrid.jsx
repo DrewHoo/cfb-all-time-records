@@ -63,6 +63,9 @@ export default function ChampionshipGrid() {
 
       {/* Header */}
       <header className="cg-header">
+        <a href="./football.html" className="cg-nav">
+          Football All-Time Records →
+        </a>
         <h1>NCAA Division I Championships</h1>
         <p className="cg-sub">
           {YEARS[0]}–{YEARS[YEARS.length - 1]} &middot; {SPORTS.length} sports
@@ -240,11 +243,28 @@ body {
   text-align: center;
   margin-bottom: 12px;
 }
+.cg-nav {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 10px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  letter-spacing: 0.03em;
+  transition: color 0.15s, border-color 0.15s;
+}
+.cg-nav:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.25);
+}
 .cg-header h1 {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #fff;
+  margin-top: 6px;
 }
 .cg-sub {
   font-size: 12px;
