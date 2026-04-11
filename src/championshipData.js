@@ -17,6 +17,8 @@ export const SPORTS = [
   { key: 'wsoc', name: "Women's Soccer", short: 'WSO' },
   { key: 'mlax', name: "Men's Lacrosse", short: 'MLX' },
   { key: 'wlax', name: "Women's Lacrosse", short: 'WLX' },
+  { key: 'wfh', name: "Women's Field Hockey", short: 'WFH' },
+  { key: 'wih', name: "Women's Ice Hockey", short: 'WIH' },
   { key: 'wrestling', name: 'Wrestling', short: 'WRS' },
   { key: 'mxc', name: "Men's Cross Country", short: 'MXC' },
 ];
@@ -111,6 +113,11 @@ export const SCHOOLS = {
   'Oregon':             { id: 2483,  color: '#154733', abbr: 'ORE' },
   'Northern Arizona':   { id: 2464,  color: '#003466', abbr: 'NAU' },
   'BYU':                { id: 252,   color: '#002E5D', abbr: 'BYU' },
+  // --- Field hockey / W ice hockey additions ---
+  'Old Dominion':       { id: 295,   color: '#003057', abbr: 'ODU' },
+  'Clarkson':           { id: null,  color: '#006633', abbr: 'CLAR' },
+  'Northeastern':       { id: 111,   color: '#CC0000', abbr: 'NEU' },
+  'Delaware':           { id: 48,    color: '#00539F', abbr: 'DEL' },
 };
 
 export const CHAMPIONSHIPS = {
@@ -245,6 +252,32 @@ export const CHAMPIONSHIPS = {
   },
   // Pulled from GitHub via scripts/fetch-data.mjs — keep in sync with SPORTS.key.
   mxc: scraped.mxc || {},
+
+  wfh: {
+    1990: 'Old Dominion', 1991: 'Old Dominion', 1992: 'Old Dominion',
+    1993: 'Maryland', 1994: 'James Madison', 1995: 'North Carolina',
+    1996: 'North Carolina', 1997: 'North Carolina', 1998: 'Old Dominion',
+    1999: 'Maryland', 2000: 'Old Dominion', 2001: 'Michigan',
+    2002: 'Wake Forest', 2003: 'Wake Forest', 2004: 'Wake Forest',
+    2005: 'Maryland', 2006: 'Maryland', 2007: 'Wake Forest',
+    2008: 'Maryland', 2009: 'North Carolina', 2010: 'Maryland',
+    2011: 'Maryland', 2012: 'Princeton', 2013: 'UConn',
+    2014: 'UConn', 2015: 'Syracuse', 2016: 'Delaware',
+    2017: 'UConn', 2018: 'North Carolina', 2019: 'North Carolina',
+    2021: 'Northwestern', 2022: 'North Carolina', 2023: 'Northwestern',
+    2024: 'Northwestern',
+  },
+
+  wih: {
+    2001: 'Minnesota Duluth', 2002: 'Minnesota Duluth', 2003: 'Minnesota Duluth',
+    2004: 'Minnesota', 2005: 'Minnesota', 2006: 'Wisconsin',
+    2007: 'Wisconsin', 2008: 'Minnesota Duluth', 2009: 'Wisconsin',
+    2010: 'Minnesota Duluth', 2011: 'Wisconsin', 2012: 'Minnesota',
+    2013: 'Minnesota', 2014: 'Clarkson', 2015: 'Minnesota',
+    2016: 'Minnesota', 2017: 'Clarkson', 2018: 'Clarkson',
+    2019: 'Wisconsin', 2021: 'Northeastern', 2022: 'Ohio State',
+    2023: 'Wisconsin', 2024: 'Ohio State', 2025: 'Wisconsin',
+  },
 
   wrestling: {
     1990: 'Oklahoma State', 1991: 'Iowa', 1992: 'Iowa', 1993: 'Iowa',
