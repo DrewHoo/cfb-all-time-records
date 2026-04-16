@@ -23,13 +23,6 @@ export default function ChampionshipGrid() {
   const [copied, setCopied] = useState(false);
   const gridRef = useRef(null);
 
-  // Stable ref mirrors `selection` so hover callbacks stay referentially
-  // stable (and don't re-render the memoized cell grid every mouseenter).
-  const selectionRef = useRef(selection);
-  useEffect(() => {
-    selectionRef.current = selection;
-  }, [selection]);
-
   // Keep ?a=/?b= in sync with the selection and drop legacy ?school=.
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -43,8 +36,9 @@ export default function ChampionshipGrid() {
   }, [selection]);
 
   const activeSchools = useMemo(() => {
-    if (selection.length > 0) return selection;
-    return highlighted ? [highlighted] : [];
+    if (!highlighted) return selection;
+    if (selection.includes(highlighted)) return selection;
+    return [...selection, highlighted];
   }, [selection, highlighted]);
 
   // Sports ordered alphabetically ignoring the "Men's "/"Women's " prefix so
@@ -91,14 +85,12 @@ export default function ChampionshipGrid() {
     [schoolTitles],
   );
 
-  // These callbacks read `selection` via the ref, so their identity never
-  // changes. That lets <GridContent> memoize against them.
   const onEnter = useCallback((school) => {
-    if (selectionRef.current.length === 0) setHighlighted(school);
+    setHighlighted(school);
   }, []);
 
   const onLeave = useCallback(() => {
-    if (selectionRef.current.length === 0) setHighlighted(null);
+    setHighlighted(null);
   }, []);
 
   const toggleSchool = useCallback((school) => {
@@ -1091,7 +1083,7 @@ body {
   transition: opacity 0.12s ease, transform 0.12s ease;
   position: relative;
   overflow: visible;
-  contain: layout paint;
+  contain: layout;
 }
 .cg-cell::after {
   content: '';
