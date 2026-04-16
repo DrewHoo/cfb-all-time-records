@@ -180,7 +180,6 @@ export default function ChampionshipGrid() {
     const dim = `
       .cg-grid .cg-cell${notChain} {
         opacity: 0.12;
-        filter: grayscale(1) brightness(0.6);
       }`;
     const glows = activeSchools
       .map((s) => {
@@ -191,9 +190,14 @@ export default function ChampionshipGrid() {
       .cg-grid .cg-cell[data-school-2="${e}"] {
         z-index: 5;
         transform: scale(1.18);
-        box-shadow: 0 0 0 2px ${color}, 0 0 14px 3px ${color};
         border-radius: 4px;
         background: rgba(255,255,255,0.06);
+      }
+      .cg-grid .cg-cell[data-school="${e}"]::after,
+      .cg-grid .cg-cell[data-school-2="${e}"]::after {
+        box-shadow: 0 0 0 2px ${color}, 0 0 14px 3px ${color};
+        border-radius: 4px;
+        opacity: 1;
       }`;
       })
       .join('');
@@ -1084,9 +1088,20 @@ body {
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   cursor: pointer;
-  transition: opacity 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+  transition: opacity 0.12s ease, transform 0.12s ease;
   position: relative;
   overflow: visible;
+  contain: layout paint;
+}
+.cg-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 4px;
+  transition: opacity 0.12s ease;
+  will-change: opacity;
 }
 .cg-cell--decade {
   border-bottom: 1px solid rgba(255,255,255,0.18);
