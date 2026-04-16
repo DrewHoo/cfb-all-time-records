@@ -6,15 +6,26 @@ const CELL = 32;
 const YEAR_W = 48;
 const HDR_H = 56;
 
-// Read ?a=/?b= (or legacy ?school=) on first render so shared links land on
-// the right selection — up to two schools for compare mode.
+// Read ?s=... (repeatable) on first render so shared links land on the
+// right selection. Legacy ?a=/?b=/?school= are still honored for older links.
 const initialSelectionFromUrl = () => {
   if (typeof window === 'undefined') return [];
   const params = new URLSearchParams(window.location.search);
-  const raw = [params.get('a'), params.get('b')];
-  const legacy = params.get('school');
-  if (legacy && !raw[0]) raw[0] = legacy;
-  return raw.filter((s) => s && SCHOOLS[s]).slice(0, 2);
+  const raw = [
+    ...params.getAll('s'),
+    params.get('a'),
+    params.get('b'),
+    params.get('school'),
+  ];
+  const seen = new Set();
+  const out = [];
+  for (const s of raw) {
+    if (s && SCHOOLS[s] && !seen.has(s)) {
+      seen.add(s);
+      out.push(s);
+    }
+  }
+  return out;
 };
 
 export default function ChampionshipGrid() {
@@ -23,15 +34,15 @@ export default function ChampionshipGrid() {
   const [copied, setCopied] = useState(false);
   const gridRef = useRef(null);
 
-  // Keep ?a=/?b= in sync with the selection and drop legacy ?school=.
+  // Keep ?s= in sync with the selection and drop legacy params.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const url = new URL(window.location.href);
     url.searchParams.delete('school');
-    if (selection[0]) url.searchParams.set('a', selection[0]);
-    else url.searchParams.delete('a');
-    if (selection[1]) url.searchParams.set('b', selection[1]);
-    else url.searchParams.delete('b');
+    url.searchParams.delete('a');
+    url.searchParams.delete('b');
+    url.searchParams.delete('s');
+    for (const s of selection) url.searchParams.append('s', s);
     window.history.replaceState(null, '', url);
   }, [selection]);
 
@@ -94,11 +105,9 @@ export default function ChampionshipGrid() {
   }, []);
 
   const toggleSchool = useCallback((school) => {
-    setSelection((prev) => {
-      if (prev.includes(school)) return prev.filter((s) => s !== school);
-      if (prev.length < 2) return [...prev, school];
-      return [prev[1], school];
-    });
+    setSelection((prev) =>
+      prev.includes(school) ? prev.filter((s) => s !== school) : [...prev, school],
+    );
     setHighlighted(null);
   }, []);
 
@@ -123,13 +132,18 @@ export default function ChampionshipGrid() {
   }, []);
 
   const shareTitle = useMemo(() => {
-    if (selection.length === 2) {
-      return `${selection[0]} vs ${selection[1]} — NCAA D-I championships since 1990`;
+    if (selection.length === 0) {
+      return 'Every NCAA D-I national champion since 1990, in one grid';
     }
     if (selection.length === 1) {
       return `Every NCAA D-I national title ${selection[0]} has won since 1990`;
     }
-    return 'Every NCAA D-I national champion since 1990, in one grid';
+    if (selection.length === 2) {
+      return `${selection[0]} vs ${selection[1]} — NCAA D-I championships since 1990`;
+    }
+    const head = selection.slice(0, -1).join(', ');
+    const tail = selection[selection.length - 1];
+    return `${head} vs ${tail} — NCAA D-I championships since 1990`;
   }, [selection]);
 
   const copyLink = useCallback(async (e) => {
@@ -209,11 +223,11 @@ export default function ChampionshipGrid() {
         <h1>NCAA Division I Championships</h1>
         <p className="cg-sub">
           {yearRange} &middot; {SPORTS.length} sports
-          &middot; Hover, tap, or pick two schools to compare
+          &middot; Hover, tap, or pick schools to compare
         </p>
       </header>
 
-      {/* Compare picker — Mantine-style combobox, up to 2 schools */}
+      {/* Compare picker — Mantine-style combobox */}
       <div className="cg-picker-wrap" onClick={(e) => e.stopPropagation()}>
         <ComparePicker
           selection={selection}
@@ -470,11 +484,8 @@ const GridContent = memo(function GridContent({
   );
 });
 
-// Mantine/antd-style multi-select combobox capped at 2 schools. Typeable
-// search + keyboard nav + click pills to remove. The input stays visible
-// when 2 are picked so you can still type to replace the oldest.
-const MAX_SELECTION = 2;
-
+// Mantine/antd-style multi-select combobox. Typeable search + keyboard
+// nav + click pills to remove.
 function ComparePicker({ selection, onChange, schools, titleCounts }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
@@ -510,9 +521,7 @@ function ComparePicker({ selection, onChange, schools, titleCounts }) {
   const commit = (school) => {
     const next = selection.includes(school)
       ? selection.filter((s) => s !== school)
-      : selection.length < MAX_SELECTION
-      ? [...selection, school]
-      : [selection[1], school];
+      : [...selection, school];
     onChange(next);
     setQuery('');
     setActiveIdx(0);
@@ -604,10 +613,8 @@ function ComparePicker({ selection, onChange, schools, titleCounts }) {
           onFocus={() => setOpen(true)}
           placeholder={
             selection.length === 0
-              ? 'Search to compare up to 2 schools…'
-              : selection.length === 1
-              ? 'Pick another school…'
-              : 'Type to replace…'
+              ? 'Search to compare schools…'
+              : 'Add another school…'
           }
         />
       </div>
