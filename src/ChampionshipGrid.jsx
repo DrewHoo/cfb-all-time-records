@@ -195,13 +195,12 @@ export default function ChampionshipGrid() {
       .cg-grid .cg-cell[data-school="${e}"],
       .cg-grid .cg-cell[data-school-2="${e}"] {
         z-index: 5;
-        transform: scale(1.18);
         border-radius: 4px;
-        background: rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.08);
       }
       .cg-grid .cg-cell[data-school="${e}"]::after,
       .cg-grid .cg-cell[data-school-2="${e}"]::after {
-        box-shadow: 0 0 0 2px ${color}, 0 0 14px 3px ${color};
+        box-shadow: inset 0 0 0 2px ${color}, 0 0 10px 1px ${color};
         border-radius: 4px;
         opacity: 1;
       }`;
@@ -975,6 +974,7 @@ body {
   border: 1px solid var(--border);
   background: var(--surface);
   -webkit-overflow-scrolling: touch;
+  overflow-anchor: none;
 }
 
 /* Grid — cell/year/header widths come from --*-default custom props that
@@ -1087,7 +1087,7 @@ body {
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   cursor: pointer;
-  transition: opacity 0.12s ease, transform 0.12s ease;
+  transition: opacity 0.12s ease, background-color 0.12s ease;
   position: relative;
   overflow: visible;
   contain: layout;
