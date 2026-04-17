@@ -330,6 +330,7 @@ const GridContent = memo(function GridContent({
       <div
         ref={gridRef}
         className="cg-grid"
+        onMouseLeave={onLeave}
         style={{
           '--sport-count': sortedSports.length,
           '--year-count': descendingYears.length,
@@ -391,7 +392,6 @@ const GridContent = memo(function GridContent({
                     onMouseEnter={
                       !isShared && primary ? () => onEnter(primary) : undefined
                     }
-                    onMouseLeave={!isShared && primary ? onLeave : undefined}
                     onClick={
                       !isShared && primary ? (e) => onClick(primary, e) : undefined
                     }
@@ -409,7 +409,6 @@ const GridContent = memo(function GridContent({
                               key={co}
                               className={`cg-half cg-half--${i === 0 ? 'a' : 'b'}`}
                               onMouseEnter={() => onEnter(co)}
-                              onMouseLeave={onLeave}
                               onClick={(e) => onClick(co, e)}
                             >
                               {coLogo ? (
@@ -989,6 +988,12 @@ body {
   --header-h: var(--header-h-default, 56px);
   grid-template-columns: var(--year-w) repeat(var(--sport-count), var(--cell-w));
   grid-template-rows: var(--header-h) repeat(var(--year-count), var(--cell-w));
+  /* Clip horizontal overflow from the last sport header's tooltip ::after,
+     which would otherwise push scrollWidth ~20px past the grid and produce
+     a phantom column on the right. Vertical overflow stays visible so the
+     tooltip itself can still render below the header. */
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 /* Corner cell */
@@ -1051,6 +1056,13 @@ body {
   z-index: 30;
   box-shadow: 0 4px 14px rgba(0,0,0,0.4);
   transition: opacity 0.12s ease;
+}
+/* Last sport header: anchor the tooltip to the column's right edge so it
+   stays within the grid's clipped x-overflow instead of being cut off. */
+.cg-sport-hdr:has(+ .cg-year)::after {
+  left: auto;
+  right: 0;
+  transform: none;
 }
 .cg-sport-hdr:hover::after {
   opacity: 1;
