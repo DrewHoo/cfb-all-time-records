@@ -6,6 +6,37 @@ const CELL = 32;
 const YEAR_W = 48;
 const HDR_H = 56;
 
+// Sanitize a school name into a className suffix. Strips everything that
+// isn't a word character so names like "Ohio State" → "active-OhioState".
+const activeClass = (school) => 'active-' + school.replace(/\W+/g, '');
+
+// Build a static stylesheet with one rule per school that has titles. The
+// grid toggles `has-active` + per-school `active-<Name>` classes on hover,
+// so the expensive style invalidation that used to happen every hover
+// (swapping the <style> tag contents) is replaced with a cheap className
+// change against pre-parsed rules.
+const SCHOOL_HIGHLIGHT_CSS = (() => {
+  const present = new Set();
+  for (const sport of SPORTS) {
+    const data = CHAMPIONSHIPS[sport.key] || {};
+    for (const value of Object.values(data)) {
+      if (!value) continue;
+      const schools = Array.isArray(value) ? value : [value];
+      for (const s of schools) present.add(s);
+    }
+  }
+  const esc = (s) => s.replace(/["\\]/g, '\\$&');
+  let css = '.cg-grid.has-active .cg-cell { opacity: 0.12; }\n';
+  for (const s of present) {
+    const color = SCHOOLS[s]?.color || '#fff';
+    const e = esc(s);
+    const c = activeClass(s);
+    css += `.cg-grid.${c} .cg-cell[data-school="${e}"],.cg-grid.${c} .cg-cell[data-school-2="${e}"]{z-index:5;border-radius:4px;background:rgba(255,255,255,0.08);opacity:1;}\n`;
+    css += `.cg-grid.${c} .cg-cell[data-school="${e}"]::after,.cg-grid.${c} .cg-cell[data-school-2="${e}"]::after{box-shadow:inset 0 0 0 2px ${color},0 0 10px 1px ${color};border-radius:4px;opacity:1;}\n`;
+  }
+  return css;
+})();
+
 // Read ?s=... (repeatable) on first render so shared links land on the
 // right selection. Legacy ?a=/?b=/?school= are still honored for older links.
 const initialSelectionFromUrl = () => {
@@ -168,51 +199,23 @@ export default function ChampionshipGrid() {
     );
   }, [shareTitle]);
 
-  // Dynamic CSS that dims non-matching cells and glows each active school in
-  // its own color. Recomputed only when `activeSchools` changes so React
-  // updates a single text node instead of reconciling ~800 cells. Split cells
-  // carry both champions in data-school and data-school-2, so either
-  // attribute matching counts.
-  const activeStyle = useMemo(() => {
-    if (activeSchools.length === 0) return '';
-    // NCAA school names are safe ASCII, but escape quotes/backslashes defensively.
-    const esc = (s) => s.replace(/["\\]/g, '\\$&');
-    const notChain = activeSchools
-      .map((s) => {
-        const e = esc(s);
-        return `:not([data-school="${e}"]):not([data-school-2="${e}"])`;
-      })
-      .join('');
-    const dim = `
-      .cg-grid .cg-cell${notChain} {
-        opacity: 0.12;
-      }`;
-    const glows = activeSchools
-      .map((s) => {
-        const color = SCHOOLS[s]?.color || '#fff';
-        const e = esc(s);
-        return `
-      .cg-grid .cg-cell[data-school="${e}"],
-      .cg-grid .cg-cell[data-school-2="${e}"] {
-        z-index: 5;
-        border-radius: 4px;
-        background: rgba(255,255,255,0.08);
-      }
-      .cg-grid .cg-cell[data-school="${e}"]::after,
-      .cg-grid .cg-cell[data-school-2="${e}"]::after {
-        box-shadow: inset 0 0 0 2px ${color}, 0 0 10px 1px ${color};
-        border-radius: 4px;
-        opacity: 1;
-      }`;
-      })
-      .join('');
-    return dim + glows;
+  // Apply highlighting classes directly to the grid DOM node so hover state
+  // never re-renders the memoized GridContent. The CSS rules themselves are
+  // static, so className changes don't cause a CSS reparse.
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const base = 'cg-grid';
+    el.className =
+      activeSchools.length === 0
+        ? base
+        : `${base} has-active ${activeSchools.map(activeClass).join(' ')}`;
   }, [activeSchools]);
 
   return (
     <div className="cg-page" onClick={clearSelection}>
       <style>{STYLES}</style>
-      <style>{activeStyle}</style>
+      <style>{SCHOOL_HIGHLIGHT_CSS}</style>
 
       {/* Header */}
       <header className="cg-header">
@@ -289,9 +292,9 @@ export default function ChampionshipGrid() {
         </button>
       </div>
 
-      {/* Grid — memoized so hover state changes in the parent don't reconcile
-          ~800 cells. Active-school highlighting is applied via the sibling
-          <style> above using data-school attribute selectors. */}
+      {/* Grid — memoized so hover state changes never re-render cells. The
+          active-school className is applied imperatively via gridRef above,
+          driving pre-parsed rules in SCHOOL_HIGHLIGHT_CSS. */}
       <GridContent
         gridRef={gridRef}
         sortedSports={sortedSports}
@@ -880,7 +883,7 @@ body {
 .cg-info {
   width: 100%;
   max-width: 720px;
-  min-height: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -890,7 +893,7 @@ body {
   margin-bottom: 16px;
   transition: border-color 0.2s, background 0.2s;
   overflow: hidden;
-  padding: 6px 12px;
+  padding: 0;
 }
 .cg-info--active {
   border-color: rgba(255,255,255,0.12);
@@ -899,13 +902,21 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  /* Fit the inner row to the info-bar height so overflow-x scrolls instead
+     of stretching the container vertically when many schools are active. */
+  height: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 12px;
+  scrollbar-width: thin;
 }
 .cg-info-school {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 .cg-info-vs {
   font-size: 11px;
@@ -913,6 +924,7 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
+  flex-shrink: 0;
 }
 .cg-info-swatch {
   width: 12px;
