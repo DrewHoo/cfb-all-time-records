@@ -100,17 +100,23 @@ export default function ChampionshipGrid() {
     [],
   );
 
-  // Count total titles per school across all sports shown. Shared titles
-  // (array values) credit each co-champion with one title.
+  // Count titles per school across all sports shown, broken down by the
+  // sport's gender. Shared titles (array values) credit each co-champion
+  // with one title.
   const schoolTitles = useMemo(() => {
     const counts = {};
     for (const sport of SPORTS) {
       const data = CHAMPIONSHIPS[sport.key] || {};
+      const gender = sport.gender;
       for (const value of Object.values(data)) {
         if (!value) continue;
         const schools = Array.isArray(value) ? value : [value];
         for (const school of schools) {
-          counts[school] = (counts[school] || 0) + 1;
+          const entry =
+            counts[school] || (counts[school] = { total: 0, male: 0, female: 0 });
+          entry.total += 1;
+          if (gender === '♂') entry.male += 1;
+          else if (gender === '♀') entry.female += 1;
         }
       }
     }
@@ -265,7 +271,21 @@ export default function ChampionshipGrid() {
                       />
                     )}
                     <span className="cg-info-name">{s}</span>
-                    <span className="cg-info-count">{schoolTitles[s] || 0}</span>
+                    <span className="cg-info-count">{schoolTitles[s]?.total || 0}</span>
+                    {schoolTitles[s] && (schoolTitles[s].male > 0 || schoolTitles[s].female > 0) && (
+                      <span className="cg-info-breakdown" aria-label="Breakdown by sport gender">
+                        <span className="cg-info-bd">
+                          <span aria-hidden="true">♂</span>
+                          <span className="cg-sr-only">Men&rsquo;s:</span>
+                          {schoolTitles[s].male}
+                        </span>
+                        <span className="cg-info-bd">
+                          <span aria-hidden="true">♀</span>
+                          <span className="cg-sr-only">Women&rsquo;s:</span>
+                          {schoolTitles[s].female}
+                        </span>
+                      </span>
+                    )}
                   </div>
                 </Fragment>
               );
@@ -659,7 +679,7 @@ function ComparePicker({ selection, onChange, schools, titleCounts }) {
                 )}
                 <span className="cg-picker-opt-name">{school}</span>
                 <span className="cg-picker-opt-count">
-                  {titleCounts[school] || 0}
+                  {titleCounts[school]?.total || 0}
                 </span>
               </div>
             );
@@ -946,6 +966,33 @@ body {
   font-size: 12px;
   color: var(--muted);
   font-family: 'DM Mono', monospace;
+}
+.cg-info-breakdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 6px;
+  margin-left: 2px;
+  border-left: 1px solid rgba(255,255,255,0.12);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+.cg-info-bd {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.cg-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 .cg-info-placeholder {
   font-size: 13px;
