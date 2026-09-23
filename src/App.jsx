@@ -291,6 +291,16 @@ export default function App() {
             Data sourced from Wikipedia: FBS win-loss records, bowl records, and national championship claims. Through 2025 season. FCS teams not included as Wikipedia does not compile equivalent aggregate data.
           </div>
         </div>
+
+        {/* What to read next — the other sports sites under drewhoover.com */}
+        <div style={{ marginTop: 20, padding: 16, background: "var(--surface)", borderRadius: 10, fontSize: 12, color: "var(--text-3)" }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5, fontSize: 11 }}>What to read next</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span><a href="https://drewhoover.com/how-many-rings/" style={{ color: "var(--text)" }}>How Many Rings?</a> — every person on a national-championship staff since 1990, ranked by rings, each one cited.</span>
+            <span><a href="https://drewhoover.com/hostile-territory/" style={{ color: "var(--text)" }}>Hostile Territory</a> — every head coach's true road record against AP top-10 teams since 1990.</span>
+            <span><a href="https://drewhoover.com/collegiate-championships/" style={{ color: "var(--text)" }}>Who has the most college championships?</a> — every NCAA champion since 1972, 33 sports, one grid.</span>
+          </div>
+        </div>
       </div>
     </div>
   );
