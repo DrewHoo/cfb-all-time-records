@@ -329,7 +329,10 @@ export default function ChampionshipGrid() {
         <p>
           Football uses AP poll champion (pre-BCS era) and BCS/CFP champion.
           Year 2020 dashes indicate seasons canceled due to COVID-19.
-          Data sourced from NCAA records.
+          Data from each sport's championship page on <a href="https://en.wikipedia.org/wiki/NCAA_Division_I">Wikipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).
+        </p>
+        <p>
+          <a href="https://drewhoover.com/">drewhoover.com</a> · <a href="https://github.com/DrewHoo/cfb-all-time-records">source</a> · <a href="https://ko-fi.com/drewhooverdotcom" onClick={() => window.dhAnalytics?.track('kofi', { from: 'footer' })}>buy me a coffee</a>
         </p>
       </footer>
     </div>
@@ -1263,6 +1266,17 @@ body {
   font-size: 11px;
   color: var(--muted);
   line-height: 1.5;
+}
+.cg-footer p + p {
+  margin-top: 8px;
+}
+.cg-footer a {
+  color: var(--muted);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+.cg-footer a:hover {
+  color: var(--text);
 }
 
 /* Responsive: on phones, shrink cells + year column so the full grid

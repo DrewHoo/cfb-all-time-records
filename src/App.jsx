@@ -288,7 +288,7 @@ export default function App() {
             <span>Click any row for full details</span>
           </div>
           <div style={{ marginTop: 8, fontSize: 10, color: "var(--text-3)" }}>
-            Data sourced from Wikipedia: FBS win-loss records, bowl records, and national championship claims. Through 2025 season. FCS teams not included as Wikipedia does not compile equivalent aggregate data.
+            Data from <a href="https://en.wikipedia.org/wiki/List_of_NCAA_Division_I_FBS_football_programs" style={{ color: "var(--text-2)" }}>Wikipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" style={{ color: "var(--text-2)" }}>CC BY-SA 4.0</a>): FBS win-loss records, bowl records, and national championship claims. Through 2025 season. FCS teams not included as Wikipedia does not compile equivalent aggregate data.
           </div>
         </div>
 
@@ -298,9 +298,16 @@ export default function App() {
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <span><a href="https://drewhoover.com/cfb-streak-king/" style={{ color: "var(--text)" }}>Streak King</a> — design a streak from up to four constraints; every FBS team ranked by its longest active run.</span>
             <span><a href="https://drewhoover.com/how-many-rings/" style={{ color: "var(--text)" }}>How Many Rings?</a> — every person on a national-championship staff since 1990, ranked by rings, each one cited.</span>
-            <span><a href="https://drewhoover.com/hostile-territory/" style={{ color: "var(--text)" }}>Hostile Territory</a> — every head coach's true road record against AP top-10 teams since 1990.</span>
+            <span><a href="https://drewhoover.com/hostile-territory/" style={{ color: "var(--text)" }}>Hostile Territory</a> — every head coach's true road record against AP top-10 teams since 1936.</span>
+            <span><a href="https://drewhoover.com/nfl-comparator/" style={{ color: "var(--text)" }}>NFL Comparator</a> — compare NFL players at the same point in their careers: who, which stat, through how many games or starts, since 1999.</span>
+            <span><a href="https://drewhoover.com/wnba-comparator/" style={{ color: "var(--text)" }}>WNBA Comparator</a> — the same comparison for WNBA players: points, assists, 30-point games, through the first N games of a career.</span>
             <span><a href="https://drewhoover.com/collegiate-championships/" style={{ color: "var(--text)" }}>Who has the most college championships?</a> — every NCAA champion since 1972, 33 sports, one grid.</span>
           </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{ marginTop: 20, textAlign: "center", fontSize: 11, color: "var(--text-3)" }}>
+          <a href="https://drewhoover.com/" style={{ color: "var(--text-2)" }}>drewhoover.com</a> · <a href="https://github.com/DrewHoo/cfb-all-time-records" style={{ color: "var(--text-2)" }}>source</a> · <a href="https://ko-fi.com/drewhooverdotcom" style={{ color: "var(--text-2)" }} onClick={() => window.dhAnalytics?.track('kofi', { from: 'footer' })}>buy me a coffee</a>
         </div>
       </div>
     </div>

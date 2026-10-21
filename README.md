@@ -2,7 +2,7 @@
 
 Two interactive views of NCAA Division I college sports history, built with React + Vite and deployed to GitHub Pages.
 
-**Live site:** https://drewhoo.github.io/cfb-all-time-records/
+**Live site:** https://drewhoover.com/cfb-all-time-records/
 
 ## What's here
 

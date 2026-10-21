@@ -37,7 +37,7 @@ const frame = (inner) => `
   <rect width="${W}" height="${H}" fill="url(#bgGrad)"/>
   ${inner}
   <text x="60" y="580" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="18" fill="${MUTED}" font-weight="500">
-    drewhoo.github.io/cfb-all-time-records
+    drewhoover.com/cfb-all-time-records
   </text>
   <rect x="60" y="600" width="80" height="3" fill="url(#accent)"/>
 </svg>`;
