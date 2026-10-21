@@ -743,9 +743,10 @@ body {
   border-color: rgba(255,255,255,0.25);
 }
 .cg-header h1 {
+  font-family: Georgia, 'Source Serif 4', 'Times New Roman', serif;
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
   color: #fff;
   margin-top: 6px;
 }

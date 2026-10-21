@@ -138,7 +138,7 @@ export default function App() {
           <a href="./" style={{ display: "inline-block", fontSize: 11, color: "var(--text-3)", textDecoration: "none", marginBottom: 10, padding: "4px 10px", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, letterSpacing: 0.3 }}>
             ← Championship Grid (all sports)
           </a>
-          <h1 style={{ fontSize: 26, fontWeight: 700, letterSpacing: -0.5, marginBottom: 4, background: "linear-gradient(135deg, #818cf8, #c084fc)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          <h1 style={{ fontFamily: "Georgia, 'Source Serif 4', 'Times New Roman', serif", fontSize: 26, fontWeight: 700, letterSpacing: 0.5, marginBottom: 4, background: "linear-gradient(135deg, #818cf8, #c084fc)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
             College Football All-Time Records
           </h1>
           <p style={{ color: "var(--text-2)", fontSize: 13 }}>

@@ -82,10 +82,10 @@ const ogGrid = frame(`
   <text x="60" y="130" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="28" fill="${MUTED}" font-weight="600" letter-spacing="2">
     NCAA DIVISION I
   </text>
-  <text x="60" y="210" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="64" fill="${TEXT}" font-weight="700" letter-spacing="-1">
+  <text x="60" y="210" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="${TEXT}" font-weight="700">
     Every Champion
   </text>
-  <text x="60" y="278" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="64" fill="${TEXT}" font-weight="700" letter-spacing="-1">
+  <text x="60" y="278" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="${TEXT}" font-weight="700">
     Since 1990
   </text>
   <text x="60" y="340" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="28" fill="${ACCENT}" font-weight="600">
@@ -121,7 +121,7 @@ const ogFootball = frame(`
   <text x="60" y="80" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="22" fill="${MUTED}" font-weight="600" letter-spacing="2">
     COLLEGE FOOTBALL · ALL-TIME
   </text>
-  <text x="60" y="140" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="52" fill="${TEXT}" font-weight="700" letter-spacing="-1">
+  <text x="60" y="140" font-family="Georgia, 'Times New Roman', serif" font-size="52" fill="${TEXT}" font-weight="700">
     136 FBS Programs, Ranked
   </text>
 
