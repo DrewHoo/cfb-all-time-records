@@ -13,6 +13,7 @@ import React from 'react'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { llmsText } from './lib/llms.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const ORIGIN = 'https://drewhoover.com'
@@ -23,6 +24,12 @@ const vite = await createServer({ root: ROOT, server: { middlewareMode: true }, 
 const PAGES = [{ file: 'index.html', module: '/src/FootballRecords.jsx', url: SITE }]
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+const unesc = (s) => String(s).replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&amp;/g, '&')
+
+// what llms.txt says, read from the same modules the page renders from
+const F = await vite.ssrLoadModule('/src/lib/football.js')
+const { SIBLINGS } = await vite.ssrLoadModule('/src/components/Notes.jsx')
+let root = null
 
 for (const p of PAGES) {
   const out = path.join(ROOT, 'dist', p.file)
@@ -63,8 +70,16 @@ for (const p of PAGES) {
   fs.writeFileSync(out, html)
   const words = appHtml.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
   console.log(`${p.file}: prerendered ${(appHtml.length / 1024).toFixed(0)}KB into #root (~${words} words)`)
+  if (p.file === 'index.html') root = { title: unesc(title), description: unesc(description) }
 }
 await vite.close()
+
+// llms.txt (llmstxt.org): the site in plain markdown for a language model
+fs.writeFileSync(
+  path.join(ROOT, 'dist/llms.txt'),
+  llmsText({ site: SITE, title: root.title, description: root.description, through: F.THROUGH, programs: F.TEAMS.length, sourceUrl: F.SOURCE_URL, siblings: SIBLINGS }),
+)
+console.log(`llms.txt: ${SIBLINGS.length} sibling sites`)
 
 // the sitemap: the one page, with lastmod, what Search Console wants submitted
 const lastmod = new Date().toISOString().slice(0, 10)

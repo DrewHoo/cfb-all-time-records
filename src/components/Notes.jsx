@@ -6,13 +6,18 @@ export const KOFI_URL = 'https://ko-fi.com/drewhooverdotcom';
 export const REPO_URL = 'https://github.com/DrewHoo/cfb-all-time-records';
 const BASE = import.meta.env.BASE_URL;
 
-const SIBLINGS = [
-  ['streak-king', 'https://drewhoover.com/cfb-streak-king/', 'Streak King', 'design a streak from up to four constraints; every FBS team ranked by its longest active run.'],
-  ['how-many-rings', 'https://drewhoover.com/how-many-rings/', 'How Many Rings?', 'every person on a football national-championship staff since 1990, ranked by rings, each one cited.'],
-  ['hostile-territory', 'https://drewhoover.com/hostile-territory/', 'Hostile Territory', "every head coach's true road record against AP top-10 teams since 1936, one chip per game."],
-  ['nfl-comparator', 'https://drewhoover.com/nfl-comparator/', 'NFL Comparator', 'compare NFL players at the same point in their careers: who, which stat, through how many games or starts, since 1999.'],
-  ['wnba-comparator', 'https://drewhoover.com/wnba-comparator/', 'WNBA Comparator', 'the same comparison for WNBA players: points, assists, 30-point games, through the first N games of a career.'],
-  ['collegiate-championships', 'https://drewhoover.com/collegiate-championships/', 'Who has the most college championships?', 'every NCAA champion since 1972, 33 sports, one grid.'],
+// Every other sports site, in the order the sites share: [tracking key, address, name, the line after the dash].
+// scripts/prerender.mjs reads this list too, for dist/llms.txt.
+export const SIBLINGS = [
+  ['nfl-comparator', 'https://drewhoover.com/nfl-comparator/', 'NFL Comparator', 'compare NFL players at the same point in their careers, every career since 1999, with a page for every player and what he leads.'],
+  ['nba-comparator', 'https://drewhoover.com/nba-comparator/', 'NBA Comparator', 'the same comparator over every NBA career since 1946-47, Wilt and Jordan included, with a page for every player and what he leads.'],
+  ['wnba-comparator', 'https://drewhoover.com/wnba-comparator/', 'WNBA Comparator', 'the same comparator over every WNBA career since 1997.'],
+  ['nhl-comparator', 'https://drewhoover.com/nhl-comparator/', 'NHL Comparator', 'the same comparator over every NHL career since 1917-18, Gretzky and Howe included.'],
+  ['cfb-comparator', 'https://drewhoover.com/cfb-comparator/', 'College Football Comparator', 'every coach, team and player at the same point in their careers, since 1869, with the best players of each position at every school and conference.'],
+  ['streak-king', 'https://drewhoover.com/cfb-streak-king/', 'College Football Streak King', 'the longest active and all-time winning and losing streaks in college football, under any definition, every FBS game since 1936.'],
+  ['hostile-territory', 'https://drewhoover.com/hostile-territory/', 'Hostile Territory', "every head coach's true road record against AP top-10 teams since 1936."],
+  ['how-many-rings', 'https://drewhoover.com/how-many-rings/', 'How Many Rings?', 'every person on a national-championship staff since 1990, ranked by the number of rings they can claim.'],
+  ['collegiate-championships', 'https://drewhoover.com/collegiate-championships/', 'Collegiate Championships', 'which schools have won the most NCAA championships, across 33 sports.'],
 ];
 
 export function ReadNext({ here }) {
