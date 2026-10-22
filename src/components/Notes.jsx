@@ -7,8 +7,6 @@ export const REPO_URL = 'https://github.com/DrewHoo/cfb-all-time-records';
 const BASE = import.meta.env.BASE_URL;
 
 const SIBLINGS = [
-  ['grid', `${BASE}`, 'NCAA Division I Championships', 'every national champion since 1990, 30 sports in one grid; pick a school to trace its titles.'],
-  ['football', `${BASE}football.html`, 'All-time FBS records', 'all 136 programs ranked by total wins, win percentage, bowl record and national titles.'],
   ['streak-king', 'https://drewhoover.com/cfb-streak-king/', 'Streak King', 'design a streak from up to four constraints; every FBS team ranked by its longest active run.'],
   ['how-many-rings', 'https://drewhoover.com/how-many-rings/', 'How Many Rings?', 'every person on a football national-championship staff since 1990, ranked by rings, each one cited.'],
   ['hostile-territory', 'https://drewhoover.com/hostile-territory/', 'Hostile Territory', "every head coach's true road record against AP top-10 teams since 1936, one chip per game."],
@@ -17,13 +15,12 @@ const SIBLINGS = [
   ['collegiate-championships', 'https://drewhoover.com/collegiate-championships/', 'Who has the most college championships?', 'every NCAA champion since 1972, 33 sports, one grid.'],
 ];
 
-/** `here` is the page's own key, left out of the list */
 export function ReadNext({ here }) {
   return (
     <>
       <h2>What to read next</h2>
       <div className="notes">
-        {SIBLINGS.filter(([key]) => key !== here).map(([key, href, name, line]) => (
+        {SIBLINGS.map(([key, href, name, line]) => (
           <p key={key}><a href={href} onClick={() => track('readnext', { from: here, to: key })}>{name}</a> — {line}</p>
         ))}
       </div>

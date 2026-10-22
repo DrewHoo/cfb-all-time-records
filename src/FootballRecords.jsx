@@ -54,15 +54,15 @@ export default function FootballRecords() {
     document.getElementById(`t-${openRow.team.slug}`)?.scrollIntoView({ block: 'center' });
   }, [openRow]);
 
-  const setSort = (sort) => { setQ((p) => ({ ...p, sort })); track('sort', { from: 'football', sort }); };
+  const setSort = (sort) => { setQ((p) => ({ ...p, sort })); track('sort', { from: 'board', sort }); };
   const setConf = (conf) => {
     setQ((p) => ({ ...p, conf, t: p.t && conf && F.teamBySlug(p.t)?.conference !== conf ? null : p.t }));
     setShown(PAGE);
-    track('conf', { from: 'football', conf: conf ?? 'all' });
+    track('conf', { from: 'board', conf: conf ?? 'all' });
   };
   const toggle = useCallback((slug) => {
     setQ((p) => ({ ...p, t: p.t === slug ? null : slug }));
-    track('open', { from: 'football', t: slug });
+    track('open', { from: 'board', t: slug });
   }, []);
   const find = {
     items: useMemo(() => [...F.TEAMS].sort((a, b) => a.name.localeCompare(b.name)).map((t) => ({ key: t.slug, name: t.name, mark: `${BASE}logos-color/${t.espn}.png`, sub: F.recordText(t) })), []),
@@ -70,7 +70,7 @@ export default function FootballRecords() {
       const t = F.teamBySlug(slug);
       setQ((p) => ({ ...p, t: slug, conf: p.conf && t.conference !== p.conf ? null : p.conf }));
       landed.current = false;
-      track('find', { from: 'football', t: slug });
+      track('find', { from: 'board', t: slug });
     },
     placeholder: 'Find a program',
     title: 'Program',
@@ -78,7 +78,7 @@ export default function FootballRecords() {
   };
   const onShare = () => {
     share(footballShareText(q, board), window.location.href);
-    track('share', { from: 'football', ...q });
+    track('share', { from: 'board', ...q });
   };
 
   const s = F.SORTS[q.sort];
@@ -89,7 +89,7 @@ export default function FootballRecords() {
   return (
     <main>
       <Dateline span={`through the ${F.THROUGH} season`}>
-        <NavIcons here="football" find={find} onShare={onShare} copied={copied} isMobile={isMobile} />
+        <NavIcons here="board" find={find} onShare={onShare} copied={copied} isMobile={isMobile} />
       </Dateline>
       <h1>College Football All-Time Records</h1>
 
@@ -150,7 +150,7 @@ export default function FootballRecords() {
         </div>
       )}
 
-      <ReadNext here="football" />
+      <ReadNext here="board" />
       <Cite what="a record" />
       <Method>
         <p>

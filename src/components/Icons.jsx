@@ -18,11 +18,3 @@ export const SearchIcon = () => (
 export const CoffeeIcon = () => (
   <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 6.5h9v3.5a3.5 3.5 0 0 1-3.5 3.5H6a3.5 3.5 0 0 1-3.5-3.5V6.5zM11.5 7.5h1a1.75 1.75 0 0 1 0 3.5h-1.2M5.5 1.8v2.4M8.5 1.8v2.4" /></svg>
 );
-/** the championship grid */
-export const GridIcon = () => (
-  <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"><rect x="2" y="2" width="12" height="12" rx="1.5" /><path d="M2 6h12M2 10h12M6 2v12M10 2v12" /></svg>
-);
-/** the ranked records table */
-export const ListIcon = () => (
-  <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M5 3.5h9M5 8h9M5 12.5h9M2 3.5h.5M2 8h.5M2 12.5h.5" /></svg>
-);

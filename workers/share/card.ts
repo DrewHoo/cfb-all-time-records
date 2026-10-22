@@ -26,8 +26,6 @@ export interface Card {
   wordmark: string;
   /** "FBS PROGRAMS BY ALL-TIME WINS" */
   heading: string;
-  /** a data URI beside the heading (a school's mark) */
-  headLogo?: string | null;
   /** the whole sentence */
   words: string;
   rows: CardRow[];
@@ -62,10 +60,7 @@ export function renderCard(card: Card): Response {
   <div style="display:flex; flex-direction:column; align-items:center; width:1200px; height:630px; background-color:${BG}; padding:40px 0 32px;
               background-image: radial-gradient(circle at 600px -126px, rgba(243,226,188,0.13) 0%, rgba(243,226,188,0) 65%);">
     <div style="display:flex; font-family:'IBM Plex Mono'; font-weight:600; font-size:16px; letter-spacing:4px; color:${RUST};">${esc(card.wordmark.toUpperCase())}</div>
-    <div style="display:flex; flex-direction:row; align-items:center; gap:14px; margin-top:10px; max-width:720px;">
-      ${card.headLogo ? `<img src="${card.headLogo}" width="44" height="44" style="width:44px; height:44px; object-fit:contain;" />` : ''}
-      <div style="display:flex; font-family:'Graduate'; font-size:${headingSize(card.heading)}px; color:${CREAM}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(card.heading.toUpperCase())}</div>
-    </div>
+    <div style="display:flex; font-family:'Graduate'; font-size:${headingSize(card.heading)}px; color:${CREAM}; margin-top:10px; max-width:720px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(card.heading.toUpperCase())}</div>
     <div style="display:flex; font-family:'Source Serif 4'; font-size:21px; color:${MUTED}; margin-top:2px; max-width:720px; text-align:center;">${esc(card.words)}</div>
     <div style="display:flex; flex-direction:column; margin-top:12px; flex-grow:1; width:720px;">${rows}</div>
     <div style="display:flex; font-family:'IBM Plex Mono'; font-size:14px; letter-spacing:2px; color:${FAINT}; margin-top:10px;">${esc(card.footer.toUpperCase())}</div>

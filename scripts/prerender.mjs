@@ -1,5 +1,5 @@
-// Runs after `vite build`. Bakes each page's rendered markup into its HTML
-// (dist/index.html, dist/football.html), adds JSON-LD and the index site's
+// Runs after `vite build`. Bakes the page's rendered markup into
+// dist/index.html, adds JSON-LD and the index site's
 // embeds, and writes dist/sitemap.xml.
 //
 // Without this the deployed page is `<div id="root"></div>` and every word on
@@ -20,10 +20,7 @@ const SITE = `${ORIGIN}/cfb-all-time-records/`
 
 const vite = await createServer({ root: ROOT, server: { middlewareMode: true }, appType: 'custom', logLevel: 'warn' })
 
-const PAGES = [
-  { file: 'index.html', module: '/src/ChampionshipGrid.jsx', url: SITE },
-  { file: 'football.html', module: '/src/FootballRecords.jsx', url: `${SITE}football.html` },
-]
+const PAGES = [{ file: 'index.html', module: '/src/FootballRecords.jsx', url: SITE }]
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
@@ -69,7 +66,7 @@ for (const p of PAGES) {
 }
 await vite.close()
 
-// the sitemap: both pages, with lastmod, what Search Console wants submitted
+// the sitemap: the one page, with lastmod, what Search Console wants submitted
 const lastmod = new Date().toISOString().slice(0, 10)
 fs.writeFileSync(
   path.join(ROOT, 'dist/sitemap.xml'),

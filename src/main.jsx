@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
-import ChampionshipGrid from './ChampionshipGrid.jsx'
+import FootballRecords from './FootballRecords.jsx'
 import './styles.css'
 
 // The markup is already in the HTML: scripts/prerender.mjs bakes it in at
@@ -8,6 +8,6 @@ import './styles.css'
 // Hydrate onto it rather than throwing it away; the dev server has no baked
 // markup, so fall back to a plain render there.
 const root = document.getElementById('root')
-const app = <React.StrictMode><ChampionshipGrid /></React.StrictMode>
+const app = <React.StrictMode><FootballRecords /></React.StrictMode>
 if (root.firstChild) hydrateRoot(root, app)
 else createRoot(root).render(app)
