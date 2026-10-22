@@ -157,19 +157,55 @@ export default function FootballRecords() {
           Every row is a program's all-time record as Wikipedia's{' '}
           <a href={F.SOURCE_URL}>list of FBS football programs</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) tallies it,
           through the {F.THROUGH} season: wins, losses and ties in every game the program has played, its bowl record, and the
-          national championships it claims. The {int(F.TEAMS.length)} programs are this season's FBS members; FCS and lower-division
-          programs aren't listed there, so they aren't here.
+          national championships it claims. The sections below say where the records come from, what counts, what the words mean,
+          and where a published number differs.
         </p>
-        <p>
-          <b>Win percentage</b> counts a tie as half a win, the NCAA's way. <b>Claimed national titles</b> are the ones the school itself
-          claims; <b>unclaimed selections</b> are seasons a recognized selector named the program champion that the school doesn't
-          claim, and the "claimed or not" count adds the two. The national-title columns, like Wikipedia's, make no judgment about which selectors count,
-          so Alabama's 18 and Michigan's 12 are the schools' own numbers.
-        </p>
-        <p>
-          Ranks are competition ranks, ties included. A program that has never played a bowl has no bowl win percentage and sits at
-          the bottom of that board without a rank. Records include games later vacated by the NCAA, as Wikipedia's table does.
-        </p>
+
+        <details>
+          <summary>Where the records come from</summary>
+          <p>
+            One table: Wikipedia's list of FBS football programs, read through the {F.THROUGH} season. It carries each program's wins,
+            losses and ties, its bowl wins, losses and ties, its seasons played, and its national championships, claimed and unclaimed.
+            The {int(F.TEAMS.length)} programs are this season's FBS members; FCS and lower-division programs aren't listed there, so
+            they aren't here.
+          </p>
+        </details>
+
+        <details>
+          <summary>What counts</summary>
+          <p>
+            Every game the program has played counts, including games later vacated by the NCAA, as Wikipedia's table does. Bowl
+            games are in the all-time record and in the bowl record both. A program that has never played a bowl has no bowl win
+            percentage and sits at the bottom of that board without a rank.
+          </p>
+          <p>
+            A national title counts the way its selector counted it. <b>Claimed national titles</b> are the ones the school itself
+            claims; <b>unclaimed selections</b> are seasons a recognized selector named the program champion that the school doesn't
+            claim. The national-title columns, like Wikipedia's, make no judgment about which selectors count.
+          </p>
+        </details>
+
+        <details>
+          <summary>What the words mean</summary>
+          <p>
+            <b>Win percentage</b> counts a tie as half a win, the NCAA's way. <b>Bowl win percentage</b> is the same arithmetic over
+            bowl games alone. The <b>"claimed or not"</b> count adds the claimed titles and the unclaimed selections. <b>Seasons
+            played</b> is the number of seasons the program has fielded a team. Ranks are competition ranks, ties included: two
+            programs with the same value share a rank, marked T, and the next rank is skipped.
+          </p>
+        </details>
+
+        <details>
+          <summary>Where a published number differs, and why</summary>
+          <p>
+            A national-title count depends on who is counting. Alabama's 18 and Michigan's 12 are the schools' own numbers; a count
+            that admits fewer selectors, or more, lands somewhere else, and the "claimed or not" board shows the widest one. A
+            school's record book, or the NCAA's, may leave vacated games out; this board keeps them, as Wikipedia's table does, so
+            a win total here can run a few games above the school's. A win percentage that drops ties, or counts them as losses,
+            differs from the one here for a program with ties in its past.
+          </p>
+        </details>
+
         <p>A sibling of <a href="https://drewhoover.com/cfb-streak-king/">College Football Streak King</a> and <a href="https://drewhoover.com/hostile-territory/">Hostile Territory</a>.</p>
       </Method>
       <SiteFooter />
