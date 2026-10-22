@@ -1,9 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import ChampionshipGrid from './ChampionshipGrid.jsx'
+import './styles.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <ChampionshipGrid />
-  </React.StrictMode>,
-)
+// The markup is already in the HTML: scripts/prerender.mjs bakes it in at
+// build time so crawlers get the whole page without running anything.
+// Hydrate onto it rather than throwing it away; the dev server has no baked
+// markup, so fall back to a plain render there.
+const root = document.getElementById('root')
+const app = <React.StrictMode><ChampionshipGrid /></React.StrictMode>
+if (root.firstChild) hydrateRoot(root, app)
+else createRoot(root).render(app)

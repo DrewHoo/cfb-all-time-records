@@ -1,154 +1,152 @@
-// Generate 1200x630 OG preview images for the two pages.
-// Renders SVG templates and rasterizes them with sharp.
-// Run with: node scripts/gen-og.mjs
+// The social preview images, drawn from the real data in the site's own
+// visual language. Run: npm run gen:og (on a Mac: the title is Georgia Bold,
+// read from the system; the script throws without it so a fallback never
+// gets committed). Re-run after a redesign or a data refresh worth committing.
+//   public/og.png           1200x630  the grid, og:image of the root
+//   public/card.png         1200x750  the grid, the 8:5 cover for the index site's project card
+//   public/og-football.png  1200x630  the records board, og:image of football.html
+//
+// Text is drawn as glyph outlines through opentype.js (pinned 1.3.4: 2.x
+// emits NaN path data), so nothing depends on fontconfig: sharp's librsvg
+// never finds Google fonts and would fall back to Helvetica. The OFL TTFs
+// live in scripts/fonts/. Every meaningful glyph stays inside the centered
+// 720px column (x 240–960): Reddit's compact feed center-crops the 1.91:1
+// card to a near-square, and a safe-zone layout survives any crop.
+import { readFileSync, existsSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { createServer } from 'vite'
+import opentype from 'opentype.js'
+import sharp from 'sharp'
 
-import sharp from 'sharp';
-import { writeFileSync, mkdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const FONTS = resolve(ROOT, 'scripts', 'fonts')
+const OUT = resolve(ROOT, 'public')
+const GEORGIA_BOLD = process.env.GEORGIA_BOLD ?? '/System/Library/Fonts/Supplemental/Georgia Bold.ttf'
+if (!existsSync(GEORGIA_BOLD)) throw new Error(`title font missing: ${GEORGIA_BOLD} (run gen:og on a Mac, or point GEORGIA_BOLD at a Georgia Bold TTF)`)
+const font = (f) => opentype.parse(readFileSync(f).buffer.slice(0))
+const FONT = {
+  Title: font(GEORGIA_BOLD),
+  Graduate: font(resolve(FONTS, 'Graduate-Regular.ttf')),
+  Mono: font(resolve(FONTS, 'IBMPlexMono-Regular.ttf')),
+  MonoBold: font(resolve(FONTS, 'IBMPlexMono-SemiBold.ttf')),
+  Serif: font(resolve(FONTS, 'SourceSerif4-Regular.ttf')),
+}
+const BG = '#282127', INK = '#efe6d9', MUTED = '#bfb2a6', FAINT = '#857a75', LINE = '#453a42', CREAM = '#f3e2bc', RUST = '#c36c36'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const outDir = resolve(__dirname, '..', 'public');
-mkdirSync(outDir, { recursive: true });
+const width = (str, name, size, spacing = 0) => FONT[name].getAdvanceWidth(str, size, { kerning: true, letterSpacing: spacing / size })
+/** one run of text as a filled path; spacing is letter-spacing in px */
+function text(str, { x, y, font: name, size, fill, anchor = 'start', spacing = 0 }) {
+  const opts = { kerning: true, letterSpacing: spacing / size }
+  const w = width(str, name, size, spacing)
+  const x0 = anchor === 'middle' ? x - w / 2 : anchor === 'end' ? x - w : x
+  return `<path d="${FONT[name].getPath(str, x0, y, size, opts).toPathData(2)}" fill="${fill}"/>`
+}
+/** shrink a run until it fits maxW */
+const fit = (str, name, size, maxW) => { while (size > 10 && width(str, name, size) > maxW) size -= 1; return size }
+const int = (n) => n.toLocaleString('en-US')
 
-const W = 1200;
-const H = 630;
+// the site's own model, through vite so the JSON imports and BASE_URL resolve
+const vite = await createServer({ root: ROOT, server: { middlewareMode: true }, appType: 'custom', logLevel: 'warn' })
+const C = await vite.ssrLoadModule('/src/lib/champs.js')
+const F = await vite.ssrLoadModule('/src/lib/football.js')
+const S = await vite.ssrLoadModule('/src/lib/share.js')
+await vite.close()
 
-const BG = '#0c0f14';
-const SURFACE = '#151921';
-const BORDER = 'rgba(255,255,255,0.08)';
-const TEXT = '#ffffff';
-const MUTED = '#9ba3b5';
-const ACCENT = '#fbbf24';
+/** a mono stamp (white with alpha) recolored to a solid, sized, as a data URI */
+const stampCache = new Map()
+async function stamp(school, size, rgb) {
+  const key = `${school}|${size}|${rgb.join()}`
+  if (stampCache.has(key)) return stampCache.get(key)
+  const file = resolve(OUT, 'logos', 'mono', `${C.slugOf(school)}.png`)
+  let uri = null
+  if (existsSync(file)) {
+    const { data, info } = await sharp(file).resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
+    for (let i = 0; i < data.length; i += 4) { data[i] = rgb[0]; data[i + 1] = rgb[1]; data[i + 2] = rgb[2] }
+    const png = await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer()
+    uri = `data:image/png;base64,${png.toString('base64')}`
+  }
+  stampCache.set(key, uri)
+  return uri
+}
+const colorLogo = (espn) => `data:image/png;base64,${readFileSync(resolve(OUT, 'logos-color', `${espn}.png`)).toString('base64')}`
 
-// Shared SVG chrome: background, bordered card, footer tag
-const frame = (inner) => `
-<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#11151c"/>
-      <stop offset="100%" stop-color="#0a0d12"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#c084fc"/>
-    </linearGradient>
-  </defs>
-  <rect width="${W}" height="${H}" fill="url(#bgGrad)"/>
+const frame = (W, H, inner) => `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <defs><radialGradient id="lamp" cx="${W / 2}" cy="-126" r="${W * 0.55}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${CREAM}" stop-opacity="0.13"/><stop offset="0.65" stop-color="${CREAM}" stop-opacity="0"/></radialGradient></defs>
+  <rect width="${W}" height="${H}" fill="${BG}"/><rect width="${W}" height="${H}" fill="url(#lamp)"/>
   ${inner}
-  <text x="60" y="580" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="18" fill="${MUTED}" font-weight="500">
-    drewhoover.com/cfb-all-time-records
-  </text>
-  <rect x="60" y="600" width="80" height="3" fill="url(#accent)"/>
-</svg>`;
+</svg>`
 
-// ---- OG 1: Championship grid ----
-// We draw a stylized mini-grid that's evocative rather than exact.
-const gridCells = () => {
-  // 23 sports × 18 years worth of cells (trimmed preview)
-  const cols = 23;
-  const rows = 14;
-  const cellW = 32;
-  const cellH = 22;
-  const gridX = 620;
-  const gridY = 120;
-  const palette = [
-    '#991b1b', '#1e3a8a', '#c2410c', '#166534', '#7c2d12',
-    '#78350f', '#1d4ed8', '#9a3412', '#14532d', '#9f1239',
-  ];
-  const cells = [];
-  // Deterministic pseudo-random fill
-  let seed = 42;
-  const rand = () => {
-    seed = (seed * 9301 + 49297) % 233280;
-    return seed / 233280;
-  };
-  for (let r = 0; r < rows; r++) {
+// --- the grid: the newest complete years across every sport, the leader lit ---
+async function renderGrid(W, H) {
+  const lead = C.leaderboard[0]
+  const cols = C.sortedSports.length
+  const cell = 22
+  const yearW = 40
+  const boardW = yearW + cols * cell // 700
+  const x0 = (W - boardW) / 2
+  const headY = 190
+  const rowsN = Math.floor((H - headY - 70) / cell)
+  // the newest years with a full row of champions (the running year is partial)
+  const years = C.descendingYears.filter((y) => C.sortedSports.filter((s) => C.champsOf(s.key, y).length).length >= cols * 0.8).slice(0, rowsN)
+  const parts = []
+  parts.push(text('NCAA DIVISION I CHAMPIONSHIPS', { x: W / 2, y: 60, font: 'MonoBold', size: 16, fill: RUST, anchor: 'middle', spacing: 4 }))
+  parts.push(text(`Every champion since ${C.FIRST}`, { x: W / 2, y: 116, font: 'Title', size: 46, fill: CREAM, anchor: 'middle' }))
+  parts.push(text(`${cols} sports in one grid. ${lead.school} leads with ${lead.total} titles; ${int(C.leaderboard.length)} schools have won at least one.`, { x: W / 2, y: 152, font: 'Serif', size: fit(`${cols} sports in one grid. ${lead.school} leads with ${lead.total} titles; ${int(C.leaderboard.length)} schools have won at least one.`, 'Serif', 21, 720), fill: MUTED, anchor: 'middle' }))
+  const faint = [0x9a, 0x8e, 0x88]
+  const lit = [0xf3, 0xe2, 0xbc]
+  for (let r = 0; r < years.length; r++) {
+    const y = headY + r * cell
+    const yr = years[r]
+    parts.push(text(String(yr), { x: x0 + yearW - 8, y: y + cell - 6, font: 'Mono', size: 11, fill: yr % 10 === 0 ? INK : FAINT, anchor: 'end' }))
+    parts.push(`<line x1="${x0}" y1="${y + cell}" x2="${x0 + boardW}" y2="${y + cell}" stroke="${LINE}" stroke-width="1" stroke-dasharray="1 2"/>`)
     for (let c = 0; c < cols; c++) {
-      const x = gridX + c * cellW;
-      const y = gridY + r * cellH;
-      const filled = rand() > 0.18;
-      const color = filled ? palette[Math.floor(rand() * palette.length)] : SURFACE;
-      cells.push(
-        `<rect x="${x}" y="${y}" width="${cellW - 2}" height="${cellH - 2}" rx="2" fill="${color}" opacity="${filled ? 0.85 : 0.35}"/>`,
-      );
+      const champs = C.champsOf(C.sortedSports[c].key, yr)
+      if (!champs.length) continue
+      const school = champs[0]
+      const hero = school === lead.school
+      const uri = await stamp(school, 16, hero ? lit : faint)
+      if (!uri) continue
+      parts.push(`<image href="${uri}" x="${x0 + yearW + c * cell + 3}" y="${y + 3}" width="16" height="16"${hero ? '' : ' opacity="0.6"'}/>`)
     }
   }
-  return cells.join('\n');
-};
-
-const ogGrid = frame(`
-  <!-- Title block -->
-  <text x="60" y="130" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="28" fill="${MUTED}" font-weight="600" letter-spacing="2">
-    NCAA DIVISION I
-  </text>
-  <text x="60" y="210" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="${TEXT}" font-weight="700">
-    Every Champion
-  </text>
-  <text x="60" y="278" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="${TEXT}" font-weight="700">
-    Since 1990
-  </text>
-  <text x="60" y="340" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="28" fill="${ACCENT}" font-weight="600">
-    30 sports · one grid
-  </text>
-  <text x="60" y="395" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="20" fill="${MUTED}" font-weight="400">
-    Hover any cell to trace a school's
-  </text>
-  <text x="60" y="422" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="20" fill="${MUTED}" font-weight="400">
-    entire title history.
-  </text>
-
-  <!-- Mini grid illustration -->
-  <rect x="600" y="90" width="560" height="420" rx="10" fill="${SURFACE}" stroke="${BORDER}" stroke-width="1"/>
-  ${gridCells()}
-`);
-
-// ---- OG 2: Football table ----
-const rowFor = (rank, name, record, pct, barW, conf, color) => {
-  const y = 180 + (rank - 1) * 42;
-  return `
-    <text x="70" y="${y + 26}" font-family="DM Mono, monospace" font-size="22" fill="${MUTED}">${rank}</text>
-    <text x="130" y="${y + 22}" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="24" fill="${TEXT}" font-weight="700">${name}</text>
-    <text x="130" y="${y + 42}" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="14" fill="${MUTED}">${conf}</text>
-    <text x="620" y="${y + 28}" font-family="DM Mono, monospace" font-size="20" fill="${TEXT}">${record}</text>
-    <text x="820" y="${y + 28}" font-family="DM Mono, monospace" font-size="20" fill="${TEXT}">${pct}</text>
-    <rect x="920" y="${y + 14}" width="220" height="8" rx="4" fill="${SURFACE}"/>
-    <rect x="920" y="${y + 14}" width="${barW}" height="8" rx="4" fill="${color}"/>
-  `;
-};
-
-const ogFootball = frame(`
-  <text x="60" y="80" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="22" fill="${MUTED}" font-weight="600" letter-spacing="2">
-    COLLEGE FOOTBALL · ALL-TIME
-  </text>
-  <text x="60" y="140" font-family="Georgia, 'Times New Roman', serif" font-size="52" fill="${TEXT}" font-weight="700">
-    136 FBS Programs, Ranked
-  </text>
-
-  <!-- Column headers -->
-  <text x="70" y="180" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="12" fill="${MUTED}" font-weight="700" letter-spacing="1">#</text>
-  <text x="130" y="180" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="12" fill="${MUTED}" font-weight="700" letter-spacing="1">TEAM</text>
-  <text x="620" y="180" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="12" fill="${MUTED}" font-weight="700" letter-spacing="1">RECORD</text>
-  <text x="820" y="180" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="12" fill="${MUTED}" font-weight="700" letter-spacing="1">WIN %</text>
-  <text x="920" y="180" font-family="DM Sans, Helvetica, Arial, sans-serif" font-size="12" fill="${MUTED}" font-weight="700" letter-spacing="1">HISTORY</text>
-
-  ${rowFor(1, 'Michigan',     '1,010-353-36', '.733', 210, 'Big Ten', '#ffcb05')}
-  ${rowFor(2, 'Ohio State',   '  977-334-53', '.729', 208, 'Big Ten', '#bb0000')}
-  ${rowFor(3, 'Alabama',      '  975-340-43', '.729', 207, 'SEC',     '#9e1b32')}
-  ${rowFor(4, 'Texas',        '  954-396-33', '.699', 199, 'SEC',     '#bf5700')}
-  ${rowFor(5, 'Notre Dame',   '  945-337-42', '.730', 207, 'Independent', '#0c2340')}
-  ${rowFor(6, 'Nebraska',     '  916-419-40', '.681', 194, 'Big Ten', '#e41c38')}
-  ${rowFor(7, 'Oklahoma',     '  935-336-53', '.726', 206, 'SEC',     '#841617')}
-  ${rowFor(8, 'USC',          '  868-354-54', '.696', 198, 'Big Ten', '#990000')}
-`);
-
-async function rasterize(svg, name) {
-  const outPath = resolve(outDir, name);
-  await sharp(Buffer.from(svg))
-    .png({ compressionLevel: 9 })
-    .toFile(outPath);
-  console.log(`wrote ${outPath}`);
+  const titles = C.leaderboard.reduce((n, r) => n + r.total, 0)
+  parts.push(text(`${C.FIRST}–${C.LAST} · ${int(titles)} TITLES · ${int(C.leaderboard.length)} SCHOOLS · DREWHOOVER.COM`, { x: W / 2, y: H - 30, font: 'Mono', size: 14, fill: FAINT, anchor: 'middle', spacing: 2 }))
+  return frame(W, H, parts.join('\n'))
 }
 
-await rasterize(ogGrid, 'og-grid.png');
-await rasterize(ogFootball, 'og-football.png');
+// --- the records board: the top of the default board ---
+function renderFootball(W, H) {
+  const q = F.DEFAULT
+  const board = F.evaluate(q)
+  const rows = S.footballCardRows(board, q, 6)
+  const parts = []
+  parts.push(text('COLLEGE FOOTBALL ALL-TIME RECORDS', { x: W / 2, y: 60, font: 'MonoBold', size: 16, fill: RUST, anchor: 'middle', spacing: 4 }))
+  parts.push(text(`All ${int(F.TEAMS.length)} FBS programs, ranked`, { x: W / 2, y: 116, font: 'Title', size: 46, fill: CREAM, anchor: 'middle' }))
+  parts.push(text(`By ${F.SORTS[q.sort].label}, every game through ${F.THROUGH}. Win-loss, bowls and national titles for every program.`, { x: W / 2, y: 152, font: 'Serif', size: 21, fill: MUTED, anchor: 'middle' }))
+  const x0 = 240
+  const rowH = 62
+  let y = 182
+  for (const r of rows) {
+    const team = F.TEAMS.find((t) => t.name === r.name)
+    parts.push(text(r.rank, { x: x0 + 34, y: y + 38, font: 'Mono', size: 15, fill: r.rank === '1' ? CREAM : FAINT, anchor: 'end', spacing: 1 }))
+    parts.push(`<image href="${colorLogo(team.espn)}" x="${x0 + 50}" y="${y + 12}" width="38" height="38"/>`)
+    parts.push(text(r.name, { x: x0 + 102, y: y + 30, font: 'Serif', size: 25, fill: INK }))
+    parts.push(text(r.span.toUpperCase(), { x: x0 + 102, y: y + 49, font: 'Mono', size: 12, fill: FAINT, spacing: 1 }))
+    parts.push(text(r.value, { x: x0 + 720, y: y + 42, font: 'Graduate', size: 32, fill: CREAM, anchor: 'end' }))
+    parts.push(`<line x1="${x0}" y1="${y + rowH}" x2="${x0 + 720}" y2="${y + rowH}" stroke="${LINE}" stroke-width="1" stroke-dasharray="3 3"/>`)
+    y += rowH
+  }
+  if (y + 18 > H - 50) throw new Error('football card: rows run past the footer')
+  parts.push(text(`${int(F.TEAMS.length)} PROGRAMS · THROUGH ${F.THROUGH} · DREWHOOVER.COM`, { x: W / 2, y: H - 30, font: 'Mono', size: 14, fill: FAINT, anchor: 'middle', spacing: 2 }))
+  return frame(W, H, parts.join('\n'))
+}
+
+// density 72 renders the SVG at its own size (96 would scale it by 4/3)
+const png = (svg) => sharp(Buffer.from(svg), { density: 72 }).png({ compressionLevel: 9, palette: true, colors: 192 })
+for (const [file, W, H] of [['og.png', 1200, 630], ['card.png', 1200, 750]]) {
+  const info = await png(await renderGrid(W, H)).toFile(resolve(OUT, file))
+  console.log(`${file}: ${info.width}x${info.height}, ${(info.size / 1024).toFixed(0)}KB`)
+}
+const info = await png(renderFootball(1200, 630)).toFile(resolve(OUT, 'og-football.png'))
+console.log(`og-football.png: ${info.width}x${info.height}, ${(info.size / 1024).toFixed(0)}KB`)

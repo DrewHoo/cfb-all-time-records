@@ -4,6 +4,7 @@
 // Year convention: football = fall season year; all other sports = tournament/championship year
 
 import scraped from './championshipData.scraped.json';
+import monoLogos from './monoLogos.json';
 
 // Each sport has:
 //   key       — referenced throughout the app
@@ -223,4 +224,12 @@ export function getLogoUrl(schoolName) {
   // schools whose primary logo is too dark to read on our #0c0f14 canvas.
   const variant = school.darkLogo ? '500-dark' : '500';
   return `https://a.espncdn.com/i/teamlogos/ncaa/${variant}/${school.id}.png`;
+}
+
+// The baked one-color stamp (scripts/gen-mono-logos.mjs → public/logos/mono),
+// the resting mark on the board; null for a school with none yet.
+const MONO = new Set(monoLogos);
+export function getMonoLogoUrl(schoolName) {
+  const slug = schoolName.replace(/\W+/g, '');
+  return MONO.has(slug) ? `${import.meta.env.BASE_URL}logos/mono/${slug}.png` : null;
 }
