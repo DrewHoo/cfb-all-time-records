@@ -34,7 +34,7 @@ Every row is a program's all-time record as Wikipedia's [list of FBS football pr
 
 ## The other sports sites
 
-${siblings.map(([, href, name, line]) => `- [${name}](${href}) — ${line}`).join('\n')}
+${siblings.map(([, href, name, line, links]) => `- [${name}](${href})${links ? ':' : ' —'} ${line}${links ? ' ' + links.map((l) => `[${l.name}](${l.url})`).join(' | ') : ''}`).join('\n')}
 
 ## Citing
 
