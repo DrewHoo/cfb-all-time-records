@@ -83,7 +83,7 @@ function renderBoard(W, H) {
     y += rowH
   }
   if (y + 18 > H - 50) throw new Error('football card: rows run past the footer')
-  parts.push(text(`${int(F.TEAMS.length)} PROGRAMS · THROUGH ${F.THROUGH} · DREWHOOVER.COM`, { x: W / 2, y: H - 30, font: 'Mono', size: 14, fill: FAINT, anchor: 'middle', spacing: 2 }))
+  parts.push(text(`${int(F.TEAMS.length)} PROGRAMS · THROUGH ${F.THROUGH.toUpperCase()} · DREWHOOVER.COM`, { x: W / 2, y: H - 30, font: 'Mono', size: 14, fill: FAINT, anchor: 'middle', spacing: 2 }))
   return frame(W, H, parts.join('\n'))
 }
 

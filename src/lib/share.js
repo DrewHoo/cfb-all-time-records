@@ -12,7 +12,7 @@ const int = (n) => n.toLocaleString('en-US');
 const confWords = (q) => (q.conf ? `${q.conf}` : `All ${int(F.TEAMS.length)}`);
 export const footballSentence = (q) => `${confWords(q)} FBS programs ranked by ${F.SORTS[q.sort].label}, every game through ${F.THROUGH}.`;
 
-/** "Michigan has 1,021 all-time wins, 1st of 136 FBS programs, through 2025." */
+/** "Michigan has 1,025 all-time wins, 1st of 136 FBS programs, through October 24, 2026." */
 export function footballClaim(row, board) {
   const s = F.SORTS[board.sort];
   const where = board.conf ? `${board.conf} programs` : 'FBS programs';

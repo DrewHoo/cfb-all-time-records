@@ -88,7 +88,7 @@ export default function FootballRecords() {
 
   return (
     <main>
-      <Dateline span={`through the ${F.THROUGH} season`}>
+      <Dateline span={`through ${F.THROUGH}`}>
         <NavIcons here="board" find={find} onShare={onShare} copied={copied} isMobile={isMobile} />
       </Dateline>
       <h1>College Football All-Time Records</h1>
@@ -132,7 +132,7 @@ export default function FootballRecords() {
                   </div>
                   <p className="claim">{footballClaim(r, board)}</p>
                   <div className="stats">
-                    <span>All-time record<b>{F.recordText(t)}</b><small>{F.pctText(t.winPct)}</small></span>
+                    <span>All-time record<b>{F.recordText(t)}</b><small>{F.pctText(t.winPct)}{F.LATEST ? ` · ${F.seasonText(t)} in ${F.SEASON}` : ''}</small></span>
                     <span>Bowl record<b>{F.bowlText(t)}</b><small>{t.bowlPct == null ? '' : F.pctText(t.bowlPct)}</small></span>
                     <span>Claimed national titles<b>{t.claimedNatChamps}</b><small>{years(t.claimedYears)}</small></span>
                     <span>Unclaimed selections<b>{t.unclaimedNatChamps}</b><small>{years(t.unclaimedYears)}</small></span>
@@ -155,17 +155,21 @@ export default function FootballRecords() {
       <Method>
         <p>
           Every row is a program's all-time record as Wikipedia's{' '}
-          <a href={F.SOURCE_URL}>list of FBS football programs</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) tallies it,
-          through the {F.THROUGH} season: wins, losses and ties in every game the program has played, its bowl record, and the
-          national championships it claims. The sections below say where the records come from, what counts, what the words mean,
+          <a href={F.SOURCE_URL}>list of FBS football programs</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) tallies it
+          through the {F.BASE_SEASON} season, with every {F.SEASON} game {F.LATEST ? `through ${F.LATEST} ` : ''}added as the season is
+          played: wins, losses and ties in every game the program has played, its bowl record, and the national championships it
+          claims. The bowls and the titles are through {F.BASE_SEASON} until the {F.SEASON} season is over. The sections below say where the records come from, what counts, what the words mean,
           and where a published number differs.
         </p>
 
         <details>
           <summary>Where the records come from</summary>
           <p>
-            One table: Wikipedia's list of FBS football programs, read through the {F.THROUGH} season. It carries each program's wins,
+            Wikipedia's list of FBS football programs, read through the {F.BASE_SEASON} season. It carries each program's wins,
             losses and ties, its bowl wins, losses and ties, its seasons played, and its national championships, claimed and unclaimed.
+            The {F.SEASON} games come from <a href="/cfb-streak-king/">College Football Streak King</a>'s ledger, which reads
+            cfbfastR's schedules and CollegeFootballData's finals and refreshes after every Saturday; this page adds each program's{' '}
+            {F.SEASON} wins, losses and ties to its record, and counts {F.SEASON} as a season played once it has played a game.
             The {int(F.TEAMS.length)} programs are this season's FBS members; FCS and lower-division programs aren't listed there, so
             they aren't here.
           </p>

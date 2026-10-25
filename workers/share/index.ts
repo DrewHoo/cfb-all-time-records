@@ -30,7 +30,7 @@ interface Env { ORIGIN?: string; NO_REPORT?: string }
 const BASE = '/cfb-all-time-records';
 const SITE = 'cfb-all-time-records';
 
-/** Bump on any change to what the card draws or how a URL reads; it keys the edge cache. */
+/** Bump on any change to what the card draws or how a URL reads; it keys the edge cache, with the latest game the data counts. */
 const CARD_VERSION = '2026-10-21b';
 
 // Analytics: one Mixpanel event per link preview, sent server-side to the
@@ -144,7 +144,7 @@ export default {
       try {
         const canon = F.toUrl(F.parseUrl(url.search));
         if (!canon) throw new Error('an address with nothing to draw');
-        const key = new Request(`${url.origin}${url.pathname}?v=${CARD_VERSION}&${canon.slice(1)}`, { method: 'GET' });
+        const key = new Request(`${url.origin}${url.pathname}?v=${CARD_VERSION}-${F.THROUGH.replace(/\W+/g, '')}&${canon.slice(1)}`, { method: 'GET' });
         const cached = await caches.default.match(key);
         report(env, ctx, request, 'share card', { ...urlProps(url), cached: !!cached });
         if (cached) return cached;

@@ -42,7 +42,7 @@ Bump `CARD_VERSION` in `workers/share/index.ts` whenever the card or the URL rea
 
 ## Data
 
-`src/data/football.json`: Wikipedia's [list of FBS football programs](https://en.wikipedia.org/wiki/List_of_NCAA_Division_I_FBS_football_programs) (CC BY-SA 4.0) through the 2025 season, with each program's ESPN id and slug. The color marks in `public/logos-color/` are the same set Streak King carries. Win percentage counts a tie as half a win; claimed titles are the school's own count, unclaimed selections the seasons a recognized selector named it champion.
+`src/data/football.json`: Wikipedia's [list of FBS football programs](https://en.wikipedia.org/wiki/List_of_NCAA_Division_I_FBS_football_programs) (CC BY-SA 4.0) through the 2025 season, with each program's ESPN id and slug. `src/data/current.json` adds the running season: each program's wins, losses and ties from [College Football Streak King](https://drewhoover.com/cfb-streak-king/)'s ledger, counted by `node scripts/build-current.mjs`, which the deploy workflow runs on its in-season schedule (Sunday 22:00 and Monday 13:00 UTC, August through January). The bowls and the titles stay through 2025 until the season is over. The color marks in `public/logos-color/` are the same set Streak King carries. Win percentage counts a tie as half a win; claimed titles are the school's own count, unclaimed selections the seasons a recognized selector named it champion.
 
 ## Deployment
 

@@ -2,18 +2,39 @@
 // codec and the ranking. Pure (no window, no React) so the prerender, the
 // share worker and the page all rank the same way.
 import file from '../data/football.json';
+import current from '../data/current.json';
 
-/** the season the records run through */
-export const THROUGH = file.through;
+/** the last finished season Wikipedia's table runs through: the bowls and the titles stop there */
+export const BASE_SEASON = file.through;
 export const SOURCE_URL = file.source;
-/** every current FBS program, as the Wikipedia table lists it */
-export const TEAMS = file.teams;
+/** the running season, layered on from Streak King's games (scripts/build-current.mjs) */
+export const SEASON = current.season;
+/** the running season's latest game, "October 24, 2026"; null before its first */
+export const LATEST = current.through
+  ? new Date(`${current.through}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+  : null;
+/** what the wins and losses run through: "October 24, 2026", or "2025" before the running season's first game */
+export const THROUGH = LATEST ?? String(BASE_SEASON);
+/** the running season's own record, by slug */
+export const seasonOf = (t) => current.teams[t.slug] ?? { w: 0, l: 0, t: 0 };
+
+// Wikipedia's record plus this season's games; a season with a game played is a season played
+const layered = (t) => {
+  const c = seasonOf(t);
+  if (c.w + c.l + c.t === 0) return t;
+  const wins = t.wins + c.w, losses = t.losses + c.l, ties = t.ties + c.t;
+  return { ...t, wins, losses, ties, winPct: Math.round(((wins + ties / 2) / (wins + losses + ties)) * 1000) / 1000, years: t.years + 1 };
+};
+/** every current FBS program, as the Wikipedia table lists it, with this season's games added */
+export const TEAMS = file.teams.map(layered);
 export const teamBySlug = (slug) => TEAMS.find((t) => t.slug === slug) ?? null;
 
 const int = (n) => n.toLocaleString('en-US');
 /** .732, the way a baseball average reads */
 export const pctText = (p) => (p == null ? '—' : p.toFixed(3).replace(/^0/, ''));
 export const recordText = (t) => `${int(t.wins)}–${int(t.losses)}${t.ties ? `–${t.ties}` : ''}`;
+/** this season's record so far, "4–3" */
+export const seasonText = (t) => { const c = seasonOf(t); return `${c.w}–${c.l}${c.t ? `–${c.t}` : ''}`; };
 export const bowlText = (t) => (t.bowlWins + t.bowlLosses + t.bowlTies === 0 ? 'no bowls' : `${t.bowlWins}–${t.bowlLosses}${t.bowlTies ? `–${t.bowlTies}` : ''}`);
 
 /** what a program can be ranked by: the word in the sentence, the noun a claim uses, how its value prints */

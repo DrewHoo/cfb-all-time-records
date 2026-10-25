@@ -4,6 +4,12 @@ on:
   push:
     branches: ['main']
   workflow_dispatch:
+  # In season, the running season's games: Sunday after Streak King's own
+  # Sunday refresh (its 14:00 cron has run as late as 17:30 UTC), and Monday
+  # in case that one ran later still. August through the January playoff.
+  schedule:
+    - cron: '0 22 * 1,8-12 0'
+    - cron: '0 13 * 1,8-12 1'
 
 permissions:
   contents: read
@@ -24,6 +30,11 @@ jobs:
           node-version: 22
           cache: 'npm'
       - run: npm ci
+      # The running season from Streak King's published payload, on the
+      # scheduled and manual runs; a push builds the committed
+      # src/data/current.json. A failed fetch builds the committed file too.
+      - if: github.event_name != 'push'
+        run: node scripts/build-current.mjs || git checkout -- src/data/current.json
       # vite build, then scripts/prerender.mjs bakes both pages' markup in
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
