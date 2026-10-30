@@ -33,6 +33,9 @@ export const ERAS = [
   { year: 2014, hint: 'playoff' },
 ];
 export const ERA_YEARS = ERAS.map((e) => e.year);
+/** the first season any program played, and the latest a board can count from: any year between, typed in */
+export const FIRST_SEASON = Math.min(...Object.values(eras.teams).map((e) => e.first));
+export const isSince = (y) => Number.isInteger(y) && y > FIRST_SEASON && y <= SEASON;
 
 const pct = (w, l, t) => (w + l + t ? Math.round(((w + t / 2) / (w + l + t)) * 1000) / 1000 : null);
 /**
@@ -44,14 +47,21 @@ const pct = (w, l, t) => (w + l + t ? Math.round(((w + t / 2) / (w + l + t)) * 1
  */
 function view(t, since) {
   const e = eras.teams[t.slug];
-  const [w0, l0, t0, y0, bw, bl, bt] = since ? e.eras[since] : [...e.base, t.bowlWins, t.bowlLosses, t.bowlTies];
+  let w0, l0, t0, y0, bw, bl, bt;
+  if (!since) [w0, l0, t0, y0, bw, bl, bt] = [...e.base, t.bowlWins, t.bowlLosses, t.bowlTies];
+  else {
+    w0 = l0 = t0 = y0 = bw = bl = bt = 0;
+    e.seasons.forEach((r, i) => { if (r && e.first + i >= since) { w0 += r[0]; l0 += r[1]; t0 += r[2]; y0++; } });
+    for (const [y, r] of Object.entries(e.bowls)) if (+y >= since) { bw += r[0]; bl += r[1]; bt += r[2]; }
+  }
   let wins = w0, losses = l0, ties = t0, years = y0, bowlWins = bw, bowlLosses = bl, bowlTies = bt;
   for (const y of current.seasons) {
     const [w, l, ti] = current.teams[t.slug][y];
-    if (w + l + ti === 0) continue;
+    if (w + l + ti === 0 || (since && y < since)) continue;
     wins += w; losses += l; ties += ti; years++;
   }
   for (const y of current.bowlSeasons ?? []) {
+    if (since && y < since) continue;
     const [w, l, ti] = current.bowls[t.slug][y];
     bowlWins += w; bowlLosses += l; bowlTies += ti;
   }
@@ -67,9 +77,13 @@ function view(t, since) {
 }
 /** every current FBS program, all time */
 export const TEAMS = file.teams.map((t) => view(t, null));
-const BY_ERA = new Map([[null, TEAMS], ...ERA_YEARS.map((y) => [y, file.teams.map((t) => view(t, y))])]);
-/** the programs as an era counts them */
-export const teamsSince = (since) => BY_ERA.get(since ?? null);
+const BY_ERA = new Map([[null, TEAMS]]);
+/** the programs as an era counts them, from any year (worked out once each) */
+export const teamsSince = (since) => {
+  const key = since ?? null;
+  if (!BY_ERA.has(key)) BY_ERA.set(key, file.teams.map((t) => view(t, key)));
+  return BY_ERA.get(key);
+};
 export const teamBySlug = (slug, since = null) => teamsSince(since).find((t) => t.slug === slug) ?? null;
 
 const int = (n) => n.toLocaleString('en-US');
@@ -108,7 +122,7 @@ export const confCount = (conf) => TEAMS.filter((t) => t.conference === conf).le
 
 export const DEFAULT = { sort: 'wins', conf: null, since: null, t: null };
 
-/** ?sort=winPct&since=1978&conf=SEC&t=alabama; anything the data doesn't know falls back to the default */
+/** ?sort=winPct&since=1978&conf=SEC&t=alabama; since is any year after the first season through this one; anything the data doesn't know falls back to the default */
 export function parseUrl(search) {
   const p = new URLSearchParams(search);
   const sort = p.get('sort');
@@ -118,7 +132,7 @@ export function parseUrl(search) {
   return {
     sort: sort && SORTS[sort] ? sort : DEFAULT.sort,
     conf: conf && CONFERENCES.includes(conf) ? conf : null,
-    since: ERA_YEARS.includes(since) ? since : null,
+    since: isSince(since) ? since : null,
     t: t && teamBySlug(t) ? t : null,
   };
 }

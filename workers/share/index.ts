@@ -31,7 +31,7 @@ const BASE = '/cfb-all-time-records';
 const SITE = 'cfb-all-time-records';
 
 /** Bump on any change to what the card draws or how a URL reads; it keys the edge cache, with the latest game the data counts. */
-const CARD_VERSION = '2026-10-30';
+const CARD_VERSION = '2026-10-30b';
 
 // Analytics: one Mixpanel event per link preview, sent server-side to the
 // index site's project (the public token its embed carries; a project token

@@ -37,14 +37,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseHTML } from 'linkedom'
+import { writeEras } from './lib/eras.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const BUILD = path.join(ROOT, 'data/build')
 const UA = { headers: { 'user-agent': 'cfb-all-time-records build (https://drewhoover.com/cfb-all-time-records/)' } }
 const PAYLOAD = 'https://drewhoover.com/cfb-streak-king/share/payload.json'
 const THROUGH = 2024
-/** where an era can start: modern rules (1912), the AP poll (1936), Division I-A (1978), the BCS (1998), the playoff (2014) */
-const BOUNDARIES = [1912, 1936, 1978, 1998, 2014]
 /** the bowls run a season further: the bowl page is current through the 2025 season's bowls */
 const BOWLS_THROUGH = 2025
 const SK_FIRST = 1936
@@ -362,17 +361,6 @@ fs.writeFileSync(path.join(ROOT, 'data/seasons-wiki.json'), JSON.stringify({ not
 if (failed) { console.error('build-seasons: the gate failed; nothing written'); process.exit(1) }
 // every season, for anyone checking a number (not bundled)
 fs.writeFileSync(path.join(ROOT, 'data/seasons.json'), JSON.stringify({ note: "Each program's record by season through 2024 and its bowls through 2025, as scripts/build-seasons.mjs joins them; `unplaced` is the part of the NCAA's total no season carries.", through: THROUGH, bowlsThrough: BOWLS_THROUGH, teams: out }) + '\n')
-// what the page reads: the NCAA's total through 2024, and each era's sums
-const eras = {}
-for (const [slug, o] of Object.entries(out)) {
-  const e = {}
-  for (const b of BOUNDARIES) {
-    const r = [0, 0, 0, 0, 0, 0, 0]
-    for (const [y, s] of Object.entries(o.seasons)) if (+y >= b) { r[0] += s[0]; r[1] += s[1]; r[2] += s[2]; r[3]++ }
-    for (const [y, s] of Object.entries(o.bowls)) if (+y >= b) { r[4] += s[0]; r[5] += s[1]; r[6] += s[2] }
-    e[b] = r
-  }
-  eras[slug] = { base: o.base, eras: e }
-}
-fs.writeFileSync(path.join(ROOT, 'src/data/eras.json'), JSON.stringify({ note: 'scripts/build-seasons.mjs writes it: base is the NCAA\'s wins, losses, ties and seasons through `through`; each era is wins, losses, ties, seasons through `through`, and bowl wins, losses, ties through `bowlsThrough`, from its year on.', through: THROUGH, bowlsThrough: BOWLS_THROUGH, boundaries: BOUNDARIES, teams: eras }) + '\n')
+// what the page reads: the NCAA's total through 2024, and every season
+writeEras({ through: THROUGH, bowlsThrough: BOWLS_THROUGH, teams: out })
 console.log('build-seasons: wrote data/seasons.json and src/data/eras.json')

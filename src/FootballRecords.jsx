@@ -7,6 +7,7 @@ import * as F from './lib/football.js';
 import { footballSentence, footballShareText, footballTitle, footballClaim, FOOTBALL_SITE } from './lib/share.js';
 import { track } from './lib/analytics.js';
 import { Picker } from './components/Picker.jsx';
+import { EraPicker } from './components/EraPicker.jsx';
 import { Dateline, NavIcons } from './components/Dateline.jsx';
 import { ReadNext, Cite, Method, SiteFooter } from './components/Notes.jsx';
 import { CloseIcon } from './components/Icons.jsx';
@@ -64,7 +65,11 @@ export default function FootballRecords() {
   }, [openRow, found]);
 
   const setSort = (sort) => { setQ((p) => ({ ...p, sort })); track('sort', { from: 'board', sort }); };
-  const setSince = (since) => { setQ((p) => ({ ...p, since })); track('since', { from: 'board', since: since ?? 'all' }); };
+  // a year typed in counts as it's typed and is tracked once, when the box is left
+  const setSince = (since, { track: tracked = true } = {}) => {
+    setQ((p) => ({ ...p, since }));
+    if (tracked) track('since', { from: 'board', since: since ?? 'all', typed: !!since && !F.ERA_YEARS.includes(since) });
+  };
   const setConf = (conf) => {
     setQ((p) => ({ ...p, conf, t: p.t && conf && F.teamBySlug(p.t)?.conference !== conf ? null : p.t }));
     setShown(PAGE);
@@ -96,7 +101,6 @@ export default function FootballRecords() {
   const s = F.SORTS[q.sort];
   const confOptions = [{ value: null, label: `All ${int(F.TEAMS.length)}` }, ...F.CONFERENCES.map((c) => ({ value: c, label: c, hint: String(F.confCount(c)) }))];
   const sortOptions = F.SORT_KEYS.map((k) => ({ value: k, label: F.SORTS[k].label }));
-  const eraOptions = [{ value: null, label: F.eraLabel(null) }, ...F.ERAS.map((e) => ({ value: e.year, label: F.eraLabel(e.year), hint: e.hint }))];
   const era = F.eraText(q.since);
   const leader = board.rows[0];
 
@@ -111,7 +115,7 @@ export default function FootballRecords() {
         <Picker value={q.conf} options={confOptions} onChange={setConf} ariaLabel="Conference" />{' '}
         FBS programs ranked by{' '}
         <Picker value={q.sort} options={sortOptions} onChange={setSort} ariaLabel="Ranked by" />{' '}
-        <Picker value={q.since} options={eraOptions} onChange={setSince} ariaLabel="Counting from" />, every game through {F.THROUGH}.
+        <EraPicker since={q.since} onChange={setSince} />, every game through {F.THROUGH}.
         <span className="sr-only">{footballSentence(q)}</span>
       </p>
       <p className="baserate">
@@ -173,7 +177,7 @@ export default function FootballRecords() {
           <a href={F.RECORDS_SOURCE_URL}>table of FBS win-loss records</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) gives
           through the {F.RECORDS_THROUGH} season, with every game since {F.LATEST ? `through ${F.LATEST} ` : ''}added from the games
           themselves, its bowl record and the national championships it claims. Pick a year and every number counts from that
-          season on, out of each program's season-by-season record. The titles are through {F.BASE_SEASON}. The sections
+          season on, out of each program's season-by-season record; "another year…" takes any year you type. The titles are through {F.BASE_SEASON}. The sections
           below say where the records come from, what counts, what the words mean, and where a published number differs.
         </p>
 
@@ -216,8 +220,8 @@ export default function FootballRecords() {
           <p>
             An era counts from its first season on: <b>since 1912</b>, the year the modern rules settled (four downs, the
             100-yard field, the six-point touchdown); <b>since 1936</b>, the first AP poll; <b>since 1978</b>, when Division I split
-            and Division I-A began; <b>since 1998</b>, the BCS; <b>since 2014</b>, the College Football Playoff. A title counts in an
-            era when its season does.
+            and Division I-A began; <b>since 1998</b>, the BCS; <b>since 2014</b>, the College Football Playoff. Another year counts the same way, from any season after {F.FIRST_SEASON}. A title
+            counts in an era when its season does.
           </p>
           <p>
             A national title counts the way its selector counted it. <b>Claimed national titles</b> are the ones the school itself
@@ -239,7 +243,7 @@ export default function FootballRecords() {
         <details>
           <summary>Where a published number differs, and why</summary>
           <p>
-            A national-title count depends on who is counting. Alabama's 18 and Michigan's 12 are the schools' own numbers; a count
+            A national-title count depends on who is counting. Alabama's 18 and Michigan's 12 are the schools' own numbers, and so is Auburn's 9, which it has claimed since August 2025; a count
             that admits fewer selectors, or more, lands somewhere else, and the "claimed or not" board shows the widest one. A
             school's own record book may keep games the NCAA vacated, or count early games against club and high-school teams the
             NCAA leaves out, so a win total here can run a few games below the school's. A win percentage that drops ties, or counts

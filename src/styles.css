@@ -72,6 +72,14 @@ a { color: inherit; }
 .pick svg { color: var(--ink-faint); }
 .pick:hover, .pick[data-state='open'] { border-bottom-style: solid; border-bottom-color: var(--cream); }
 .pick[data-state='open'] svg { color: var(--cream); }
+/* the era word's year box: the word's face, a solid underline while it's typed in; hidden, it stays focusable */
+.yword { font-weight: 600; color: var(--cream); white-space: nowrap; }
+.yword.off { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+.yin {
+  font: inherit; color: inherit; width: 4.2ch; padding: 0 0 1px; text-align: center;
+  background: transparent; border: none; border-bottom: 1px solid var(--cream); border-radius: 0; outline: none;
+}
+.yin::placeholder { color: var(--ink-faint); font-weight: 400; }
 /* a word's menu */
 .menu {
   z-index: 20; min-width: 220px; max-width: min(340px, calc(100vw - 24px));
