@@ -9,8 +9,9 @@ on:
   # title game, the check job below builds only when Streak King's payload has
   # been rebuilt since the live board's. So the board follows Streak King's
   # refreshes (Thursday 13:00, Friday and Sunday 14:00 UTC, which have run as
-  # late as 17:30) and whatever runs it adds for the postseason, a few hours
-  # behind, without a schedule of its own to keep in step.
+  # late as 17:30; every day at 13:00 in December and January 1-27, for the
+  # bowls and the playoff) a few hours behind, without a schedule of its own
+  # to keep in step.
   schedule:
     - cron: '0 19,23 * 1,8-12 *'
 
