@@ -10,15 +10,19 @@ const int = (n) => n.toLocaleString('en-US');
 // ---- the football records ----
 
 const confWords = (q) => (q.conf ? `${q.conf}` : `All ${int(F.TEAMS.length)}`);
-export const footballSentence = (q) => `${confWords(q)} FBS programs ranked by ${F.measure(q.sort, q.since)}, every game through ${F.THROUGH}.`;
+/** "All 136 FBS programs ranked by all-time wins, through October 24, 2026." "SEC FBS programs ranked by regular-season wins from 1950 through 1990." */
+export const footballSentence = (q) => `${confWords(q)} FBS programs ranked by ${F.measure(q)}${through(q)}.`;
+/** ", through October 24, 2026", or nothing when the measure already says where the board stops */
+const through = (q) => (q.until ? '' : `, through ${F.THROUGH}`);
 
 /** "Michigan has 1,025 all-time wins, 1st of 136 FBS programs, through October 24, 2026." */
 export function footballClaim(row, board) {
   const s = F.SORTS[board.sort];
   const where = board.conf ? `${board.conf} programs` : 'FBS programs';
-  const have = row.value == null ? `has no ${F.measure(board.sort, board.since)} to rank by` : s.says(row.team, row.value);
+  const m = F.measure(board);
+  const have = row.value == null ? `has no ${m} to rank by` : s.says(row.team, row.value, m);
   const place = row.rank == null ? '' : `, ${row.tied ? 'tied ' : ''}${F.ordinal(row.rank)} of ${int(board.total)} ${where}`;
-  return `${row.team.name} ${have}${place}, through ${F.THROUGH}.`;
+  return `${row.team.name} ${have}${place}${through(board)}.`;
 }
 
 const openRow = (board, q) => (q.t ? board.rows.find((r) => r.team.slug === q.t) ?? null : null);
@@ -30,9 +34,12 @@ export function footballShareText(q, board) {
 
 export function footballTitle(q, board) {
   const row = openRow(board, q);
-  if (row) return `${row.team.name} ${q.since ? `football record since ${q.since}` : 'all-time football record'}: ${F.recordText(row.team)}, ${row.rank == null ? 'unranked' : `${row.tied ? 'tied ' : ''}${F.ordinal(row.rank)}`} in ${F.measure(q.sort, q.since)} of ${int(board.total)} ${q.conf ? `${q.conf} ` : 'FBS '}programs`;
+  if (row) {
+    const span = F.spanText(q.since, q.until), noun = { all: 'football record', reg: 'regular-season football record', bowl: 'football bowl record' }[board.games];
+    return `${row.team.name} ${span ? `${noun}${span}` : `all-time ${noun}`}: ${F.recordText(row.team)}, ${row.rank == null ? 'unranked' : `${row.tied ? 'tied ' : ''}${F.ordinal(row.rank)}`} in ${F.measure(q)} of ${int(board.total)} ${q.conf ? `${q.conf} ` : 'FBS '}programs`;
+  }
   if (!F.isShared(q)) return `All ${int(F.TEAMS.length)} FBS football programs ranked by all-time wins, through ${F.THROUGH}`;
-  return `${confWords(q)} FBS football programs ranked by ${F.measure(q.sort, q.since)}, through ${F.THROUGH}`;
+  return `${confWords(q)} FBS football programs ranked by ${F.measure(q)}${through(q)}`;
 }
 
 export function footballDescription(q, board) {
@@ -40,7 +47,7 @@ export function footballDescription(q, board) {
   const parts = [];
   if (row) {
     parts.push(footballClaim(row, board));
-    parts.push(`Bowl record ${F.bowlText(row.team)}, ${row.team.claimedNatChamps} claimed national title${row.team.claimedNatChamps === 1 ? '' : 's'}${row.team.unclaimedNatChamps ? ` and ${row.team.unclaimedNatChamps} unclaimed` : ''}, ${row.team.years} seasons${F.eraText(q.since)}.`);
+    parts.push(`Bowl record ${F.bowlText(row.team)}, ${row.team.claimedNatChamps} claimed national title${row.team.claimedNatChamps === 1 ? '' : 's'}${row.team.unclaimedNatChamps ? ` and ${row.team.unclaimedNatChamps} unclaimed` : ''}, ${row.team.years} seasons${F.spanText(q.since, q.until)}.`);
   } else if (board.rows[0]?.value != null) {
     parts.push(`${board.rows[0].team.name} leads with ${F.SORTS[q.sort].fmt(board.rows[0].value)}.`);
   }
@@ -63,4 +70,4 @@ export function footballCardRows(board, q, n = 6) {
     espn: r.team.espn,
   }));
 }
-export const footballCardHeading = (q) => `${q.conf ? q.conf : 'FBS'} programs by ${F.measure(q.sort, q.since)}`;
+export const footballCardHeading = (q) => `${q.conf ? q.conf : 'FBS'} programs by ${F.measure(q)}`;

@@ -1,13 +1,13 @@
 // All 136 FBS programs on one board: the sentence picks the conference, the
-// measure and the era it counts from, the rows rank by it, and a program
-// opens inline under its row. The address carries the board
-// (?sort=&since=&conf=) and the open row (?t=).
+// measure, the years it counts from and through, and the games it counts;
+// the rows rank by it, and a program opens inline under its row. The address
+// carries the board (?sort=&games=&since=&until=&conf=) and the open row (?t=).
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import * as F from './lib/football.js';
 import { footballSentence, footballShareText, footballTitle, footballClaim, FOOTBALL_SITE } from './lib/share.js';
 import { track } from './lib/analytics.js';
 import { Picker } from './components/Picker.jsx';
-import { EraPicker } from './components/EraPicker.jsx';
+import { YearPicker } from './components/YearPicker.jsx';
 import { Dateline, NavIcons } from './components/Dateline.jsx';
 import { ReadNext, Cite, Method, SiteFooter } from './components/Notes.jsx';
 import { CloseIcon } from './components/Icons.jsx';
@@ -65,11 +65,17 @@ export default function FootballRecords() {
   }, [openRow, found]);
 
   const setSort = (sort) => { setQ((p) => ({ ...p, sort })); track('sort', { from: 'board', sort }); };
-  // a year typed in counts as it's typed and is tracked once, when the box is left
+  // a year typed in counts as it's typed and is tracked once, when the box is left;
+  // a start after the end clears the end
   const setSince = (since, { track: tracked = true } = {}) => {
-    setQ((p) => ({ ...p, since }));
+    setQ((p) => ({ ...p, since, until: p.until && since && since > p.until ? null : p.until }));
     if (tracked) track('since', { from: 'board', since: since ?? 'all', typed: !!since && !F.ERA_YEARS.includes(since) });
   };
+  const setUntil = (until, { track: tracked = true } = {}) => {
+    setQ((p) => ({ ...p, until }));
+    if (tracked) track('until', { from: 'board', until: until ?? 'now', typed: !!until && !ends.some((e) => e.year === until) });
+  };
+  const setGames = (games) => { setQ((p) => ({ ...p, games })); track('games', { from: 'board', games }); };
   const setConf = (conf) => {
     setQ((p) => ({ ...p, conf, t: p.t && conf && F.teamBySlug(p.t)?.conference !== conf ? null : p.t }));
     setShown(PAGE);
@@ -101,7 +107,11 @@ export default function FootballRecords() {
   const s = F.SORTS[q.sort];
   const confOptions = [{ value: null, label: `All ${int(F.TEAMS.length)}` }, ...F.CONFERENCES.map((c) => ({ value: c, label: c, hint: String(F.confCount(c)) }))];
   const sortOptions = F.SORT_KEYS.map((k) => ({ value: k, label: F.SORTS[k].label }));
-  const era = F.eraText(q.since);
+  const gameOptions = F.GAME_KEYS.map((k) => ({ value: k, label: F.GAMES[k].label, hint: F.GAMES[k].hint }));
+  const ends = [...(F.LATEST ? [{ year: F.SEASON - 1, hint: 'the last full season' }] : []), ...F.ENDS];
+  const span = F.spanText(q.since, q.until);
+  const recNoun = { all: 'record', reg: 'regular-season record', bowl: 'bowl record' }[board.games];
+  const recLabel = span ? `${recNoun[0].toUpperCase()}${recNoun.slice(1)}${span}` : `All-time ${recNoun}`;
   const leader = board.rows[0];
 
   return (
@@ -115,7 +125,11 @@ export default function FootballRecords() {
         <Picker value={q.conf} options={confOptions} onChange={setConf} ariaLabel="Conference" />{' '}
         FBS programs ranked by{' '}
         <Picker value={q.sort} options={sortOptions} onChange={setSort} ariaLabel="Ranked by" />{' '}
-        <EraPicker since={q.since} onChange={setSince} />, every game through {F.THROUGH}.
+        <YearPicker value={q.since} onChange={setSince} none="all time" word="since" years={F.ERAS}
+          lo={F.FIRST_SEASON + 1} hi={F.SEASON} ariaLabel="Counting from" />{' '}
+        <YearPicker value={q.until} onChange={setUntil} none={F.endLabel(null)} word="through" years={ends}
+          lo={q.since ?? F.FIRST_SEASON + 1} hi={F.LAST_PLAYED - 1} ariaLabel="Counting through" />
+        {F.gamesApply(q.sort) ? <>, counting <Picker value={board.games} options={gameOptions} onChange={setGames} ariaLabel="Games counted" /></> : null}.
         <span className="sr-only">{footballSentence(q)}</span>
       </p>
       <p className="baserate">
@@ -124,7 +138,7 @@ export default function FootballRecords() {
       </p>
 
       <div className="bhead" aria-hidden="true">
-        <span>Rank</span><span>Program</span><span className="bh-rec">Record</span><span className="bh-val">{F.measure(q.sort, q.since)}</span>
+        <span>Rank</span><span>Program</span><span className="bh-rec">Record</span><span className="bh-val">{F.measure(q)}</span>
       </div>
       <ol className="board">
         {visible.map((r) => {
@@ -145,16 +159,18 @@ export default function FootballRecords() {
                     <Mark team={t} className="panel-mark" />
                     <div className="panel-id">
                       <span className="panel-name">{t.name}</span>
-                      <span className="panel-meta">{t.conference} · {t.years} seasons{era}</span>
+                      <span className="panel-meta">{t.conference} · {t.years} season{t.years === 1 ? '' : 's'}{span}</span>
                     </div>
                     <button className="ico panel-close" onClick={() => toggle(t.slug)} aria-label="Close"><CloseIcon /></button>
                   </div>
                   <p className="claim">{footballClaim(r, board)}</p>
                   <div className="stats">
-                    <span>{q.since ? `Record since ${q.since}` : 'All-time record'}<b>{F.recordText(t)}</b><small>{F.pctText(t.winPct)}{q.since ? ` · ${F.recordText(F.teamBySlug(t.slug))} all time` : F.LATEST ? ` · ${F.seasonText(t)} in ${F.SEASON}` : ''}</small></span>
-                    <span>Bowl record{era}<b>{F.bowlText(t)}</b><small>{t.bowlPct == null ? '' : F.pctText(t.bowlPct)}</small></span>
-                    <span>Claimed national titles{era}<b>{t.claimedNatChamps}</b><small>{years(t.claimedYears)}</small></span>
-                    <span>Unclaimed selections{era}<b>{t.unclaimedNatChamps}</b><small>{years(t.unclaimedYears)}</small></span>
+                    <span>{recLabel}<b>{F.recordText(t)}</b><small>{F.pctText(t.winPct)}{span ? ` · ${F.recordText(F.teamBySlug(t.slug, { games: board.games }))} all time` : F.LATEST && board.games === 'all' ? ` · ${F.seasonText(t)} in ${F.SEASON}` : ''}</small></span>
+                    {board.games === 'bowl'
+                      ? <span>{span ? `Record${span}` : 'All-time record'}, every game<b>{F.recordText(t.every)}</b><small>{F.pctText(t.every.winPct)}</small></span>
+                      : <span>Bowl record{span}<b>{F.bowlText(t)}</b><small>{t.bowlPct == null ? '' : F.pctText(t.bowlPct)}</small></span>}
+                    <span>Claimed national titles{span}<b>{t.claimedNatChamps}</b><small>{years(t.claimedYears)}</small></span>
+                    <span>Unclaimed selections{span}<b>{t.unclaimedNatChamps}</b><small>{years(t.unclaimedYears)}</small></span>
                   </div>
                 </div>
               )}
@@ -176,8 +192,9 @@ export default function FootballRecords() {
           Every row is a program's record as the NCAA counts it: the total Wikipedia's{' '}
           <a href={F.RECORDS_SOURCE_URL}>table of FBS win-loss records</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) gives
           through the {F.RECORDS_THROUGH} season, with every game since {F.LATEST ? `through ${F.LATEST} ` : ''}added from the games
-          themselves, its bowl record and the national championships it claims. Pick a year and every number counts from that
-          season on, out of each program's season-by-season record; "another year…" takes any year you type. The titles are through {F.BASE_SEASON}. The sections
+          themselves, its bowl record and the national championships it claims. Pick a year to start from, or one to stop at, and
+          every number counts those seasons alone, out of each program's season-by-season record; "another year…" takes any year
+          you type. Wins, losses and win percentage can count every game, the regular season or the bowls. The titles are through {F.BASE_SEASON}. The sections
           below say where the records come from, what counts, what the words mean, and where a published number differs.
         </p>
 
@@ -214,14 +231,18 @@ export default function FootballRecords() {
             program played below the top division count, as they do in the NCAA's totals, so a program that moved up carries its
             FCS years in every era. Junior-college seasons, rugby seasons and unofficial teams don't count. Bowl games are in the
             record and in the bowl record both. A playoff game counts as a bowl, first-round games on campus included, as on
-            Wikipedia's list; a conference title game doesn't. A program that has played no bowl has no bowl win percentage and sits at the bottom
+            Wikipedia's list; a conference title game doesn't. The <b>regular season</b> is every game but the bowls and the
+            playoff, so a conference title game counts in it; it is a program's record less its bowl record, season by season. Where
+            the NCAA vacated a bowl win the bowl list still carries, the season's regular-season record stays as the NCAA counts it. A program that has played no bowl has no bowl win percentage and sits at the bottom
             of that board without a rank.
           </p>
           <p>
             An era counts from its first season on: <b>since 1912</b>, the year the modern rules settled (four downs, the
             100-yard field, the six-point touchdown); <b>since 1936</b>, the first AP poll; <b>since 1978</b>, when Division I split
-            and Division I-A began; <b>since 1998</b>, the BCS; <b>since 2014</b>, the College Football Playoff. Another year counts the same way, from any season after {F.FIRST_SEASON}. A title
-            counts in an era when its season does.
+            and Division I-A began; <b>since 1998</b>, the BCS; <b>since 2014</b>, the College Football Playoff. Another year counts the same way, from any season after {F.FIRST_SEASON}. An end year counts
+            through that season, its bowls included: <b>through 2013</b> is the BCS and everything before it, <b>through 1997</b> everything
+            before the BCS, <b>through 1977</b> before Division I-A, <b>through 1935</b> before the AP poll. A title counts in a span
+            when its season does.
           </p>
           <p>
             A national title counts the way its selector counted it. <b>Claimed national titles</b> are the ones the school itself
@@ -233,8 +254,8 @@ export default function FootballRecords() {
         <details>
           <summary>What the words mean</summary>
           <p>
-            <b>Win percentage</b> counts a tie as half a win, the NCAA's way. <b>Bowl win percentage</b> is the same arithmetic over
-            bowl games alone. The <b>"claimed or not"</b> count adds the claimed titles and the unclaimed selections. <b>Seasons
+            <b>Win percentage</b> counts a tie as half a win, the NCAA's way, over whichever games are counted: bowl win percentage is
+            the same arithmetic over bowl games alone. The <b>"claimed or not"</b> count adds the claimed titles and the unclaimed selections. <b>Seasons
             played</b> is the number of seasons the program has fielded a team. Ranks are competition ranks, ties included: two
             programs with the same value share a rank, marked T, and the next rank is skipped.
           </p>
@@ -251,8 +272,9 @@ export default function FootballRecords() {
           </p>
           <p>
             For a few programs the seasons and the NCAA total differ by a few early games no season can be pinned to; those count all
-            time and in no era, so a program's record since 1912 can fall a few games short of its all-time record less its seasons
-            before 1912.
+            time and in no span of years, so a program's record since 1912 can fall a few games short of its all-time record less its seasons
+            before 1912. The all-time bowl record is Wikipedia's list, while a span of years counts bowls season by season, and for some
+            programs the two differ by a game or two.
           </p>
         </details>
 
