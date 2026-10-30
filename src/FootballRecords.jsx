@@ -173,7 +173,7 @@ export default function FootballRecords() {
           <a href={F.RECORDS_SOURCE_URL}>table of FBS win-loss records</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>) gives
           through the {F.RECORDS_THROUGH} season, with every game since {F.LATEST ? `through ${F.LATEST} ` : ''}added from the games
           themselves, its bowl record and the national championships it claims. Pick a year and every number counts from that
-          season on, out of each program's season-by-season record. The bowls and the titles are through {F.BASE_SEASON}. The sections
+          season on, out of each program's season-by-season record. The titles are through {F.BASE_SEASON}. The sections
           below say where the records come from, what counts, what the words mean, and where a published number differs.
         </p>
 
@@ -185,7 +185,8 @@ export default function FootballRecords() {
             every game after {F.RECORDS_THROUGH} itself, from <a href="/cfb-streak-king/">College Football Streak King</a>'s ledger,
             which reads cfbfastR's schedules and CollegeFootballData's finals and refreshes after every Saturday. A season with a game
             played counts as a season played. The bowl records are Wikipedia's{' '}
-            <a href={F.BOWL_SOURCE_URL}>list of FBS bowl records</a>, through the {F.BASE_SEASON} season's bowls.
+            <a href={F.BOWL_SOURCE_URL}>list of FBS bowl records</a> through the {F.BASE_SEASON} season's bowls. Every bowl since is
+            counted from Streak King's games too.
           </p>
           <p>
             The season-by-season records behind every era come from three places. From 1936 on, every top-division season is counted
@@ -208,7 +209,8 @@ export default function FootballRecords() {
             Games count the NCAA's way. Wins the NCAA vacated are out, and a forfeit counts for the team awarded it. Seasons a
             program played below the top division count, as they do in the NCAA's totals, so a program that moved up carries its
             FCS years in every era. Junior-college seasons, rugby seasons and unofficial teams don't count. Bowl games are in the
-            record and in the bowl record both. A program that has played no bowl has no bowl win percentage and sits at the bottom
+            record and in the bowl record both. A playoff game counts as a bowl, first-round games on campus included, as on
+            Wikipedia's list; a conference title game doesn't. A program that has played no bowl has no bowl win percentage and sits at the bottom
             of that board without a rank.
           </p>
           <p>

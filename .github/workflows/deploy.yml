@@ -4,14 +4,15 @@ on:
   push:
     branches: ['main']
   workflow_dispatch:
-  # In season, the games since the NCAA's total stops: Friday after Streak
-  # King's Friday refresh (Thursday's games), Sunday after its Sunday refresh
-  # (Saturday's; its 14:00 crons have run as late as 17:30 UTC), and Monday
-  # in case that one ran later still. August through the January playoff.
+  # In season, the games since the NCAA's total stops, and the bowls since the
+  # bowl page's: every day at 19:00 and 23:00 UTC, August through the January
+  # title game, the check job below builds only when Streak King's payload has
+  # been rebuilt since the live board's. So the board follows Streak King's
+  # refreshes (Thursday 13:00, Friday and Sunday 14:00 UTC, which have run as
+  # late as 17:30) and whatever runs it adds for the postseason, a few hours
+  # behind, without a schedule of its own to keep in step.
   schedule:
-    - cron: '0 19 * 1,8-12 5'
-    - cron: '0 22 * 1,8-12 0'
-    - cron: '0 13 * 1,8-12 1'
+    - cron: '0 19,23 * 1,8-12 *'
 
 permissions:
   contents: read
@@ -23,7 +24,26 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # A scheduled run builds only when the payload's builtAt differs from the
+  # live board's (dist/current.json); a push or a manual run always builds.
+  # A payload that can't be read skips the run, so it never ships the
+  # committed, older file over a fresher live one.
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      build: ${{ steps.check.outputs.build }}
+    steps:
+      - id: check
+        run: |
+          if [ "${{ github.event_name }}" != schedule ]; then echo build=true >> "$GITHUB_OUTPUT"; exit 0; fi
+          payload=$(curl -fsS https://drewhoover.com/cfb-streak-king/share/payload.json | jq -r .builtAt) || payload=
+          live=$(curl -fsS https://drewhoover.com/cfb-all-time-records/current.json | jq -r .builtAt) || live=
+          echo "payload built $payload; the live board's from $live"
+          if [ -n "$payload" ] && [ "$payload" != "$live" ]; then echo build=true >> "$GITHUB_OUTPUT"; else echo build=false >> "$GITHUB_OUTPUT"; fi
+
   build:
+    needs: check
+    if: needs.check.outputs.build == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

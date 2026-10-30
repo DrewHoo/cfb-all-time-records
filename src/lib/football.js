@@ -5,7 +5,7 @@ import file from '../data/football.json';
 import eras from '../data/eras.json';
 import current from '../data/current.json';
 
-/** the season the bowls and the titles run through (Wikipedia's bowl page) */
+/** the season the titles and Wikipedia's bowl page run through; every bowl since is counted from the games */
 export const BASE_SEASON = file.through;
 export const SOURCE_URL = file.source;
 export const BOWL_SOURCE_URL = file.bowlSource;
@@ -39,23 +39,28 @@ const pct = (w, l, t) => (w + l + t ? Math.round(((w + t / 2) / (w + l + t)) * 1
  * A program's numbers from an era's first season on (all time without one):
  * the NCAA's total through 2024 or the era's seasons, plus every season since
  * from the games (a season with a game played is a season played); the bowls
- * and the titles through the bowl page's season.
+ * through the bowl page's season plus every postseason game since; the titles
+ * through the bowl page's season.
  */
 function view(t, since) {
   const e = eras.teams[t.slug];
   const [w0, l0, t0, y0, bw, bl, bt] = since ? e.eras[since] : [...e.base, t.bowlWins, t.bowlLosses, t.bowlTies];
-  let wins = w0, losses = l0, ties = t0, years = y0;
+  let wins = w0, losses = l0, ties = t0, years = y0, bowlWins = bw, bowlLosses = bl, bowlTies = bt;
   for (const y of current.seasons) {
     const [w, l, ti] = current.teams[t.slug][y];
     if (w + l + ti === 0) continue;
     wins += w; losses += l; ties += ti; years++;
+  }
+  for (const y of current.bowlSeasons ?? []) {
+    const [w, l, ti] = current.bowls[t.slug][y];
+    bowlWins += w; bowlLosses += l; bowlTies += ti;
   }
   const after = (ys) => (since ? ys.filter((y) => y >= since) : ys);
   const claimedYears = after(t.claimedYears), unclaimedYears = after(t.unclaimedYears);
   return {
     ...t, since,
     wins, losses, ties, years, winPct: pct(wins, losses, ties),
-    bowlWins: bw, bowlLosses: bl, bowlTies: bt, bowlPct: pct(bw, bl, bt),
+    bowlWins, bowlLosses, bowlTies, bowlPct: pct(bowlWins, bowlLosses, bowlTies),
     claimedYears, unclaimedYears,
     claimedNatChamps: claimedYears.length, unclaimedNatChamps: unclaimedYears.length, totalNatChamps: claimedYears.length + unclaimedYears.length,
   };

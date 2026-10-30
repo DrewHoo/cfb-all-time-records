@@ -4,9 +4,12 @@
 // its weekly refresh of every game (cfbfastR's schedules, with
 // CollegeFootballData's finals for a game cfbfastR hasn't marked yet), and
 // writes src/data/current.json: each program's wins, losses and ties in each
-// of those seasons, the running season, and the date of its latest game.
-// Bowls and national titles stay Wikipedia's (src/data/football.json) until
-// the bowl page is read again.
+// of those seasons, the running season, and the date of its latest game; and,
+// for every season after the bowl page's (src/data/football.json, through
+// 2025), each program's bowl wins, losses and ties, from the payload's
+// postseason flag (Streak King's rule: bowls, the playoff including its
+// first-round campus games and the title games, not conference title games).
+// National titles stay Wikipedia's until the table is read again.
 //
 //   node scripts/build-current.mjs              the live payload
 //   node scripts/build-current.mjs <file>       a local copy (a cfb-streak-king checkout's src/data/payload.json)
@@ -30,6 +33,8 @@ const p = src
     })
 
 const g = p.games
+const POST = 4 // FLAG.post in Streak King's src/lib/schema.ts
+const BOWLS_FROM = Number(base.through) + 1
 const index = new Map(p.teams.map((t, i) => [t.espn, i]))
 for (const t of base.teams) if (!index.has(t.espn)) throw new Error(`build-current: no Streak King team has ESPN id ${t.espn} (${t.name})`)
 const slugOf = new Map(base.teams.map((t) => [index.get(t.espn), t.slug]))
@@ -39,20 +44,26 @@ for (let k = 0; k < g.se.length; k++) SEASON = Math.max(SEASON, g.se[k])
 const seasons = []
 for (let y = FROM; y <= SEASON; y++) seasons.push(y)
 const teams = Object.fromEntries(base.teams.map((t) => [t.slug, Object.fromEntries(seasons.map((y) => [y, [0, 0, 0]]))]))
+const bowlSeasons = seasons.filter((y) => y >= BOWLS_FROM)
+const bowls = Object.fromEntries(base.teams.map((t) => [t.slug, Object.fromEntries(bowlSeasons.map((y) => [y, [0, 0, 0]]))]))
 let latest = 0
 for (let k = 0; k < g.se.length; k++) {
   if (g.se[k] < FROM || g.hs[k] == null || g.as[k] == null) continue
   if (g.se[k] === SEASON) latest = Math.max(latest, g.ep[k])
   for (const [me, mine, theirs] of [[g.hi[k], g.hs[k], g.as[k]], [g.ai[k], g.as[k], g.hs[k]]]) {
+    const i = mine > theirs ? 0 : mine < theirs ? 1 : 2
     const r = teams[slugOf.get(me)]?.[g.se[k]]
-    if (r) r[mine > theirs ? 0 : mine < theirs ? 1 : 2]++
+    if (r) r[i]++
+    const b = g.fl[k] & POST ? bowls[slugOf.get(me)]?.[g.se[k]] : null
+    if (b) b[i]++
   }
 }
 
 const through = latest ? new Date(latest * 86400000).toISOString().slice(0, 10) : null
 const played = Object.values(teams).filter((r) => r[SEASON].some((n) => n)).length
+const bowlGames = Object.values(bowls).reduce((n, r) => n + Object.values(r).flat().reduce((a, b) => a + b, 0), 0) / 2
 fs.writeFileSync(
   path.join(ROOT, 'src/data/current.json'),
-  JSON.stringify({ season: SEASON, seasons, through, source: URL_, builtAt: p.builtAt, teams }) + '\n',
+  JSON.stringify({ season: SEASON, seasons, through, source: URL_, builtAt: p.builtAt, teams, bowlSeasons, bowls }) + '\n',
 )
-console.log(`current: ${seasons.join(', ')}; ${SEASON} through ${through ?? 'no games yet'}, ${played} of ${base.teams.length} programs have played, from Streak King's payload built ${p.builtAt}`)
+console.log(`current: ${seasons.join(', ')}; ${SEASON} through ${through ?? 'no games yet'}, ${played} of ${base.teams.length} programs have played; ${bowlGames} bowl games after ${BOWLS_FROM - 1}, from Streak King's payload built ${p.builtAt}`)

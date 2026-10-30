@@ -1,6 +1,6 @@
 // Runs after `vite build`. Bakes the page's rendered markup into
 // dist/index.html, adds JSON-LD and the index site's
-// embeds, and writes dist/sitemap.xml.
+// embeds, and writes dist/sitemap.xml, dist/llms.txt and dist/current.json.
 //
 // Without this the deployed page is `<div id="root"></div>` and every word on
 // it exists only after React runs. Google usually renders JS in a deferred
@@ -80,6 +80,10 @@ fs.writeFileSync(
   llmsText({ site: SITE, title: root.title, description: root.description, baseSeason: F.BASE_SEASON, recordsThrough: F.RECORDS_THROUGH, season: F.SEASON, latest: F.LATEST, programs: F.TEAMS.length, sourceUrl: F.RECORDS_SOURCE_URL, siblings: SIBLINGS }),
 )
 console.log(`llms.txt: ${SIBLINGS.length} sibling sites`)
+
+// current.json, the seasons and bowls counted from Streak King's games: the
+// deploy workflow's check reads its builtAt to tell whether a refresh is new
+fs.copyFileSync(path.join(ROOT, 'src/data/current.json'), path.join(ROOT, 'dist/current.json'))
 
 // the sitemap: the one page, with lastmod, what Search Console wants submitted
 const lastmod = new Date().toISOString().slice(0, 10)
