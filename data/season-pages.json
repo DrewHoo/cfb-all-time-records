@@ -1,0 +1,690 @@
+{
+ "note": "The Wikipedia season list each program is read from, at the revision scripts/build-seasons.mjs reads, and its page on James Howell's all-time scores (jhowell.net/cf/scores/<howell>).",
+ "ncaa": {
+  "title": "NCAA Division I FBS football win–loss records",
+  "revid": 1304394366,
+  "note": "the last revision before the 2025 season: current through the end of the 2024 season"
+ },
+ "pages": {
+  "michigan": {
+   "title": "List of Michigan Wolverines football seasons",
+   "revid": 1333954353,
+   "howell": "Michigan.htm"
+  },
+  "ohio-state": {
+   "title": "List of Ohio State Buckeyes football seasons",
+   "revid": 1354844287,
+   "howell": "OhioState.htm"
+  },
+  "alabama": {
+   "title": "List of Alabama Crimson Tide football seasons",
+   "revid": 1361772213,
+   "howell": "Alabama.htm"
+  },
+  "notre-dame": {
+   "title": "List of Notre Dame Fighting Irish football seasons",
+   "revid": 1362345818,
+   "howell": "NotreDame.htm"
+  },
+  "texas": {
+   "title": "List of Texas Longhorns football seasons",
+   "revid": 1334024834,
+   "howell": "Texas.htm"
+  },
+  "oklahoma": {
+   "title": "List of Oklahoma Sooners football seasons",
+   "revid": 1378318835,
+   "howell": "Oklahoma.htm"
+  },
+  "penn-state": {
+   "title": "List of Penn State Nittany Lions football seasons",
+   "revid": 1341033561,
+   "howell": "PennState.htm"
+  },
+  "nebraska": {
+   "title": "List of Nebraska Cornhuskers football seasons",
+   "revid": 1380970519,
+   "howell": "Nebraska.htm"
+  },
+  "georgia": {
+   "title": "List of Georgia Bulldogs football seasons",
+   "revid": 1333951222,
+   "howell": "Georgia.htm"
+  },
+  "usc": {
+   "title": "List of USC Trojans football seasons",
+   "revid": 1333956326,
+   "howell": "SouthernCalifornia.htm"
+  },
+  "tennessee": {
+   "title": "List of Tennessee Volunteers football seasons",
+   "revid": 1331975755,
+   "howell": "Tennessee.htm"
+  },
+  "clemson": {
+   "title": "List of Clemson Tigers football seasons",
+   "revid": 1346931892,
+   "howell": "Clemson.htm"
+  },
+  "auburn": {
+   "title": "List of Auburn Tigers football seasons",
+   "revid": 1382122272,
+   "howell": "Auburn.htm"
+  },
+  "lsu": {
+   "title": "List of LSU Tigers football seasons",
+   "revid": 1349066243,
+   "howell": "LouisianaState.htm"
+  },
+  "west-virginia": {
+   "title": "List of West Virginia Mountaineers football seasons",
+   "revid": 1368691417,
+   "howell": "WestVirginia.htm"
+  },
+  "texas-am": {
+   "title": "List of Texas A&M Aggies football seasons",
+   "revid": 1347503523,
+   "howell": "TexasAM.htm"
+  },
+  "washington": {
+   "title": "List of Washington Huskies football seasons",
+   "revid": 1376299828,
+   "howell": "Washington.htm"
+  },
+  "pittsburgh": {
+   "title": "List of Pittsburgh Panthers football seasons",
+   "revid": 1380748983,
+   "howell": "Pittsburgh.htm"
+  },
+  "florida": {
+   "title": "List of Florida Gators football seasons",
+   "revid": 1381489460,
+   "howell": "Florida.htm"
+  },
+  "syracuse": {
+   "title": "List of Syracuse Orange football seasons",
+   "revid": 1379432804,
+   "howell": "Syracuse.htm"
+  },
+  "navy": {
+   "title": "List of Navy Midshipmen football seasons",
+   "revid": 1354468274,
+   "howell": "Navy.htm"
+  },
+  "wisconsin": {
+   "title": "List of Wisconsin Badgers football seasons",
+   "revid": 1325025125,
+   "howell": "Wisconsin.htm"
+  },
+  "arkansas": {
+   "title": "List of Arkansas Razorbacks football seasons",
+   "revid": 1324895600,
+   "howell": "Arkansas.htm"
+  },
+  "minnesota": {
+   "title": "List of Minnesota Golden Gophers football seasons",
+   "revid": 1332922002,
+   "howell": "Minnesota.htm"
+  },
+  "delaware": {
+   "title": "List of Delaware Fightin' Blue Hens football seasons",
+   "revid": 1360776520,
+   "howell": "Delaware.htm"
+  },
+  "army": {
+   "title": "List of Army Black Knights football seasons",
+   "revid": 1381750566,
+   "howell": "Army.htm"
+  },
+  "michigan-state": {
+   "title": "List of Michigan State Spartans football seasons",
+   "revid": 1325015804,
+   "howell": "MichiganState.htm"
+  },
+  "north-carolina": {
+   "title": "List of North Carolina Tar Heels football seasons",
+   "revid": 1381375557,
+   "howell": "NorthCarolina.htm"
+  },
+  "miami-oh": {
+   "title": "List of Miami RedHawks football seasons",
+   "revid": 1360768822,
+   "howell": "Miami(Ohio).htm"
+  },
+  "colorado": {
+   "title": "List of Colorado Buffaloes football seasons",
+   "revid": 1380912581,
+   "howell": "Colorado.htm"
+  },
+  "utah": {
+   "title": "List of Utah Utes football seasons",
+   "revid": 1344307407,
+   "howell": "Utah.htm"
+  },
+  "missouri": {
+   "title": "List of Missouri Tigers football seasons",
+   "revid": 1381325392,
+   "howell": "Missouri.htm"
+  },
+  "oregon": {
+   "title": "List of Oregon Ducks football seasons",
+   "revid": 1382542645,
+   "howell": "Oregon.htm"
+  },
+  "iowa": {
+   "title": "List of Iowa Hawkeyes football seasons",
+   "revid": 1350871011,
+   "howell": "Iowa.htm"
+  },
+  "california": {
+   "title": "List of California Golden Bears football seasons",
+   "revid": 1329398577,
+   "howell": "California.htm"
+  },
+  "tcu": {
+   "title": "List of TCU Horned Frogs football seasons",
+   "revid": 1380437386,
+   "howell": "TexasChristian.htm"
+  },
+  "virginia": {
+   "title": "List of Virginia Cavaliers football seasons",
+   "revid": 1333944264,
+   "howell": "Virginia.htm"
+  },
+  "ole-miss": {
+   "title": "List of Ole Miss Rebels football seasons",
+   "revid": 1354903184,
+   "howell": "Mississippi.htm"
+  },
+  "maryland": {
+   "title": "List of Maryland Terrapins football seasons",
+   "revid": 1325015273,
+   "howell": "Maryland.htm"
+  },
+  "rutgers": {
+   "title": "List of Rutgers Scarlet Knights football seasons",
+   "revid": 1337104658,
+   "howell": "Rutgers.htm"
+  },
+  "miami-fl": {
+   "title": "List of Miami Hurricanes football seasons",
+   "revid": 1333952290,
+   "howell": "Miami(Florida).htm"
+  },
+  "stanford": {
+   "title": "List of Stanford Cardinal football seasons",
+   "revid": 1376267249,
+   "howell": "Stanford.htm"
+  },
+  "appalachian-state": {
+   "title": "List of Appalachian State Mountaineers football seasons",
+   "revid": 1381262027,
+   "howell": "AppalachianState.htm"
+  },
+  "cincinnati": {
+   "title": "List of Cincinnati Bearcats football seasons",
+   "revid": 1333296906,
+   "howell": "Cincinnati.htm"
+  },
+  "fresno-state": {
+   "title": "List of Fresno State Bulldogs football seasons",
+   "revid": 1362585515,
+   "howell": "FresnoState.htm"
+  },
+  "central-michigan": {
+   "title": "List of Central Michigan Chippewas football seasons",
+   "revid": 1333975153,
+   "howell": "CentralMichigan.htm"
+  },
+  "tulsa": {
+   "title": "List of Tulsa Golden Hurricane football seasons",
+   "revid": 1360768846,
+   "howell": "Tulsa.htm"
+  },
+  "kentucky": {
+   "title": "List of Kentucky Wildcats football seasons",
+   "revid": 1381933828,
+   "howell": "Kentucky.htm"
+  },
+  "louisiana-tech": {
+   "title": "List of Louisiana Tech Bulldogs football seasons",
+   "revid": 1362585197,
+   "howell": "LouisianaTech.htm"
+  },
+  "nc-state": {
+   "title": "List of NC State Wolfpack football seasons",
+   "revid": 1366698771,
+   "howell": "NorthCarolinaState.htm"
+  },
+  "south-carolina": {
+   "title": "List of South Carolina Gamecocks football seasons",
+   "revid": 1356548723,
+   "howell": "SouthCarolina.htm"
+  },
+  "illinois": {
+   "title": "List of Illinois Fighting Illini football seasons",
+   "revid": 1333949732,
+   "howell": "Illinois.htm"
+  },
+  "purdue": {
+   "title": "List of Purdue Boilermakers football seasons",
+   "revid": 1325017165,
+   "howell": "Purdue.htm"
+  },
+  "ucla": {
+   "title": "List of UCLA Bruins football seasons",
+   "revid": 1325020499,
+   "howell": "UCLA.htm"
+  },
+  "arizona-state": {
+   "title": "List of Arizona State Sun Devils football seasons",
+   "revid": 1381480036,
+   "howell": "ArizonaState.htm"
+  },
+  "oklahoma-state": {
+   "title": "List of Oklahoma State Cowboys football seasons",
+   "revid": 1333364010,
+   "howell": "OklahomaState.htm"
+  },
+  "arizona": {
+   "title": "List of Arizona Wildcats football seasons",
+   "revid": 1381331011,
+   "howell": "Arizona.htm"
+  },
+  "marshall": {
+   "title": "List of Marshall Thundering Herd football seasons",
+   "revid": 1333954755,
+   "howell": "Marshall.htm"
+  },
+  "baylor": {
+   "title": "List of Baylor Bears football seasons",
+   "revid": 1370980871,
+   "howell": "Baylor.htm"
+  },
+  "byu": {
+   "title": "List of BYU Cougars football seasons",
+   "revid": 1344307225,
+   "howell": "BrighamYoung.htm"
+  },
+  "vanderbilt": {
+   "title": "List of Vanderbilt Commodores football seasons",
+   "revid": 1333946009,
+   "howell": "Vanderbilt.htm"
+  },
+  "western-kentucky": {
+   "title": "List of Western Kentucky Hilltoppers football seasons",
+   "revid": 1333980647,
+   "howell": "WesternKentucky.htm"
+  },
+  "jacksonville-state": {
+   "title": "List of Jacksonville State Gamecocks football seasons",
+   "revid": 1360768977,
+   "howell": "JacksonvilleState.htm"
+  },
+  "northern-illinois": {
+   "title": "List of Northern Illinois Huskies football seasons",
+   "revid": 1373392211,
+   "howell": "NorthernIllinois.htm"
+  },
+  "southern-miss": {
+   "title": "List of Southern Miss Golden Eagles football seasons",
+   "revid": 1360776523,
+   "howell": "SouthernMississippi.htm"
+  },
+  "ohio": {
+   "title": "List of Ohio Bobcats football seasons",
+   "revid": 1333974206,
+   "howell": "Ohio.htm"
+  },
+  "kansas": {
+   "title": "List of Kansas Jayhawks football seasons",
+   "revid": 1380418522,
+   "howell": "Kansas.htm"
+  },
+  "middle-tennessee": {
+   "title": "List of Middle Tennessee Blue Raiders football seasons",
+   "revid": 1325611871,
+   "howell": "MiddleTennesseeState.htm"
+  },
+  "texas-tech": {
+   "title": "List of Texas Tech Red Raiders football seasons",
+   "revid": 1365260573,
+   "howell": "TexasTech.htm"
+  },
+  "western-michigan": {
+   "title": "List of Western Michigan Broncos football seasons",
+   "revid": 1329619158,
+   "howell": "WesternMichigan.htm"
+  },
+  "san-diego-state": {
+   "title": "List of San Diego State Aztecs football seasons",
+   "revid": 1382038196,
+   "howell": "SanDiegoState.htm"
+  },
+  "mississippi-state": {
+   "title": "List of Mississippi State Bulldogs football seasons",
+   "revid": 1361343560,
+   "howell": "MississippiState.htm"
+  },
+  "toledo": {
+   "title": "List of Toledo Rockets football seasons",
+   "revid": 1352911003,
+   "howell": "Toledo.htm"
+  },
+  "florida-state": {
+   "title": "List of Florida State Seminoles football seasons",
+   "revid": 1380862904,
+   "howell": "FloridaState.htm"
+  },
+  "umass": {
+   "title": "List of UMass Minutemen football seasons",
+   "revid": 1381003906,
+   "howell": "Massachusetts.htm"
+  },
+  "washington-state": {
+   "title": "List of Washington State Cougars football seasons",
+   "revid": 1329153877,
+   "howell": "WashingtonState.htm"
+  },
+  "sam-houston": {
+   "title": "List of Sam Houston State Bearkats football seasons",
+   "revid": 1374060801,
+   "howell": "SamHoustonState.htm"
+  },
+  "iowa-state": {
+   "title": "List of Iowa State Cyclones football seasons",
+   "revid": 1377873229,
+   "howell": "IowaState.htm"
+  },
+  "nevada": {
+   "title": "List of Nevada Wolf Pack football seasons",
+   "revid": 1372825308,
+   "howell": "Nevada.htm"
+  },
+  "kansas-state": {
+   "title": "List of Kansas State Wildcats football seasons",
+   "revid": 1380920771,
+   "howell": "KansasState.htm"
+  },
+  "troy": {
+   "title": "List of Troy Trojans football seasons",
+   "revid": 1303719850,
+   "howell": "Troy.htm"
+  },
+  "utah-state": {
+   "title": "List of Utah State Aggies football seasons",
+   "revid": 1362585569,
+   "howell": "UtahState.htm"
+  },
+  "tulane": {
+   "title": "List of Tulane Green Wave football seasons",
+   "revid": 1348502274,
+   "howell": "Tulane.htm"
+  },
+  "louisiana": {
+   "title": "List of Louisiana Ragin' Cajuns football seasons",
+   "revid": 1364350844,
+   "howell": "Louisiana.htm"
+  },
+  "northwestern": {
+   "title": "List of Northwestern Wildcats football seasons",
+   "revid": 1338067160,
+   "howell": "Northwestern.htm"
+  },
+  "bowling-green": {
+   "title": "List of Bowling Green Falcons football seasons",
+   "revid": 1333972001,
+   "howell": "BowlingGreen.htm"
+  },
+  "oregon-state": {
+   "title": "List of Oregon State Beavers football seasons",
+   "revid": 1379960008,
+   "howell": "OregonState.htm"
+  },
+  "wyoming": {
+   "title": "List of Wyoming Cowboys football seasons",
+   "revid": 1344817513,
+   "howell": "Wyoming.htm"
+  },
+  "louisville": {
+   "title": "List of Louisville Cardinals football seasons",
+   "revid": 1353721447,
+   "howell": "Louisville.htm"
+  },
+  "north-texas": {
+   "title": "List of North Texas Mean Green football seasons",
+   "revid": 1382756426,
+   "howell": "NorthTexas.htm"
+  },
+  "colorado-state": {
+   "title": "List of Colorado State Rams football seasons",
+   "revid": 1362862087,
+   "howell": "ColoradoState.htm"
+  },
+  "memphis": {
+   "title": "List of Memphis Tigers football seasons",
+   "revid": 1333983323,
+   "howell": "Memphis.htm"
+  },
+  "smu": {
+   "title": "List of SMU Mustangs football seasons",
+   "revid": 1371724541,
+   "howell": "SouthernMethodist.htm"
+  },
+  "texas-state": {
+   "title": "List of Texas State Bobcats football seasons",
+   "revid": 1362585602,
+   "howell": "TexasState.htm"
+  },
+  "duke": {
+   "title": "List of Duke Blue Devils football seasons",
+   "revid": 1379533235,
+   "howell": "Duke.htm"
+  },
+  "uconn": {
+   "title": "List of UConn Huskies football seasons",
+   "revid": 1373985275,
+   "howell": "Connecticut.htm"
+  },
+  "akron": {
+   "title": "List of Akron Zips football seasons",
+   "revid": 1381650876,
+   "howell": "Akron.htm"
+  },
+  "san-jose-state": {
+   "title": "List of San Jose State Spartans football seasons",
+   "revid": 1355029067,
+   "howell": "SanJoseState.htm"
+  },
+  "indiana": {
+   "title": "List of Indiana Hoosiers football seasons",
+   "revid": 1381916693,
+   "howell": "Indiana.htm"
+  },
+  "boise-state": {
+   "title": "List of Boise State Broncos football seasons",
+   "revid": 1382451825,
+   "howell": "BoiseState.htm"
+  },
+  "new-mexico": {
+   "title": "List of New Mexico Lobos football seasons",
+   "revid": 1334285306,
+   "howell": "NewMexico.htm"
+  },
+  "arkansas-state": {
+   "title": "List of Arkansas State Red Wolves football seasons",
+   "revid": 1381957306,
+   "howell": "ArkansasState.htm"
+  },
+  "missouri-state": {
+   "title": "List of Missouri State Bears football seasons",
+   "revid": 1367991496,
+   "howell": "MissouriState.htm"
+  },
+  "temple": {
+   "title": "List of Temple Owls football seasons",
+   "revid": 1368495042,
+   "howell": "Temple.htm"
+  },
+  "wake-forest": {
+   "title": "List of Wake Forest Demon Deacons football seasons",
+   "revid": 1330893422,
+   "howell": "WakeForest.htm"
+  },
+  "rice": {
+   "title": "List of Rice Owls football seasons",
+   "revid": 1333983573,
+   "howell": "Rice.htm"
+  },
+  "eastern-michigan": {
+   "title": "List of Eastern Michigan Eagles football seasons",
+   "revid": 1347658675,
+   "howell": "EasternMichigan.htm"
+  },
+  "ball-state": {
+   "title": "List of Ball State Cardinals football seasons",
+   "revid": 1333974541,
+   "howell": "BallState.htm"
+  },
+  "houston": {
+   "title": "List of Houston Cougars football seasons",
+   "revid": 1333952939,
+   "howell": "Houston.htm"
+  },
+  "east-carolina": {
+   "title": "List of East Carolina Pirates football seasons",
+   "revid": 1360776511,
+   "howell": "EastCarolina.htm"
+  },
+  "new-mexico-state": {
+   "title": "List of New Mexico State Aggies football seasons",
+   "revid": 1333979396,
+   "howell": "NewMexicoState.htm"
+  },
+  "air-force": {
+   "title": "List of Air Force Falcons football seasons",
+   "revid": 1380469551,
+   "howell": "AirForce.htm"
+  },
+  "georgia-southern": {
+   "title": "List of Georgia Southern Eagles football seasons",
+   "revid": 1330444004,
+   "howell": "GeorgiaSouthern.htm"
+  },
+  "buffalo": {
+   "title": "List of Buffalo Bulls football seasons",
+   "revid": 1360768867,
+   "howell": "Buffalo.htm"
+  },
+  "utep": {
+   "title": "List of UTEP Miners football seasons",
+   "revid": 1364308273,
+   "howell": "Texas-ElPaso.htm"
+  },
+  "james-madison": {
+   "title": "List of James Madison Dukes football seasons",
+   "revid": 1360769082,
+   "howell": "JamesMadison.htm"
+  },
+  "kent-state": {
+   "title": "List of Kent State Golden Flashes football seasons",
+   "revid": 1360330006,
+   "howell": "KentState.htm"
+  },
+  "liberty": {
+   "title": "List of Liberty Flames football seasons",
+   "revid": 1360769440,
+   "howell": "Liberty.htm"
+  },
+  "ucf": {
+   "title": "List of UCF Knights football seasons",
+   "revid": 1375081859,
+   "howell": "CentralFlorida.htm"
+  },
+  "unlv": {
+   "title": "List of UNLV Rebels football seasons",
+   "revid": 1329248081,
+   "howell": "Nevada-LasVegas.htm"
+  },
+  "south-florida": {
+   "title": "List of South Florida Bulls football seasons",
+   "revid": 1380816981,
+   "howell": "SouthFlorida.htm"
+  },
+  "uab": {
+   "title": "List of UAB Blazers football seasons",
+   "revid": 1346058137,
+   "howell": "Alabama-Birmingham.htm"
+  },
+  "coastal-carolina": {
+   "title": "List of Coastal Carolina Chanticleers football seasons",
+   "revid": 1362861861,
+   "howell": "CoastalCarolina.htm"
+  },
+  "florida-atlantic": {
+   "title": "List of Florida Atlantic Owls football seasons",
+   "revid": 1351583650,
+   "howell": "FloridaAtlantic.htm"
+  },
+  "old-dominion": {
+   "title": "List of Old Dominion Monarchs football seasons",
+   "revid": 1378136243,
+   "howell": "OldDominion.htm"
+  },
+  "florida-international": {
+   "title": "List of FIU Panthers football seasons",
+   "revid": 1333977669,
+   "howell": "FloridaInternational.htm"
+  },
+  "utsa": {
+   "title": "List of UTSA Roadrunners football seasons",
+   "revid": 1371814820,
+   "howell": "Texas-SanAntonio.htm"
+  },
+  "south-alabama": {
+   "title": "List of South Alabama Jaguars football seasons",
+   "revid": 1354199346,
+   "howell": "SouthAlabama.htm"
+  },
+  "kennesaw-state": {
+   "title": "List of Kennesaw State Owls football seasons",
+   "revid": 1379381985,
+   "howell": "KennesawState.htm"
+  },
+  "georgia-state": {
+   "title": "List of Georgia State Panthers football seasons",
+   "revid": 1298394365,
+   "howell": "GeorgiaState.htm"
+  },
+  "charlotte": {
+   "title": "List of Charlotte 49ers football seasons",
+   "revid": 1328751551,
+   "howell": "Charlotte.htm"
+  },
+  "virginia-tech": {
+   "title": "List of Virginia Tech Hokies football seasons",
+   "revid": 1382778664,
+   "howell": "VirginiaTech.htm"
+  },
+  "georgia-tech": {
+   "title": "List of Georgia Tech Yellow Jackets football seasons",
+   "revid": 1333944628,
+   "howell": "GeorgiaTech.htm"
+  },
+  "boston-college": {
+   "title": "List of Boston College Eagles football seasons",
+   "revid": 1330248617,
+   "howell": "BostonCollege.htm"
+  },
+  "hawaii": {
+   "title": "List of Hawaii Rainbow Warriors football seasons",
+   "revid": 1360768978,
+   "howell": "Hawaii.htm"
+  },
+  "louisiana-monroe": {
+   "title": "List of Louisiana–Monroe Warhawks football seasons",
+   "revid": 1307304789,
+   "howell": "Louisiana-Monroe.htm"
+  }
+ }
+}

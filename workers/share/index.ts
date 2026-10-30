@@ -31,7 +31,7 @@ const BASE = '/cfb-all-time-records';
 const SITE = 'cfb-all-time-records';
 
 /** Bump on any change to what the card draws or how a URL reads; it keys the edge cache, with the latest game the data counts. */
-const CARD_VERSION = '2026-10-21b';
+const CARD_VERSION = '2026-10-30';
 
 // Analytics: one Mixpanel event per link preview, sent server-side to the
 // index site's project (the public token its embed carries; a project token
@@ -75,7 +75,7 @@ const isOldBoard = (pathname: string): boolean => /^\/football(?:\.html|\/)?$/.t
 /** the address and its slots, for an event */
 const urlProps = (url: URL) => {
   const q = F.parseUrl(url.search);
-  return { url: url.href, $current_url: url.href, path: url.pathname.replace(BASE, '') || '/', sort: q.sort, conf: q.conf, t: q.t };
+  return { url: url.href, $current_url: url.href, path: url.pathname.replace(BASE, '') || '/', sort: q.sort, conf: q.conf, since: q.since, t: q.t };
 };
 
 const edge = (ttl: number) => ({ cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': ttl, '400-599': 30 } } }) as RequestInit;

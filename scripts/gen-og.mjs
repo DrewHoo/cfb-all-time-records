@@ -68,7 +68,7 @@ function renderBoard(W, H) {
   const parts = []
   parts.push(text('COLLEGE FOOTBALL ALL-TIME RECORDS', { x: W / 2, y: 60, font: 'MonoBold', size: 16, fill: RUST, anchor: 'middle', spacing: 4 }))
   parts.push(text(`All ${int(F.TEAMS.length)} FBS programs, ranked`, { x: W / 2, y: 116, font: 'Title', size: 46, fill: CREAM, anchor: 'middle' }))
-  parts.push(text(`By ${F.SORTS[q.sort].label}, every game through ${F.THROUGH}. Win-loss, bowls and national titles for every program.`, { x: W / 2, y: 152, font: 'Serif', size: 21, fill: MUTED, anchor: 'middle' }))
+  parts.push(text(`By ${F.measure(q.sort, q.since)}, every game through ${F.THROUGH}. Win-loss, bowls and national titles for every program.`, { x: W / 2, y: 152, font: 'Serif', size: 21, fill: MUTED, anchor: 'middle' }))
   const x0 = 240
   const rowH = 62
   let y = 182

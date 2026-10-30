@@ -42,7 +42,22 @@ Bump `CARD_VERSION` in `workers/share/index.ts` whenever the card or the URL rea
 
 ## Data
 
-`src/data/football.json`: Wikipedia's [list of FBS football programs](https://en.wikipedia.org/wiki/List_of_NCAA_Division_I_FBS_football_programs) (CC BY-SA 4.0) through the 2025 season, with each program's ESPN id and slug. `src/data/current.json` adds the running season: each program's wins, losses and ties from [College Football Streak King](https://drewhoover.com/cfb-streak-king/)'s ledger, counted by `node scripts/build-current.mjs`, which the deploy workflow runs on its in-season schedule (Sunday 22:00 and Monday 13:00 UTC, August through January). The bowls and the titles stay through 2025 until the season is over. The color marks in `public/logos-color/` are the same set Streak King carries. Win percentage counts a tie as half a win; claimed titles are the school's own count, unclaimed selections the seasons a recognized selector named it champion.
+Each program's record is the NCAA's count: vacated wins out, forfeits to the team awarded them, seasons below the top division in.
+
+- `src/data/eras.json` (written by `node scripts/build-seasons.mjs`): each program's NCAA total through 2024, from Wikipedia's [FBS win-loss table](https://en.wikipedia.org/w/index.php?title=NCAA_Division_I_FBS_football_win%E2%80%93loss_records&oldid=1304394366) at its last revision before the 2025 season (CC BY-SA 4.0), and its wins, losses, ties, seasons and bowls from 1912, 1936, 1978, 1998 and 2014 on. The table was updated only through week 3 of 2025 after that, so nothing reads it past 2024.
+- `src/data/current.json` (`node scripts/build-current.mjs`): every season after 2024, counted from [College Football Streak King](https://drewhoover.com/cfb-streak-king/)'s games, which the deploy workflow refreshes on its in-season schedule (Sunday 22:00 and Monday 13:00 UTC, August through January).
+- `src/data/football.json`: each program's conference, ESPN id and slug from Wikipedia's [list of FBS football programs](https://en.wikipedia.org/wiki/List_of_NCAA_Division_I_FBS_football_programs), its bowl record from the [list of FBS bowl records](https://en.wikipedia.org/wiki/List_of_NCAA_Division_I_FBS_football_bowl_records) and its national titles, through the 2025 season.
+
+The season-by-season records behind the eras (`data/seasons.json`) join Streak King's games (every top-division season from 1936), each program's "List of … football seasons" on Wikipedia (`data/season-pages.json` pins the revision of each), and James Howell's all-time scores (early ties a list drops, and the bowls by season), under `data/season-rulings.json`: forfeits, vacated wins, missing seasons and seasons the NCAA doesn't count, each with its receipts. The build fails unless each program's seasons sum to its NCAA total within a few games, or a ruling says why not; what no season carries is `unplaced` and counts all time only. Run it by hand when a source changes:
+
+```bash
+node scripts/build-seasons.mjs --fetch          # the live Streak King payload; saved pages under data/build/ (not committed)
+node scripts/build-current.mjs
+```
+
+It reads Howell's pages from a cfb-streak-king checkout beside this one (`--howell <dir>` to point elsewhere). `data/build/review.txt` lists every season where the list and the games disagree, with the list's footnotes, for writing a ruling.
+
+The color marks in `public/logos-color/` are the same set Streak King carries. Win percentage counts a tie as half a win; claimed titles are the school's own count, unclaimed selections the seasons a recognized selector named it champion.
 
 ## Deployment
 

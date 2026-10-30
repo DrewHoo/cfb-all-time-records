@@ -13,26 +13,27 @@ const REPO = 'https://github.com/DrewHoo/cfb-all-time-records'
  *   site: string,         // the site's URL, with the trailing slash
  *   title: string,        // the root page's <title>
  *   description: string,  // the root page's meta description
- *   baseSeason: number,   // the last finished season Wikipedia's table runs through (F.BASE_SEASON)
+ *   baseSeason: number,   // the season the bowls and the titles run through (F.BASE_SEASON)
+ *   recordsThrough: number, // the season the NCAA's totals run through (F.RECORDS_THROUGH)
  *   season: number,       // the running season, layered on (F.SEASON)
  *   latest: string|null,  // its latest game, "October 24, 2026" (F.LATEST)
  *   programs: number,     // how many programs are on the board (F.TEAMS.length)
- *   sourceUrl: string,    // the Wikipedia table (F.SOURCE_URL)
+ *   sourceUrl: string,    // the Wikipedia win-loss table (F.RECORDS_SOURCE_URL)
  *   siblings: [key: string, href: string, name: string, line: string][],  // Notes.jsx SIBLINGS
  * }} o
  */
-export function llmsText({ site, title, description, baseSeason, season, latest, programs, sourceUrl, siblings }) {
+export function llmsText({ site, title, description, baseSeason, recordsThrough, season, latest, programs, sourceUrl, siblings }) {
   return `# ${title}
 
 > ${description}
 
-Every row is a program's all-time record as Wikipedia's [list of FBS football programs](${sourceUrl}) (CC BY-SA 4.0) tallies it through the ${baseSeason} season${latest ? `, with every ${season} game through ${latest} added` : ''}: wins, losses and ties in every game the program has played, its bowl record, and the national championships it claims. The bowls and the titles are through ${baseSeason} until the ${season} season is over. The ${programs} programs are this season's FBS members. The board at ${site} ranks them by all-time wins, win percentage, bowl wins, bowl win percentage, claimed national titles, national titles claimed or not, seasons played or all-time losses, for all of FBS or one conference; a program opens inline under its row with its full record. The address carries the board (\`?sort=\`, \`?conf=\`) and the open program (\`?t=<slug>\`).
+Every row is a program's record as the NCAA counts it: the total Wikipedia's [table of FBS win-loss records](${sourceUrl}) (CC BY-SA 4.0) gives through the ${recordsThrough} season${latest ? `, with every game since through ${latest} added from the games themselves` : ''}, its bowl record and the national championships it claims. The bowls and the titles are through ${baseSeason}. Vacated wins are out and forfeits count for the team awarded them; seasons below the top division count, as in the NCAA's totals. The ${programs} programs are this season's FBS members. The board at ${site} ranks them by wins, win percentage, bowl wins, bowl win percentage, claimed national titles, national titles claimed or not, seasons played or losses, all time or since 1912 (modern rules), 1936 (the AP poll), 1978 (Division I-A), 1998 (the BCS) or 2014 (the playoff), counted from each program's season-by-season record, for all of FBS or one conference; a program opens inline under its row with its full record. The address carries the board (\`?sort=\`, \`?since=<year>\`, \`?conf=\`) and the open program (\`?t=<slug>\`).
 
 ## Pages
 
 - [${title}](${site}) — the board, the default view: every FBS program by all-time wins.
 - [Method](${site}#method): where the records come from, what counts, what the words mean, and where a published number differs.
-- [The repository](${REPO}): the data, the ranking and the share worker.
+- [The repository](${REPO}): the data (every season, and the rulings with their sources), the ranking and the share worker.
 
 ## The other sports sites
 

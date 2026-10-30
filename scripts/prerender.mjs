@@ -77,7 +77,7 @@ await vite.close()
 // llms.txt (llmstxt.org): the site in plain markdown for a language model
 fs.writeFileSync(
   path.join(ROOT, 'dist/llms.txt'),
-  llmsText({ site: SITE, title: root.title, description: root.description, baseSeason: F.BASE_SEASON, season: F.SEASON, latest: F.LATEST, programs: F.TEAMS.length, sourceUrl: F.SOURCE_URL, siblings: SIBLINGS }),
+  llmsText({ site: SITE, title: root.title, description: root.description, baseSeason: F.BASE_SEASON, recordsThrough: F.RECORDS_THROUGH, season: F.SEASON, latest: F.LATEST, programs: F.TEAMS.length, sourceUrl: F.RECORDS_SOURCE_URL, siblings: SIBLINGS }),
 )
 console.log(`llms.txt: ${SIBLINGS.length} sibling sites`)
 

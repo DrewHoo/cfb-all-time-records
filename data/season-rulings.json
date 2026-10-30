@@ -1,0 +1,2588 @@
+{
+ "version": 1,
+ "updated": "2026-10-30",
+ "note": "What scripts/build-seasons.mjs changes in a program's seasons, over the games and the season lists. `record` is the NCAA's record for a season where it differs from the games (a forfeit, vacated wins) or where a list leaves the season out; `uncounted` drops seasons the NCAA doesn't count (junior college, rugby, a predecessor program). Every ruling carries receipts. `base` is the NCAA's total through 2024 for a program the 2024 FBS table doesn't list, with how it was worked out. A ruling that changes nothing stops the build. `since` moves the NCAA's total for an action announced after the table's revision of August 5, 2025. `unplaced` acknowledges a program whose seasons miss the NCAA's total by more than the build's slack, with what was compared; the difference counts in the all-time figures and in no era. `bowls` is the NCAA's bowl record for a season where it differs from Howell's games.",
+ "base": {
+  "delaware": {
+   "w": 739,
+   "l": 485,
+   "t": 44,
+   "years": 133,
+   "note": "FBS from 2025, so not in the table through 2024. The table's revision of September 17, 2025 (1311939140) lists 741–486–44 over 134 seasons, counting 2025 through September 13; Delaware's games to then were W 08-28, L 09-06, W 09-13 (Streak King's payload).",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=NCAA_Division_I_FBS_football_win%E2%80%93loss_records&oldid=1311939140",
+     "quote": "Delaware 741 486 44"
+    }
+   ]
+  },
+  "missouri-state": {
+   "w": 501,
+   "l": 543,
+   "t": 40,
+   "years": 113,
+   "note": "FBS from 2025, so not in the table through 2024. The September 17, 2025 revision (1311939140) lists 502–545–40 over 114 seasons, counting 2025 through September 13; Missouri State's games to then were L 08-30, W 09-06, L 09-13 (Streak King's payload).",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=NCAA_Division_I_FBS_football_win%E2%80%93loss_records&oldid=1311939140",
+     "quote": "Missouri State 502 545 40"
+    }
+   ]
+  }
+ },
+ "rulings": [
+  {
+   "team": "ohio-state",
+   "season": 2010,
+   "record": [
+    0,
+    1,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ohio_State_Buckeyes_football_seasons&oldid=1354844287",
+     "quote": "Ohio State vacated all 12 of its victories and its Big Ten Conference championship from the 2010 season."
+    }
+   ]
+  },
+  {
+   "team": "alabama",
+   "season": 1993,
+   "record": [
+    1,
+    12,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Alabama_Crimson_Tide_football_seasons&oldid=1361772213",
+     "quote": "Alabama finished the 1993 season with an overall record of 9–3–1, 5–2–1 in conference play, but was later forced to officially forfeit all regular season games as a penalty due to NCAA infractions."
+    }
+   ]
+  },
+  {
+   "team": "alabama",
+   "season": 2005,
+   "record": [
+    0,
+    2,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Alabama_Crimson_Tide_football_seasons&oldid=1361772213",
+     "quote": "The NCAA ruled Alabama to vacate 21 victories between the 2005–07 seasons due to sanctions stemming from textbook-related infractions."
+    }
+   ]
+  },
+  {
+   "team": "alabama",
+   "season": 2006,
+   "record": [
+    0,
+    7,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Alabama_Crimson_Tide_football_seasons&oldid=1361772213",
+     "quote": "The NCAA ruled Alabama to vacate 21 victories between the 2005–07 seasons due to sanctions stemming from textbook-related infractions."
+    }
+   ]
+  },
+  {
+   "team": "alabama",
+   "season": 2007,
+   "record": [
+    2,
+    6,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Alabama_Crimson_Tide_football_seasons&oldid=1361772213",
+     "quote": "The NCAA ruled Alabama to vacate 21 victories between the 2005–07 seasons due to sanctions stemming from textbook-related infractions."
+    }
+   ]
+  },
+  {
+   "team": "notre-dame",
+   "season": 2012,
+   "record": [
+    0,
+    1,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Notre_Dame_Fighting_Irish_football_seasons&oldid=1362345818",
+     "quote": "Notre Dame was forced to vacate all 12 wins and their appearance in the 2013 BCS National Championship Game from the 2012 season, and all 9 wins from the 2013 season"
+    }
+   ]
+  },
+  {
+   "team": "notre-dame",
+   "season": 2013,
+   "record": [
+    0,
+    4,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Notre_Dame_Fighting_Irish_football_seasons&oldid=1362345818",
+     "quote": "Notre Dame was forced to vacate all 12 wins and their appearance in the 2013 BCS National Championship Game from the 2012 season, and all 9 wins from the 2013 season"
+    }
+   ]
+  },
+  {
+   "team": "usc",
+   "season": 2004,
+   "record": [
+    11,
+    0,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_USC_Trojans_football_seasons&oldid=1333956326",
+     "quote": "vacated the last 2 wins in 2004, and all 12 wins from 2005"
+    }
+   ]
+  },
+  {
+   "team": "usc",
+   "season": 2005,
+   "record": [
+    0,
+    0,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_USC_Trojans_football_seasons&oldid=1333956326",
+     "quote": "However, the team's loss in 2005 was vacated as well."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 2010,
+   "record": [
+    0,
+    8,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Ole Miss announced the vacation of all wins in the years 2010, 2011, 2012, and 2016."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 2011,
+   "record": [
+    0,
+    10,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Ole Miss announced the vacation of all wins in the years 2010, 2011, 2012, and 2016."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 2012,
+   "record": [
+    0,
+    6,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Ole Miss announced the vacation of all wins in the years 2010, 2011, 2012, and 2016."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 2013,
+   "record": [
+    1,
+    5,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "In 2013, all wins except the Music City Bowl were vacated."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 2014,
+   "record": [
+    1,
+    4,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "In 2014, all wins except the Presbyterian game were vacated."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 2016,
+   "record": [
+    0,
+    7,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Ole Miss announced the vacation of all wins in the years 2010, 2011, 2012, and 2016."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 1976,
+   "record": [
+    6,
+    5,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Mississippi State later forfeited its win over Ole Miss due to NCAA infractions."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 1977,
+   "record": [
+    6,
+    5,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Mississippi State later forfeited its win over Ole Miss due to NCAA infractions."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 1983,
+   "record": [
+    7,
+    5,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Tulane later forfeited its win over Ole Miss due to NCAA infractions."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 1993,
+   "record": [
+    6,
+    5,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Alabama later forfeited its win over Ole Miss due to NCAA infractions."
+    }
+   ]
+  },
+  {
+   "team": "tennessee",
+   "season": 1993,
+   "record": [
+    10,
+    2,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tennessee_Volunteers_football_seasons&oldid=1331975755",
+     "quote": "Fulmer's 1993 Tennessee team finished 9–2–1 (6–1–1), but Alabama subsequently forfeited the tie to Tennessee."
+    }
+   ]
+  },
+  {
+   "team": "tennessee",
+   "season": 2019,
+   "record": [
+    0,
+    5,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tennessee_Volunteers_football_seasons&oldid=1331975755",
+     "quote": "The NCAA vacated all 11 of Tennessee's wins from the 2019 and 2020 seasons after ruling that it used ineligible players."
+    }
+   ]
+  },
+  {
+   "team": "tennessee",
+   "season": 2020,
+   "record": [
+    0,
+    7,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tennessee_Volunteers_football_seasons&oldid=1331975755",
+     "quote": "The NCAA vacated all 11 of Tennessee's wins from the 2019 and 2020 seasons after ruling that it used ineligible players."
+    }
+   ]
+  },
+  {
+   "team": "auburn",
+   "season": 1975,
+   "record": [
+    4,
+    6,
+    1
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "auburn",
+   "season": 1976,
+   "record": [
+    4,
+    7,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "auburn",
+   "season": 1977,
+   "record": [
+    6,
+    5,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "nebraska",
+   "season": 1951,
+   "record": [
+    2,
+    8,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Nebraska_Cornhuskers_football_seasons&oldid=1380970519",
+     "quote": "2–8"
+    }
+   ]
+  },
+  {
+   "team": "kansas-state",
+   "season": 1951,
+   "record": [
+    0,
+    9,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Kansas_State_Wildcats_football_seasons&oldid=1380920771",
+     "quote": "0–9–0"
+    }
+   ]
+  },
+  {
+   "team": "kansas-state",
+   "season": 1977,
+   "record": [
+    2,
+    9,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Kansas_State_Wildcats_football_seasons&oldid=1380920771",
+     "quote": "2–9"
+    }
+   ]
+  },
+  {
+   "team": "kansas-state",
+   "season": 1980,
+   "record": [
+    4,
+    7,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Kansas_State_Wildcats_football_seasons&oldid=1380920771",
+     "quote": "4–7"
+    }
+   ]
+  },
+  {
+   "team": "pittsburgh",
+   "season": 1986,
+   "record": [
+    6,
+    4,
+    1
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Pittsburgh_Panthers_football_seasons&oldid=1380748983",
+     "quote": "6 4 1"
+    }
+   ]
+  },
+  {
+   "team": "wisconsin",
+   "season": 1994,
+   "record": [
+    8,
+    3,
+    1
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Wisconsin_Badgers_football_seasons&oldid=1325025125",
+     "quote": "Michigan State self-forfeited all wins in the 1994 season, resulting in Wisconsin's 1994 loss to Michigan State being retroactively changed to a win."
+    }
+   ]
+  },
+  {
+   "team": "purdue",
+   "season": 1994,
+   "record": [
+    5,
+    4,
+    2
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Purdue_Boilermakers_football_seasons&oldid=1325017165",
+     "quote": "Michigan State self-forfeited all wins in the 1994 season, resulting in Purdue's 1994 loss to Michigan State being retroactively changed to a win."
+    }
+   ]
+  },
+  {
+   "team": "miami-oh",
+   "season": 1994,
+   "record": [
+    6,
+    4,
+    1
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Miami_RedHawks_football_seasons&oldid=1360768822",
+     "quote": "the NCAA later awarded a forfeit win over Michigan State University for using an ineligible player"
+    }
+   ]
+  },
+  {
+   "team": "michigan-state",
+   "season": 1994,
+   "record": [
+    0,
+    11,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Wisconsin_Badgers_football_seasons&oldid=1325025125",
+     "quote": "Michigan State self-forfeited all wins in the 1994 season"
+    }
+   ]
+  },
+  {
+   "team": "arkansas",
+   "season": 1993,
+   "record": [
+    6,
+    4,
+    1
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tulane_Green_Wave_football_seasons&oldid=1348502274",
+     "quote": "forcing Alabama to forfeit all games in which Langham competed"
+    }
+   ]
+  },
+  {
+   "team": "south-carolina",
+   "season": 1960,
+   "record": [
+    3,
+    6,
+    0
+   ],
+   "why": "forfeited a tie",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_South_Carolina_Gamecocks_football_seasons&oldid=1356548723",
+     "quote": "3–6"
+    }
+   ]
+  },
+  {
+   "team": "south-carolina",
+   "season": 1993,
+   "record": [
+    5,
+    6,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tulane_Green_Wave_football_seasons&oldid=1348502274",
+     "quote": "forcing Alabama to forfeit all games in which Langham competed"
+    }
+   ]
+  },
+  {
+   "team": "vanderbilt",
+   "season": 1993,
+   "record": [
+    5,
+    6,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tulane_Green_Wave_football_seasons&oldid=1348502274",
+     "quote": "forcing Alabama to forfeit all games in which Langham competed"
+    }
+   ]
+  },
+  {
+   "team": "tulane",
+   "season": 1993,
+   "record": [
+    4,
+    8,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tulane_Green_Wave_football_seasons&oldid=1348502274",
+     "quote": "improving Tulane's record from 3–9 to 4–8"
+    }
+   ]
+  },
+  {
+   "team": "southern-miss",
+   "season": 1975,
+   "record": [
+    8,
+    3,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "southern-miss",
+   "season": 1976,
+   "record": [
+    3,
+    8,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "southern-miss",
+   "season": 1993,
+   "record": [
+    3,
+    7,
+    1
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tulane_Green_Wave_football_seasons&oldid=1348502274",
+     "quote": "forcing Alabama to forfeit all games in which Langham competed"
+    }
+   ]
+  },
+  {
+   "team": "louisville",
+   "season": 1975,
+   "record": [
+    2,
+    9,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "louisville",
+   "season": 1976,
+   "record": [
+    5,
+    6,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "north-texas",
+   "season": 1976,
+   "record": [
+    7,
+    4,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "north-texas",
+   "season": 1977,
+   "record": [
+    10,
+    1,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "lsu",
+   "season": 1975,
+   "record": [
+    5,
+    6,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "lsu",
+   "season": 1976,
+   "record": [
+    7,
+    3,
+    1
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "mississippi-state",
+   "season": 1975,
+   "record": [
+    2,
+    9,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "mississippi-state",
+   "season": 1976,
+   "record": [
+    0,
+    11,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "mississippi-state",
+   "season": 1977,
+   "record": [
+    0,
+    11,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "All wins from 1975 to 1977 were forfeited by the NCAA, except for the 1975 victories over Memphis and North Texas State."
+    }
+   ]
+  },
+  {
+   "team": "mississippi-state",
+   "season": 1993,
+   "record": [
+    4,
+    5,
+    2
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tulane_Green_Wave_football_seasons&oldid=1348502274",
+     "quote": "forcing Alabama to forfeit all games in which Langham competed"
+    }
+   ]
+  },
+  {
+   "team": "mississippi-state",
+   "season": 2018,
+   "record": [
+    0,
+    5,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Mississippi_State_Bulldogs_football_seasons&oldid=1361343560",
+     "quote": "8 wins vacated by NCAA Committee on Infractions (8/2019)"
+    }
+   ]
+  },
+  {
+   "team": "north-carolina",
+   "season": 2008,
+   "record": [
+    0,
+    5,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_North_Carolina_Tar_Heels_football_seasons&oldid=1381375557",
+     "quote": "UNC decided to vacate all of its wins in 2008 and 2009 following an NCAA investigation."
+    }
+   ]
+  },
+  {
+   "team": "north-carolina",
+   "season": 2009,
+   "record": [
+    0,
+    5,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_North_Carolina_Tar_Heels_football_seasons&oldid=1381375557",
+     "quote": "UNC decided to vacate all of its wins in 2008 and 2009 following an NCAA investigation."
+    }
+   ]
+  },
+  {
+   "team": "louisiana",
+   "season": 2011,
+   "record": [
+    1,
+    4,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Louisiana_Ragin'_Cajuns_football_seasons&oldid=1364350844",
+     "quote": "Vacated 8 wins"
+    }
+   ]
+  },
+  {
+   "team": "louisiana",
+   "season": 2012,
+   "record": [
+    5,
+    4,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Louisiana_Ragin'_Cajuns_football_seasons&oldid=1364350844",
+     "quote": "Vacated 4 wins"
+    }
+   ]
+  },
+  {
+   "team": "louisiana",
+   "season": 2013,
+   "record": [
+    1,
+    4,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Louisiana_Ragin'_Cajuns_football_seasons&oldid=1364350844",
+     "quote": "Vacated 8 wins; Sun Belt co-champions (vacated)"
+    }
+   ]
+  },
+  {
+   "team": "louisiana",
+   "season": 2014,
+   "record": [
+    7,
+    4,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Louisiana_Ragin'_Cajuns_football_seasons&oldid=1364350844",
+     "quote": "Vacated 2 wins"
+    }
+   ]
+  },
+  {
+   "team": "unlv",
+   "season": 1983,
+   "record": [
+    0,
+    11,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_UNLV_Rebels_football_seasons&oldid=1329248081",
+     "quote": "0–11"
+    }
+   ]
+  },
+  {
+   "team": "unlv",
+   "season": 1984,
+   "record": [
+    0,
+    13,
+    0
+   ],
+   "why": "forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_UNLV_Rebels_football_seasons&oldid=1329248081",
+     "quote": "0–13"
+    }
+   ]
+  },
+  {
+   "team": "kentucky",
+   "season": 1976,
+   "record": [
+    9,
+    3,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Kentucky_Wildcats_football_seasons&oldid=1381933828",
+     "quote": "Mississippi State forfeited their 1976 win over Kentucky"
+    }
+   ]
+  },
+  {
+   "team": "florida-state",
+   "season": 1983,
+   "record": [
+    8,
+    4,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Florida_State_Seminoles_football_seasons&oldid=1380862904",
+     "quote": "The 1983 season includes a forfeit win vs. Tulane."
+    }
+   ]
+  },
+  {
+   "team": "boise-state",
+   "season": 1997,
+   "record": [
+    5,
+    6,
+    0
+   ],
+   "why": "an opponent forfeited",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Boise_State_Broncos_football_seasons&oldid=1382451825",
+     "quote": "63–23 win over Boise State on August 30 was forfeited for infractions."
+    }
+   ]
+  },
+  {
+   "team": "michigan-state",
+   "season": 2022,
+   "record": [
+    0,
+    7,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Michigan_State_Spartans_football_seasons&oldid=1325015804",
+     "quote": "Michigan State vacated all 14 of its victories from the 2022–24 seasons."
+    }
+   ]
+  },
+  {
+   "team": "michigan-state",
+   "season": 2023,
+   "record": [
+    0,
+    8,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Michigan_State_Spartans_football_seasons&oldid=1325015804",
+     "quote": "Michigan State vacated all 14 of its victories from the 2022–24 seasons."
+    }
+   ]
+  },
+  {
+   "team": "michigan-state",
+   "season": 2024,
+   "record": [
+    0,
+    7,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Michigan_State_Spartans_football_seasons&oldid=1325015804",
+     "quote": "Michigan State vacated all 14 of its victories from the 2022–24 seasons."
+    }
+   ]
+  },
+  {
+   "team": "arizona-state",
+   "season": 2021,
+   "record": [
+    0,
+    5,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Arizona_State_Sun_Devils_football_seasons&oldid=1381480036",
+     "quote": "0–5"
+    }
+   ]
+  },
+  {
+   "team": "arizona-state",
+   "season": 2022,
+   "record": [
+    1,
+    9,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Arizona_State_Sun_Devils_football_seasons&oldid=1381480036",
+     "quote": "1–9"
+    }
+   ]
+  },
+  {
+   "team": "lsu",
+   "season": 2012,
+   "record": [
+    0,
+    3,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_LSU_Tigers_football_seasons&oldid=1349066243",
+     "quote": "LSU vacated all 37 wins from the 2012-15 seasons due to NCAA punishment for an ineligible player."
+    }
+   ]
+  },
+  {
+   "team": "lsu",
+   "season": 2013,
+   "record": [
+    0,
+    3,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_LSU_Tigers_football_seasons&oldid=1349066243",
+     "quote": "LSU vacated all 37 wins from the 2012-15 seasons due to NCAA punishment for an ineligible player."
+    }
+   ]
+  },
+  {
+   "team": "lsu",
+   "season": 2014,
+   "record": [
+    0,
+    5,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_LSU_Tigers_football_seasons&oldid=1349066243",
+     "quote": "LSU vacated all 37 wins from the 2012-15 seasons due to NCAA punishment for an ineligible player."
+    }
+   ]
+  },
+  {
+   "team": "lsu",
+   "season": 2015,
+   "record": [
+    0,
+    3,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_LSU_Tigers_football_seasons&oldid=1349066243",
+     "quote": "LSU vacated all 37 wins from the 2012-15 seasons due to NCAA punishment for an ineligible player."
+    }
+   ]
+  },
+  {
+   "team": "florida-state",
+   "season": 2006,
+   "record": [
+    2,
+    6,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Florida_State_Seminoles_football_seasons&oldid=1380862904",
+     "quote": "FSU was forced to vacate five wins in 2006 and seven wins in 2007 due to an academic cheating scandal."
+    }
+   ]
+  },
+  {
+   "team": "florida-state",
+   "season": 2007,
+   "record": [
+    0,
+    6,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Florida_State_Seminoles_football_seasons&oldid=1380862904",
+     "quote": "FSU was forced to vacate five wins in 2006 and seven wins in 2007 due to an academic cheating scandal."
+    }
+   ]
+  },
+  {
+   "team": "florida-state",
+   "seasons": [
+    1902,
+    1904
+   ],
+   "uncounted": true,
+   "why": "Florida State College, before the university fielded a team in 1947",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Florida_State_Seminoles_football_seasons&oldid=1380862904",
+     "quote": "The Florida State Seminoles football team has represented Florida State University in collegiate football since 1947, competing as Florida State College from 1902-1904."
+    }
+   ]
+  },
+  {
+   "team": "tennessee",
+   "seasons": [
+    1894,
+    1895
+   ],
+   "uncounted": true,
+   "why": "an unofficial team",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tennessee_Volunteers_football_seasons&oldid=1331975755",
+     "quote": "Unofficial team",
+     "note": "the season list names the team for 1894, 1895, 1917 and 1918 \"Unofficial team\" in the coach column"
+    }
+   ]
+  },
+  {
+   "team": "tennessee",
+   "seasons": [
+    1917,
+    1918
+   ],
+   "uncounted": true,
+   "why": "an unofficial team",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Tennessee_Volunteers_football_seasons&oldid=1331975755",
+     "quote": "Unofficial team",
+     "note": "the season list names the team for 1894, 1895, 1917 and 1918 \"Unofficial team\" in the coach column"
+    }
+   ]
+  },
+  {
+   "team": "california",
+   "seasons": [
+    1884,
+    1885
+   ],
+   "uncounted": true,
+   "why": "rugby",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_California_Golden_Bears_football_seasons&oldid=1329398577",
+     "quote": "Cal played rugby instead of football from 1882–85 and 1906–14"
+    }
+   ]
+  },
+  {
+   "team": "california",
+   "seasons": [
+    1906,
+    1914
+   ],
+   "uncounted": true,
+   "why": "rugby",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_California_Golden_Bears_football_seasons&oldid=1329398577",
+     "quote": "Cal played rugby instead of football from 1882–85 and 1906–14"
+    }
+   ]
+  },
+  {
+   "team": "boise-state",
+   "seasons": [
+    1933,
+    1967
+   ],
+   "uncounted": true,
+   "why": "junior college",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Boise_State_Broncos_football_seasons&oldid=1382451825",
+     "quote": "Seasons 1933–1967 (junior college)",
+     "note": "the navigation box at the foot of the season list"
+    }
+   ]
+  },
+  {
+   "team": "louisiana-monroe",
+   "seasons": [
+    1931,
+    1950
+   ],
+   "uncounted": true,
+   "why": "junior college",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Louisiana–Monroe_Warhawks_football_seasons&oldid=1307304789",
+     "quote": "NJCAA",
+     "note": "the conference cells for 1931 through 1950 read NJCAA"
+    }
+   ]
+  },
+  {
+   "team": "old-dominion",
+   "seasons": [
+    1930,
+    1940
+   ],
+   "uncounted": true,
+   "why": "the NCAA does not count them",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Old_Dominion_Monarchs_football_seasons&oldid=1378136243",
+     "quote": "According to statistics, the NCAA does not recognize the Monarchs' 1930–1940 seasons."
+    }
+   ]
+  },
+  {
+   "team": "syracuse",
+   "season": 2004,
+   "record": [
+    0,
+    6,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Syracuse_Orange_football_seasons&oldid=1379432804",
+     "quote": "Syracuse vacated 11 wins over the 2004, 2005, and 2006 seasons due to NCAA punishment for academic fraud."
+    }
+   ]
+  },
+  {
+   "team": "syracuse",
+   "season": 2005,
+   "record": [
+    0,
+    10,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Syracuse_Orange_football_seasons&oldid=1379432804",
+     "quote": "Syracuse vacated 11 wins over the 2004, 2005, and 2006 seasons due to NCAA punishment for academic fraud."
+    }
+   ]
+  },
+  {
+   "team": "syracuse",
+   "season": 2006,
+   "record": [
+    0,
+    8,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Syracuse_Orange_football_seasons&oldid=1379432804",
+     "quote": "Syracuse vacated 11 wins over the 2004, 2005, and 2006 seasons due to NCAA punishment for academic fraud."
+    }
+   ]
+  },
+  {
+   "team": "kentucky",
+   "season": 2021,
+   "record": [
+    0,
+    3,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Kentucky_Wildcats_football_seasons&oldid=1381933828",
+     "quote": "Kentucky vacated all 2021 wins in August 2024."
+    }
+   ]
+  },
+  {
+   "team": "smu",
+   "season": 1998,
+   "record": [
+    1,
+    1,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_SMU_Mustangs_football_seasons&oldid=1371724541",
+     "quote": "Due to NCAA sanctions, SMU had 4 regular season wins and 6 regular season losses vacated for the 1998 season."
+    }
+   ]
+  },
+  {
+   "team": "arkansas-state",
+   "season": 2005,
+   "record": [
+    2,
+    6,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Arkansas_State_Red_Wolves_football_seasons&oldid=1381957306",
+     "quote": "4 wins in 2005 and 6 wins in 2006 later vacated due to NCAA sanctions."
+    }
+   ]
+  },
+  {
+   "team": "arkansas-state",
+   "season": 2006,
+   "record": [
+    0,
+    6,
+    0
+   ],
+   "why": "vacated",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Arkansas_State_Red_Wolves_football_seasons&oldid=1381957306",
+     "quote": "4 wins in 2005 and 6 wins in 2006 later vacated due to NCAA sanctions."
+    }
+   ]
+  },
+  {
+   "team": "miami-oh",
+   "season": 1936,
+   "record": [
+    7,
+    1,
+    1
+   ],
+   "why": "the season list leaves the season out",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=1936_Miami_Redskins_football_team&oldid=1340475768",
+     "quote": "7–1–1 (3–1–1 BAA)",
+     "note": "the season's infobox"
+    }
+   ]
+  },
+  {
+   "team": "ohio-state",
+   "season": 2010,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl win was vacated with the season's wins",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ohio_State_Buckeyes_football_seasons&oldid=1354844287",
+     "quote": "Ohio State vacated all 12 of its victories and its Big Ten Conference championship from the 2010 season."
+    }
+   ]
+  },
+  {
+   "team": "alabama",
+   "season": 2005,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl win was vacated with the season's wins",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Alabama_Crimson_Tide_football_seasons&oldid=1361772213",
+     "quote": "The NCAA ruled Alabama to vacate 21 victories between the 2005–07 seasons due to sanctions stemming from textbook-related infractions."
+    }
+   ]
+  },
+  {
+   "team": "notre-dame",
+   "season": 2013,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl win was vacated with the season's wins",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Notre_Dame_Fighting_Irish_football_seasons&oldid=1362345818",
+     "quote": "Notre Dame was forced to vacate all 12 wins and their appearance in the 2013 BCS National Championship Game from the 2012 season, and all 9 wins from the 2013 season"
+    }
+   ]
+  },
+  {
+   "team": "usc",
+   "season": 2004,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl win was vacated with the season's wins",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_USC_Trojans_football_seasons&oldid=1333956326",
+     "quote": "vacated the last 2 wins in 2004, and all 12 wins from 2005"
+    }
+   ]
+  },
+  {
+   "team": "usc",
+   "season": 2005,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl loss was vacated with the season",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_USC_Trojans_football_seasons&oldid=1333956326",
+     "quote": "However, the team's loss in 2005 was vacated as well."
+    }
+   ]
+  },
+  {
+   "team": "ole-miss",
+   "season": 2012,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl win was vacated with the season's wins",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Ole_Miss_Rebels_football_seasons&oldid=1354903184",
+     "quote": "Ole Miss announced the vacation of all wins in the years 2010, 2011, 2012, and 2016."
+    }
+   ]
+  },
+  {
+   "team": "louisiana",
+   "season": 2011,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl win was vacated with the season's wins",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Louisiana_Ragin'_Cajuns_football_seasons&oldid=1364350844",
+     "quote": "Vacated 8 wins"
+    }
+   ]
+  },
+  {
+   "team": "louisiana",
+   "season": 2013,
+   "bowls": [
+    0,
+    0,
+    0
+   ],
+   "why": "the bowl win was vacated with the season's wins",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Louisiana_Ragin'_Cajuns_football_seasons&oldid=1364350844",
+     "quote": "Vacated 8 wins; Sun Belt co-champions (vacated)"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1904,
+   "record": [
+    5,
+    1,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1904 5-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1904 5-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1909,
+   "record": [
+    0,
+    1,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1909 0-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1909 0-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1910,
+   "record": [
+    0,
+    1,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1910 0-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1910 0-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1913,
+   "record": [
+    0,
+    1,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1913 0-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1913 0-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1915,
+   "record": [
+    0,
+    1,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1915 0-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1915 0-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1916,
+   "record": [
+    0,
+    2,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1916 0-2",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1916 0-2",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1918,
+   "record": [
+    0,
+    1,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1918 0-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1918 0-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1919,
+   "record": [
+    4,
+    4,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1919 Oscar Strahan 4-4",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1919 4-4",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1920,
+   "record": [
+    4,
+    2,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1920 Oscar Strahan 4-2-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1920 4-2-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1921,
+   "record": [
+    7,
+    0,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1921 Oscar Strahan 7-0",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1921 7-0",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1922,
+   "record": [
+    3,
+    3,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1922 Oscar Strahan 3-3",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1922 3-3",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1923,
+   "record": [
+    4,
+    4,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1923 Oscar Strahan 4-4",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1923 4-4",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1924,
+   "record": [
+    4,
+    4,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1924 Oscar Strahan 4-4",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1924 4-4",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1925,
+   "record": [
+    2,
+    6,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1925 Oscar Strahan 2-6",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1925 2-6",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1926,
+   "record": [
+    7,
+    2,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1926 Oscar Strahan 7-2",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1926 7-2",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1927,
+   "record": [
+    4,
+    4,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1927 Oscar Strahan 4-4-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1927 4-4-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1928,
+   "record": [
+    2,
+    7,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1928 Oscar Strahan 2-7",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1928 2-7",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1929,
+   "record": [
+    6,
+    1,
+    2
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1929 Oscar Strahan 6-1-2",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1929 6-1-2",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1930,
+   "record": [
+    5,
+    1,
+    3
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1930 Oscar Strahan 5-1-3",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1930 5-1-3",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1931,
+   "record": [
+    4,
+    4,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1931 Oscar Strahan 4-4",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1931 4-4",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1932,
+   "record": [
+    5,
+    3,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1932 Oscar Strahan 5-3",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1932 5-3",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1933,
+   "record": [
+    7,
+    1,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1933 Oscar Strahan 7-1-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1933 7-1-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1934,
+   "record": [
+    2,
+    7,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1934 Oscar Strahan 2-7-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1934 2-7-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1935,
+   "record": [
+    2,
+    7,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1935 JoeCheaney 2-7",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1935 2-7",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1936,
+   "record": [
+    2,
+    5,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1936 JoeCheaney 2-5-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1936 2-5-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1937,
+   "record": [
+    6,
+    4,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1937 JoeCheaney 6-4",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1937 6-4",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1938,
+   "record": [
+    0,
+    8,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1938 JoeCheaney 0-8",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1938 0-8",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1939,
+   "record": [
+    3,
+    5,
+    2
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1939 JoeCheaney 3-5-2",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1939 3-5-2",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1940,
+   "record": [
+    3,
+    5,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1940 Joe Cheaney 3-5-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1940 3-5-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1941,
+   "record": [
+    4,
+    4,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1941 Joe Cheaney 4-4",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1941 4-4",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1942,
+   "record": [
+    3,
+    4,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1942 Joe Cheaney 3-4-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1942 3-4-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1946,
+   "record": [
+    6,
+    2,
+    2
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1946 George Vest 6-2-2",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1946 6-2-2",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1947,
+   "record": [
+    5,
+    4,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1947 George Vest 5-4",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1947 5-4",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1948,
+   "record": [
+    8,
+    1,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1948 George Vest 8-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1948 8-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1949,
+   "record": [
+    3,
+    6,
+    1
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1949 George Vest 3-6-1",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1949 3-6-1",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  },
+  {
+   "team": "texas-state",
+   "season": 1950,
+   "record": [
+    6,
+    3,
+    0
+   ],
+   "why": "the season list starts in 1951; the school's year-by-year table",
+   "receipts": [
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2015.pdf",
+     "quote": "1950 George Vest 6-3",
+     "note": "2015 Texas State Football Fact Book, PDF page 163, \"YEAR BY YEAR TEAM RECORDS\" table"
+    },
+    {
+     "url": "https://dc.library.txstate.edu/sites/default/files/2024-05/UA_FB-2010.pdf",
+     "quote": "1950 6-3",
+     "note": "2010 Texas State Football Fact Book, PDF page 98, \"ALL-TIME YEAR BY-YEAR RECORD\" table"
+    }
+   ]
+  }
+ ],
+ "since": [
+  {
+   "team": "michigan-state",
+   "w": -14,
+   "why": "the 2022–24 wins, vacated after the table's revision; the table's later updates (through September 17, 2025) don't take them out",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=List_of_Michigan_State_Spartans_football_seasons&oldid=1325015804",
+     "quote": "Michigan State vacated all 14 of its victories from the 2022–24 seasons."
+    }
+   ]
+  },
+  {
+   "team": "arizona-state",
+   "w": -10,
+   "why": "the 2021–22 wins, vacated after the table's revision; the table's revision of September 17, 2025 takes them out",
+   "receipts": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=NCAA_Division_I_FBS_football_win%E2%80%93loss_records&oldid=1311939140",
+     "quote": "Arizona State 641 428 24"
+    }
+   ]
+  }
+ ],
+ "unplaced": [
+  {
+   "team": "syracuse",
+   "why": "8 ties short, after Howell's early ties fill those the season list drops: the list leaves ties out of its early seasons, and Howell's pages cover only the top-division ones",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "tulsa",
+   "why": "11 wins short with the same number of seasons; Howell's top-division seasons agree with the list, so the difference sits in seasons below the top division, before 1936 as far as the seasons can show",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "baylor",
+   "why": "6 wins more than the NCAA counts; Howell agrees with the list except 1910, so the difference is most likely early games against non-college teams, which the NCAA leaves out",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "sam-houston",
+   "why": "7 wins and 2 losses short; no second source covers its seasons below the top division",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "utah-state",
+   "why": "8 wins and 4 losses more than the NCAA counts; Howell agrees with the list for its top-division seasons before 1936",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "akron",
+   "why": "5 wins more than the NCAA counts; no second source covers its seasons below the top division",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "new-mexico-state",
+   "why": "11 wins more than the NCAA counts; Howell agrees with the list for its top-division seasons before 1936",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "georgia-southern",
+   "why": "4 wins and 7 losses more than the NCAA counts; no second source covers its seasons below the top division",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "utep",
+   "why": "7 wins and 11 losses more than the NCAA counts; the list records forfeit wins in 1941, 1960 and 1962 that would take the wins further from the NCAA's total, so the games stand",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "kent-state",
+   "why": "7 losses short; no second source covers its seasons below the top division",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  },
+  {
+   "team": "charlotte",
+   "why": "8 losses more than the NCAA counts across 15 seasons (1946–48, 2013–24); Streak King's games cover 2015 on",
+   "receipts": [
+    {
+     "sources": [
+      "wikipedia season list",
+      "jhowell.net",
+      "cfb-streak-king payload"
+     ],
+     "note": "the program's season list summed against the NCAA's total through 2024; 1936 on, every top-division season is Streak King's games"
+    }
+   ]
+  }
+ ]
+}
