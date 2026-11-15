@@ -53,11 +53,12 @@ jobs:
           node-version: 22
           cache: 'npm'
       - run: npm ci
-      # The running season from Streak King's published payload, on the
-      # scheduled and manual runs; a push builds the committed
-      # src/data/current.json. A failed fetch builds the committed file too.
-      - if: github.event_name != 'push'
-        run: node scripts/build-current.mjs || git checkout -- src/data/current.json
+      # The running season from Streak King's published payload, on every
+      # run: a push that built the committed src/data/current.json put the
+      # board back to the week it was committed (2026-11-15: a push would have
+      # shipped 10-28's games over 11-12's). The payload is public and costs
+      # no CFBD calls. A failed fetch builds the committed file.
+      - run: node scripts/build-current.mjs || git checkout -- src/data/current.json
       # vite build, then scripts/prerender.mjs bakes both pages' markup in
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
