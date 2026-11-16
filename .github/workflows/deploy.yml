@@ -6,17 +6,27 @@ on:
   workflow_dispatch:
   # In season, the games since the NCAA's total stops, and the bowls since the
   # bowl page's: every day at 19:00 and 23:00 UTC, August through the January
-  # title game, the check job below builds only when Streak King's payload has
-  # been rebuilt since the live board's. So the board follows Streak King's
-  # refreshes (Thursday 13:00, Friday and Sunday 14:00 UTC, which have run as
-  # late as 17:30; every day at 13:00 in December and January 1-27, for the
-  # bowls and the playoff) a few hours behind, without a schedule of its own
-  # to keep in step.
+  # title game. A run reads Streak King's published payload, and one that
+  # finds no game the committed file lacks commits and deploys nothing. So the
+  # board follows Streak King's refreshes (Thursday 13:00, Friday and Sunday
+  # 14:00 UTC, which have run as late as 17:30; every day at 13:00 in December
+  # and January 1-27, for the bowls and the playoff) a few hours behind,
+  # without a schedule of its own to keep in step.
   schedule:
     - cron: '0 19,23 * 1,8-12 *'
 
+# The committed src/data/current.json is the board's data. A scheduled or
+# manual run counts it again from Streak King's payload
+# (scripts/build-current.mjs), builds, commits the file to main and deploys
+# that commit, the share worker included; a push builds the file main holds
+# and fetches nothing. Nothing ships that isn't committed, so no deploy can
+# put an older week back. Until 2026-11-16 every run fetched the payload and
+# built the committed file when the fetch failed, without saying so. A push
+# made with the workflow's own token starts no workflow, so the data commit
+# doesn't deploy twice.
 permissions:
-  contents: read
+  contents: write
+  issues: write
   pages: write
   id-token: write
 
@@ -25,45 +35,73 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # A scheduled run builds only when the payload's builtAt differs from the
-  # live board's (dist/current.json); a push or a manual run always builds.
-  # A payload that can't be read skips the run, so it never ships the
-  # committed, older file over a fresher live one.
-  check:
+  build:
     runs-on: ubuntu-latest
     outputs:
-      build: ${{ steps.check.outputs.build }}
+      sha: ${{ steps.built.outputs.sha }}
+      ship: ${{ steps.new.outputs.ship }}
     steps:
-      - id: check
-        run: |
-          if [ "${{ github.event_name }}" != schedule ]; then echo build=true >> "$GITHUB_OUTPUT"; exit 0; fi
-          payload=$(curl -fsS https://drewhoover.com/cfb-streak-king/share/payload.json | jq -r .builtAt) || payload=
-          live=$(curl -fsS https://drewhoover.com/cfb-all-time-records/current.json | jq -r .builtAt) || live=
-          echo "payload built $payload; the live board's from $live"
-          if [ -n "$payload" ] && [ "$payload" != "$live" ]; then echo build=true >> "$GITHUB_OUTPUT"; else echo build=false >> "$GITHUB_OUTPUT"; fi
-
-  build:
-    needs: check
-    if: needs.check.outputs.build == 'true'
-    runs-on: ubuntu-latest
-    steps:
+      # main's tip, not the commit that started the run: a push queued behind
+      # a refresh builds the file the refresh just committed
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
       - run: npm ci
-      # The running season from Streak King's published payload, on every
-      # run: a push that built the committed src/data/current.json put the
-      # board back to the week it was committed (2026-11-15: a push would have
-      # shipped 10-28's games over 11-12's). The payload is public and costs
-      # no CFBD calls. A failed fetch builds the committed file.
-      - run: node scripts/build-current.mjs || git checkout -- src/data/current.json
+      # The running season from Streak King's published payload (public, no
+      # CFBD calls). A payload that can't be read fails the run: nothing is
+      # committed or deployed, and the board keeps the counts it had.
+      - if: github.event_name != 'push'
+        run: node scripts/build-current.mjs
+      # a scheduled run with no new game stops here; a push or a manual run always ships
+      - id: new
+        run: |
+          if [ "${{ github.event_name }}" = schedule ] && [ -z "$(git status --porcelain -- src/data)" ]; then
+            echo "no game the committed file lacks; the board keeps what it shows"
+            echo "ship=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ship=true" >> "$GITHUB_OUTPUT"
+          fi
+      # No deploy takes the live board back to older counts
+      - if: steps.new.outputs.ship == 'true'
+        run: node scripts/check-not-older-than-live.mjs
+        env:
+          ALLOW_OLDER_DATA: ${{ contains(github.event.head_commit.message, '[older data]') && '1' || '' }}
       # vite build, then scripts/prerender.mjs bakes both pages' markup in
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+      - if: steps.new.outputs.ship == 'true'
+        run: npm run build
+      # The new counts, committed before they deploy: the next push builds
+      # from them. A commit pushed meanwhile is rebased under; one that rewrote
+      # the file conflicts and fails the run before anything ships.
+      - if: github.event_name != 'push'
+        run: |
+          git add src/data/current.json
+          git diff --quiet --cached && exit 0
+          git -c user.name="the refresh" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "The data at $(date -u +%Y-%m-%d)"
+          git checkout -- .
+          git pull -q --rebase origin main
+          git push -q origin HEAD:main
+      - id: built
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - if: steps.new.outputs.ship == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
+      # nobody reads a failed run: a refresh that fails opens an issue, and a
+      # second failure comments on the open one
+      - if: failure() && github.event_name != 'push'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="The data refresh failed"
+          run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          open=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$open" ]; then gh issue comment "$open" --body "Failed again. $run"
+          else gh issue create --title "$title" --body "The board keeps the counts it had. $run" --assignee DrewHoo; fi
 
   deploy:
     environment:
@@ -71,6 +109,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    if: needs.build.outputs.ship == 'true'
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
@@ -83,6 +122,8 @@ jobs:
     needs: deploy
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -94,9 +135,12 @@ jobs:
   # (gh secret set CLOUDFLARE_API_TOKEN --repo DrewHoo/cfb-all-time-records).
   worker:
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: [build, deploy]
     steps:
+      # the commit the site was built from, a refresh's data commit included
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22

@@ -14,7 +14,11 @@
 //   node scripts/build-current.mjs              the live payload
 //   node scripts/build-current.mjs <file>       a local copy (a cfb-streak-king checkout's src/data/payload.json)
 //
-// The deploy workflow runs it on its schedule; a push builds the committed file.
+// The committed file is the board's data: the deploy workflow's scheduled and
+// manual runs run this, commit the file and deploy that commit, and a push
+// builds the committed file. A payload with no game the committed file lacks
+// (Streak King rebuilt for the week's lines) leaves the file as it is, so the
+// run has nothing to commit. A payload that can't be read fails the run.
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -62,8 +66,13 @@ for (let k = 0; k < g.se.length; k++) {
 const through = latest ? new Date(latest * 86400000).toISOString().slice(0, 10) : null
 const played = Object.values(teams).filter((r) => r[SEASON].some((n) => n)).length
 const bowlGames = Object.values(bowls).reduce((n, r) => n + Object.values(r).flat().reduce((a, b) => a + b, 0), 0) / 2
-fs.writeFileSync(
-  path.join(ROOT, 'src/data/current.json'),
-  JSON.stringify({ season: SEASON, seasons, through, source: URL_, builtAt: p.builtAt, teams, bowlSeasons, bowls }) + '\n',
-)
+const OUT = path.join(ROOT, 'src/data/current.json')
+const counts = { season: SEASON, seasons, through, source: URL_, teams, bowlSeasons, bowls }
+const withoutBuiltAt = ({ builtAt: _, ...rest }) => JSON.stringify(rest)
+const committed = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : null
+if (committed && withoutBuiltAt(committed) === JSON.stringify(counts)) {
+  console.log(`current: the payload built ${p.builtAt} has no game the committed file lacks (through ${through}); kept it`)
+  process.exit(0)
+}
+fs.writeFileSync(OUT, JSON.stringify({ season: SEASON, seasons, through, source: URL_, builtAt: p.builtAt, teams, bowlSeasons, bowls }) + '\n')
 console.log(`current: ${seasons.join(', ')}; ${SEASON} through ${through ?? 'no games yet'}, ${played} of ${base.teams.length} programs have played; ${bowlGames} bowl games after ${BOWLS_FROM - 1}, from Streak King's payload built ${p.builtAt}`)
