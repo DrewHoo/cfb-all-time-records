@@ -13,7 +13,8 @@ import React from 'react'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { llmsText } from './lib/llms.mjs'
+import { llmsText, SIBLINGS } from './lib/llms.mjs'
+import { readNextLinks, bakeReadNext, READ_NEXT_ORIGIN } from './lib/readNext.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const ORIGIN = 'https://drewhoover.com'
@@ -28,12 +29,16 @@ const unesc = (s) => String(s).replace(/&quot;/g, '"').replace(/&lt;/g, '<').rep
 
 // what llms.txt says, read from the same modules the page renders from
 const F = await vite.ssrLoadModule('/src/lib/football.js')
-const { SIBLINGS } = await vite.ssrLoadModule('/src/components/Notes.jsx')
+const { setBaked } = await vite.ssrLoadModule('/src/lib/readNext.js')
+// What to read next, baked: the sport's list (scripts/lib/readNext.mjs); main.jsx hydrates from the same list in the page
+const READ_NEXT = bakeReadNext(await readNextLinks('/cfb/links.json', 'cfb-all-time-records'))
+console.log(`read next: ${READ_NEXT.length} baked from ${READ_NEXT_ORIGIN}/cfb/links.json`)
 let root = null
 
 for (const p of PAGES) {
   const out = path.join(ROOT, 'dist', p.file)
   const { default: App } = await vite.ssrLoadModule(p.module)
+  setBaked(READ_NEXT)
   const appHtml = renderToString(React.createElement(App))
   let html = fs.readFileSync(out, 'utf8')
 
@@ -60,13 +65,14 @@ for (const p of PAGES) {
   }
   html = html.replace(
     '</head>',
-    `    <script src="${ORIGIN}/embed/back-bar.js" data-section="sports" async></script>
+    `    <script src="${ORIGIN}/embed/back-bar.js" data-section="sports" data-read-next="cfb" async></script>
     <script src="${ORIGIN}/embed/giscus.js" async></script>
     <script src="${ORIGIN}/embed/analytics.js" async></script>
     <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
   </head>`,
   )
-  html = html.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`)
+  const readNext = READ_NEXT.length ? `<script type="application/json" id="readnext-data">${JSON.stringify(READ_NEXT).replace(/</g, '\\u003c')}</script>` : ''
+  html = html.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>${readNext}`)
   fs.writeFileSync(out, html)
   const words = appHtml.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
   console.log(`${p.file}: prerendered ${(appHtml.length / 1024).toFixed(0)}KB into #root (~${words} words)`)

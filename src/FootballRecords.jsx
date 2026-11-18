@@ -6,6 +6,7 @@ import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import * as F from './lib/football.js';
 import { footballSentence, footballShareText, footballTitle, footballClaim, FOOTBALL_SITE } from './lib/share.js';
 import { track } from './lib/analytics.js';
+import { setSubject } from './lib/readNext.js';
 import { Picker } from './components/Picker.jsx';
 import { YearPicker } from './components/YearPicker.jsx';
 import { Dateline, NavIcons } from './components/Dateline.jsx';
@@ -49,6 +50,8 @@ export default function FootballRecords() {
     window.history.replaceState(null, '', `${window.location.pathname}${F.toUrl(q)}`);
     document.title = footballTitle(q, board);
   }, [q, board]);
+  // What to read next is about the open program (the back-bar embed reads it off <html>)
+  useEffect(() => { setSubject(q.t); }, [q.t]);
   // a deep link lands on its row; a program picked from find scrolls to its row, and focus goes there too
   const glide = useRef(false);
   const [found, setFound] = useState(0); // a pick of the program already open still scrolls to it
@@ -185,7 +188,7 @@ export default function FootballRecords() {
         </div>
       )}
 
-      <ReadNext here="board" />
+      <ReadNext />
       <Cite what="a record" />
       <Method>
         <p>

@@ -1,30 +1,46 @@
-// What to read next, the citing ask with Ko-fi, the Method frame and the
-// footer: the static copy every page carries.
+// What to read next (Putting Up Numbers' claims, lib/readNext.js), the citing
+// ask with Ko-fi, the Method frame and the footer: what every page carries.
+import { useEffect, useRef, useState } from 'react';
 import { track } from '../lib/analytics.js';
+import { bakedLinks, drawnLinks, tapLink, blockShown, isPun } from '../lib/readNext.js';
 
 export const KOFI_URL = 'https://ko-fi.com/drewhooverdotcom';
 export const REPO_URL = 'https://github.com/DrewHoo/cfb-all-time-records';
 const BASE = import.meta.env.BASE_URL;
 
-// Every other sports site, in the order the sites share: [tracking key, address, name, the line after the dash].
-// scripts/prerender.mjs reads this list too, for dist/llms.txt.
-/** Putting Up Numbers (puttingupnumbers.com), where the comparators live now: one link a sport */
-const PUN_SPORTS = [['College Football', 'cfb'], ['NFL', 'nfl'], ['NBA', 'nba'], ['WNBA', 'wnba'], ['NHL', 'nhl'], ['Soccer', 'soccer']].map(([name, id]) => ({ name, url: `https://puttingupnumbers.com/${id}/` }))
-export const SIBLINGS = [
-  ['puttingupnumbers', 'https://puttingupnumbers.com/', 'Putting Up Numbers', 'compare players, coaches, and teams on wins.', PUN_SPORTS],
-  ['streak-king', 'https://drewhoover.com/cfb-streak-king/', 'College Football Streak King', 'the longest active and all-time winning and losing streaks in college football, under any definition, every FBS game since 1936.'],
-  ['hostile-territory', 'https://drewhoover.com/hostile-territory/', 'Hostile Territory', "every head coach's true road record against AP top-10 teams since 1936."],
-  ['how-many-rings', 'https://drewhoover.com/how-many-rings/', 'How Many Rings?', 'every person on a national-championship staff since 1990, ranked by the number of rings they can claim.'],
-  ['collegiate-championships', 'https://drewhoover.com/collegiate-championships/', 'Collegiate Championships', 'which schools have won the most NCAA championships, across 33 sports.'],
-];
-
-export function ReadNext({ here }) {
+// What to read next: the first five of the back-bar embed's draw, as
+// sentences, each a link. Until the embed draws (and when it never does) the
+// list the prerender baked into the page; with neither, no block.
+export function ReadNext() {
+  // the baked list first, so the hydrate matches the prerender
+  const [links, setLinks] = useState(bakedLinks);
+  const ref = useRef(null);
+  useEffect(() => {
+    const take = () => setLinks(drawnLinks() ?? bakedLinks());
+    take();
+    window.addEventListener('dh:readnext', take);
+    return () => window.removeEventListener('dh:readnext', take);
+  }, []);
+  // a sighting once the block is on screen, again when the draw changes
+  useEffect(() => {
+    if (!links.length || !ref.current || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver((seen) => {
+      if (!seen.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      blockShown(links);
+    });
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, [links]);
+  if (!links.length) return null;
   return (
     <>
       <h2>What to read next</h2>
-      <div className="notes">
-        {SIBLINGS.map(([key, href, name, line, links]) => (
-          <p key={key}><a href={href} onClick={() => track('readnext', { from: here, to: key })}>{name}</a>{links ? ': ' : ' — '}{line}{links?.map((l, i) => <span key={l.url}>{i ? ' | ' : ' '}<a href={l.url} onClick={() => track('readnext', { from: here, to: `puttingupnumbers/${l.name}` })}>{l.name}</a></span>)}</p>
+      <div className="notes readnext" ref={ref}>
+        {links.map((l, i) => (
+          <p key={l.id}>
+            <a href={l.href} referrerPolicy={isPun(l.href) ? 'no-referrer-when-downgrade' : undefined} onClick={() => tapLink(l, i + 1)}>{l.text}</a>
+          </p>
         ))}
       </div>
     </>
