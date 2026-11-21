@@ -19,23 +19,23 @@ The championship grid that used to share this repo lives on as [collegiate-champ
 ## Build
 
 ```bash
-npm install
-npm run dev        # http://localhost:5173/cfb-all-time-records/
-npm run build      # vite build, then scripts/prerender.mjs bakes the markup, JSON-LD, the embeds and the sitemap into dist/
-npm run preview    # serves dist/ at http://localhost:4173/cfb-all-time-records/
+pnpm install
+pnpm run dev        # http://localhost:5173/cfb-all-time-records/
+pnpm run build      # vite build, then scripts/prerender.mjs bakes the markup, JSON-LD, the embeds and the sitemap into dist/
+pnpm run preview    # serves dist/ at http://localhost:4173/cfb-all-time-records/
 ```
 
 The prerender is what crawlers and unfurlers see; `src/main.jsx` hydrates onto it. Nothing reads `window` during render: the URL is applied once after mount, so the first client render matches the prerendered page.
 
 ## Share images
 
-- `npm run gen:og` (on a Mac: the title is Georgia Bold from the system) draws `public/og.png` (1200×630) and `public/card.png` (1200×750, the 8:5 cover the index site's sports list shows) from the top of the default board, text as glyph outlines through opentype.js. Committed; re-run after a redesign or a data refresh worth committing.
+- `pnpm run gen:og` (on a Mac: the title is Georgia Bold from the system) draws `public/og.png` (1200×630) and `public/card.png` (1200×750, the 8:5 cover the index site's sports list shows) from the top of the default board, text as glyph outlines through opentype.js. Committed; re-run after a redesign or a data refresh worth committing.
 - `workers/share/` is a Cloudflare Worker on `drewhoover.com/cfb-all-time-records/*` in front of Pages. For an address that says more than the root (`?sort=`, `?games=`, `?since=`, `?until=`, `?conf=`, `?t=`) it rewrites the `<head>` with the site's own words and points `og:image` at `share/og.png?…`, which it draws on demand with workers-og (the top of the board, the open program swapped in and lit) and caches at the edge. Crawler fetches are counted in Mixpanel as `share unfurl` and `share card`. Anything else, and anything that fails, passes through untouched.
 
 ```bash
-npm run build && npm run preview       # the origin the worker proxies locally
-npm run worker:dev                     # http://localhost:8787/cfb-all-time-records/share/og.png?sort=winPct&conf=SEC&t=alabama
-npm run worker:deploy                  # by hand; deploy.yml does it after every push to main (CLOUDFLARE_API_TOKEN secret)
+pnpm run build && pnpm run preview       # the origin the worker proxies locally
+pnpm run worker:dev                     # http://localhost:8787/cfb-all-time-records/share/og.png?sort=winPct&conf=SEC&t=alabama
+pnpm run worker:deploy                  # by hand; deploy.yml does it after every push to main (CLOUDFLARE_API_TOKEN secret)
 ```
 
 Bump `CARD_VERSION` in `workers/share/index.ts` whenever the card or the URL reading changes; it keys the edge cache.

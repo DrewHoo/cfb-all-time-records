@@ -8,8 +8,8 @@
     "build": "vite build && node scripts/prerender.mjs",
     "preview": "vite preview --port 4173 --strictPort",
     "gen:og": "node scripts/gen-og.mjs",
-    "worker:dev": "npx wrangler dev -c workers/share/wrangler.jsonc --local --var ORIGIN:http://localhost:4173 --var NO_REPORT:1",
-    "worker:deploy": "npx wrangler deploy -c workers/share/wrangler.jsonc",
+    "worker:dev": "pnpm exec wrangler dev -c workers/share/wrangler.jsonc --local --var ORIGIN:http://localhost:4173 --var NO_REPORT:1",
+    "worker:deploy": "pnpm exec wrangler deploy -c workers/share/wrangler.jsonc",
     "build:seasons": "node scripts/build-seasons.mjs",
     "check:receipts": "node scripts/check-receipts.mjs --pages data/receipt-pages --offline data/season-rulings.json"
   },
@@ -28,5 +28,13 @@
     "vite": "^5.1.0",
     "workers-og": "^0.0.27",
     "wrangler": "^4.151.3"
+  },
+  "packageManager": "pnpm@10.29.2",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }

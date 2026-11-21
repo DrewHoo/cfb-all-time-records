@@ -1,6 +1,6 @@
 {
   // The share worker: per-address <head> rewrites and og cards in front of
-  // GitHub Pages. Deploy with: npm run worker:deploy (deploy.yml does it after
+  // GitHub Pages. Deploy with: pnpm run worker:deploy (deploy.yml does it after
   // every push to main, with the CLOUDFLARE_API_TOKEN repo secret).
   "name": "cfb-all-time-records-share",
   "main": "index.ts",

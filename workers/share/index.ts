@@ -16,9 +16,9 @@
 // Anything else — and anything that goes wrong — passes through untouched:
 // this worker must never be the reason the site is down.
 //
-// Deploy: npm run worker:deploy (deploy.yml does it after every push to
-// main). To see a card locally: npm run build, npm run preview (4173), then
-// npm run worker:dev and open
+// Deploy: pnpm run worker:deploy (deploy.yml does it after every push to
+// main). To see a card locally: pnpm run build, pnpm run preview (4173), then
+// pnpm run worker:dev and open
 //   http://localhost:8787/cfb-all-time-records/share/og.png?sort=winPct&conf=SEC&t=alabama
 
 import * as F from '../../src/lib/football.js';

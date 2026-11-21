@@ -1,5 +1,5 @@
 // The social preview images, drawn from the real data in the site's own
-// visual language. Run: npm run gen:og (on a Mac: the title is Georgia Bold,
+// visual language. Run: pnpm run gen:og (on a Mac: the title is Georgia Bold,
 // read from the system; the script throws without it so a fallback never
 // gets committed). Re-run after a redesign or a data refresh worth committing.
 //   public/og.png    1200x630  the top of the default board, og:image of the root
